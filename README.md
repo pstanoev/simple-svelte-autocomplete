@@ -83,6 +83,7 @@ Props you may want to specify include:
 - `valueFunction` - optional function that derives the value from the selected item. If used `valueFieldName` is ignored
 - `keywordsCleanFunction` - optional function to additionally process the derived keywords from the item
 - `textCleanFunction` - optional function to additionally process the user entered text
+- `debug` - flag to enable detailed log statements from the component
 
 ## Style
 The component is inteded to use with [Builma](https://bulma.io/) but it can be adapted to use Boostrap or anything else.

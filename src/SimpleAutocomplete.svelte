@@ -382,9 +382,11 @@
         const listItem = listItems[i];
         if (selectedItem == listItem.item) {
           highlightIndex = i;
-          console.log(
-            "Found selected item: " + i + ": " + JSON.stringify(listItem)
-          );
+          if (debug) {
+            console.log(
+              "Found selected item: " + i + ": " + JSON.stringify(listItem)
+            );
+          }
           highlight();
           break;
         }
