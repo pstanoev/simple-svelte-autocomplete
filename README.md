@@ -14,11 +14,12 @@ Import the component and define items:
 
 ````javascript
 import AutoComplete from "./SimpleAutocomplete.svelte";
+
 let colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
 let selectedColor;
 ````
 
-
+And use it like this:
 ````html
 <AutoComplete items={colors} bind:selectedItem={selectedColor} />
 ````
@@ -45,6 +46,23 @@ Just define which field should be used as label:
   labelFieldName="name" />
 ````
 
+Specifying function for label instead of field name is also supported:
+````html
+<AutoComplete
+  items={colorList}
+  bind:selectedItem={selectedColorObject}
+  bind:value={selectedColorValue}
+  labelFunction={color => color.id + '. ' + color.name} />
+````
+
+By default the component searches by the item label, but it can also search by custom fields by specifying `keywords` function. For example to enable searching by color name and color HEX code:
+````html
+<AutoComplete
+  items={colorList}
+  bind:selectedItem={selectedColorObject}
+  labelFieldName="name"
+  keywordsFunction={color => color.name + ' ' + color.code} />
+````
 
 ## Props
 
@@ -67,3 +85,6 @@ Props you may want to specify include:
 - `valueFunction` - optional function that derives the value from the selected item. If used `valueFieldName` is ignored
 - `keywordsCleanFunction` - optional function to additionally process the derived keywords from the item
 - `textCleanFunction` - optional function to additionally process the user entered text
+
+## Style
+The component is inteded to use with [Builma](https://bulma.io/) but it can be adapted to use Boostrap or anything else.
