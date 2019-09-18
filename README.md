@@ -42,7 +42,6 @@ Just define which field should be used as label:
 <AutoComplete
   items={colorList}
   bind:selectedItem={selectedColorObject}
-  bind:value={selectedColorValue}
   labelFieldName="name" />
 ````
 
@@ -51,7 +50,6 @@ Specifying function for label instead of field name is also supported:
 <AutoComplete
   items={colorList}
   bind:selectedItem={selectedColorObject}
-  bind:value={selectedColorValue}
   labelFunction={color => color.id + '. ' + color.name} />
 ````
 
