@@ -101,10 +101,19 @@ let selectedColorValue;
           placeholder={showPlacehoder ? 'Please select color' : ''} />
 
         <p>
-          Selected color object: {JSON.stringify(selectedColorObject)}
+          Selected color item: {JSON.stringify(selectedColorObject)}
           <br />
           Selected value: {selectedColorValue}
         </p>
+
+        <div>
+        <p>Change selected item from outside:</p>
+          <button
+            class="button"
+            on:click={() => (selectedColorObject = colorList[colorList.length - 1])}>
+            Set color to Black
+          </button>
+        </div>
       </div>
       <div class="columns">
         <div class="column">
