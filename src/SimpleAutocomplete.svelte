@@ -96,12 +96,16 @@
 
   // selected item state
   export let selectedItem = undefined;
-  export let value = valueFunction(selectedItem);
+  export let value;
+  let text;
 
-  let text =
-    selectedItem !== undefined && selectedItem !== null
-      ? safeLabelFunction(selectedItem)
-      : "";
+  function onSelectedItemChanged() {
+    value = valueFunction(selectedItem);
+    text = safeLabelFunction(selectedItem);
+    onChange(selectedItem);
+  }
+
+  $: selectedItem, onSelectedItemChanged();
 
   // HTML elements
   let input;
@@ -118,7 +122,9 @@
   let skipFirstItem = true;
 
   function preparelistItems() {
+    var tStart;
     if (debug) {
+      tStart = performance.now();
       console.log("prepare items to search");
       console.log("items: " + JSON.stringify(items));
     }
@@ -131,7 +137,13 @@
     }
 
     if (debug) {
-      console.log("items to search prepared");
+      var tEnd = performance.now();
+      console.log(
+        listItems.length +
+          " items to search prepared in " +
+          (tEnd - tStart) +
+          " milliseconds"
+      );
     }
   }
 
@@ -210,11 +222,17 @@
     filteredListItems = filteredListItemsHighlighted;
     if (debug) {
       var tEnd = performance.now();
-      console.log("Search took " + (tEnd - tStart) + " milliseconds.");
+      console.log(
+        "Search took " +
+          (tEnd - tStart) +
+          " milliseconds, found " +
+          filteredListItems.length +
+          " items"
+      );
     }
   }
 
-  $: text, search();
+  // $: text, search();
 
   function selectListItem(listItem) {
     if (debug) {
@@ -223,9 +241,6 @@
     const newSelectedItem = listItem.item;
     if (beforeChange(selectedItem, newSelectedItem)) {
       selectedItem = newSelectedItem;
-      value = valueFunction(selectedItem);
-      text = safeLabelFunction(selectedItem);
-      onChange(selectedItem);
     }
   }
 
@@ -334,6 +349,7 @@
     }
 
     text = e.target.value;
+    search();
     highlightIndex = 0;
     open();
   }
@@ -509,17 +525,19 @@
   <div
     class="autocomplete-list {opened ? '' : 'hidden'} is-fullwidth"
     bind:this={list}>
-    {#each filteredListItems as listItem, i}
-      <div
-        class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
-        on:click={() => onListItemClick(listItem)}>
-        {#if listItem.highlighted}
-          {@html listItem.highlighted.label}
-        {:else}
-          {@html listItem.label}
-        {/if}
-      </div>
-    {/each}
+    {#if filteredListItems}
+      {#each filteredListItems as listItem, i}
+        <div
+          class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
+          on:click={() => onListItemClick(listItem)}>
+          {#if listItem.highlighted}
+            {@html listItem.highlighted.label}
+          {:else}
+            {@html listItem.label}
+          {/if}
+        </div>
+      {/each}
+    {/if}
   </div>
 </div>
 
