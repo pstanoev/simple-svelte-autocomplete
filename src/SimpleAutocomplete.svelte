@@ -8,10 +8,16 @@
   export let valueFieldName = undefined;
 
   export let labelFunction = function(item) {
+    if (item === undefined || item === null) {
+      return "";
+    }
     return labelFieldName ? item[labelFieldName] : item;
   };
 
   export let keywordsFunction = function(item) {
+    if (item === undefined || item === null) {
+      return "";
+    }
     return keywordsFieldName ? item[keywordsFieldName] : item;
   };
 
@@ -47,7 +53,10 @@
       originalResult = theFunction(argument);
     } catch (error) {
       console.warn(
-        "Error executing Autocomplete function on value: " + argument
+        "Error executing Autocomplete function on value: " +
+          argument +
+          " function: " +
+          theFunction
       );
     }
     let result = originalResult;
@@ -96,7 +105,7 @@
 
   // selected item state
   export let selectedItem = undefined;
-  export let value;
+  export let value = undefined;
   let text;
 
   function onSelectedItemChanged() {
@@ -278,9 +287,28 @@
       console.log("highlight");
     }
 
-    const el = list.querySelector(".selected");
-    if (el && el.scrollIntoViewIfNeeded === "Function") {
-      el.scrollIntoViewIfNeeded();
+    const query = ".selected";
+    if (debug) {
+      console.log("Seaching DOM element: " + query + " in " + list);
+    }
+    const el = list.querySelector(query);
+    if (el) {
+      if (typeof el.scrollIntoViewIfNeeded === "function") {
+        if (debug) {
+          console.log("Scrolling selected item into view");
+        }
+        el.scrollIntoViewIfNeeded();
+      } else {
+        if (debug) {
+          console.warn(
+            "Could not scroll selected item into view, scrollIntoViewIfNeeded not supported"
+          );
+        }
+      }
+    } else {
+      if (debug) {
+        console.warn("Selected item not found to scroll into view");
+      }
     }
   }
 
@@ -307,7 +335,7 @@
       //   console.log("onDocumentClick inside");
       // }
       // resetListToAllItemsAndOpen();
-      // highlight();
+      highlight();
     }
   }
 
@@ -388,14 +416,20 @@
     }
 
     filteredListItems = listItems;
+    open();
 
     // find selected item
     if (selectedItem) {
-      // console.log(
-      //   "Searching currently selected value: " + JSON.stringify(value)
-      // );
+      if (debug) {
+        console.log(
+          "Searching currently selected item: " + JSON.stringify(selectedItem)
+        );
+      }
       for (let i = 0; i < listItems.length; i++) {
         const listItem = listItems[i];
+        if (debug) {
+          console.log("Item " + i + ": " + JSON.stringify(listItem));
+        }
         if (selectedItem == listItem.item) {
           highlightIndex = i;
           if (debug) {
@@ -408,8 +442,6 @@
         }
       }
     }
-
-    open();
   }
 
   function open() {
