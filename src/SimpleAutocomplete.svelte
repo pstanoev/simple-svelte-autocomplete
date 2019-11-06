@@ -39,7 +39,6 @@
   export let beforeChange = function(oldSelectedItem, newSelectedItem) {
     return true;
   };
-
   export let onChange = function(newSelectedItem) {};
 
   function safeStringFunction(theFunction, argument) {
@@ -77,7 +76,7 @@
 
   function safeKeywordsFunction(item) {
     // console.log("safeKeywordsFunction");
-    let keywords = safeStringFunction(keywordsFunction, item);
+    const keywords = safeStringFunction(keywordsFunction, item);
     let result = safeStringFunction(keywordsCleanFunction, keywords);
     result = result.toLowerCase().trim();
     if (debug) {
@@ -128,10 +127,9 @@
   let filteredListItems;
 
   let listItems = [];
-  let skipFirstItem = true;
 
   function preparelistItems() {
-    var tStart;
+    let tStart;
     if (debug) {
       tStart = performance.now();
       console.log("prepare items to search");
@@ -146,7 +144,7 @@
     }
 
     if (debug) {
-      var tEnd = performance.now();
+      const tEnd = performance.now();
       console.log(
         listItems.length +
           " items to search prepared in " +
@@ -174,7 +172,7 @@
       return "";
     }
     const textFiltered = userEnteredText
-      .replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, " ")
+      .replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " ")
       .trim();
 
     const cleanUserEnteredText = textCleanFunction(textFiltered);
@@ -193,7 +191,7 @@
   }
 
   function search() {
-    var tStart;
+    let tStart;
     if (debug) {
       tStart = performance.now();
       console.log("Searching user entered text: '" + text + "'");
@@ -230,7 +228,7 @@
     const filteredListItemsHighlighted = tempfilteredListItems.map(hlfilter);
     filteredListItems = filteredListItemsHighlighted;
     if (debug) {
-      var tEnd = performance.now();
+      const tEnd = performance.now();
       console.log(
         "Search took " +
           (tEnd - tStart) +
@@ -477,9 +475,9 @@
   function highlightFilter(q, fields) {
     const qs = "(" + q.trim().replace(/\s/g, ")(.*)(") + ")";
     const reg = new RegExp(qs, "ig");
-    let n = 1,
-      len = qs.split(")(").length + 1,
-      repl = "";
+    let n = 1;
+    const len = qs.split(")(").length + 1;
+    let repl = "";
     for (; n < len; n++) repl += n % 2 ? `<b>$${n}</b>` : `$${n}`;
 
     return i => {

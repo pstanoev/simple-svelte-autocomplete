@@ -15,7 +15,7 @@ Import the component and define items:
 ````javascript
 import AutoComplete from "./SimpleAutocomplete.svelte";
 
-let colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
+const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
 let selectedColor;
 ````
 
@@ -26,7 +26,7 @@ And use it like this:
 
 You can also use it with array of objects:
 ````javascript
-let colorList = [
+const colorList = [
   { id: 1, name: "White", code: "#FFFFFF" },
   { id: 2, name: "Red", code: "#FF0000" },
   { id: 3, name: "Yellow", code: "#FF00FF" },

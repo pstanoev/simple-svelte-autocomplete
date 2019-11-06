@@ -2,7 +2,7 @@
   import AutoComplete from "./SimpleAutocomplete.svelte";
   import { countryList } from "./country-list.js";
 
-  let colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
+  const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
   let selectedColor;
   let items = countryList;
   let selectedCountry;
@@ -10,16 +10,16 @@
   let disabled = false;
   let showPlacehoder = false;
 
-  let example1Given = `let colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];`;
+  const example1Given = `const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];`;
 
-  let example1Code = `let colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
+  const example1Code = `const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
 let selectedColor;
 <AutoComplete items={colors} bind:selectedItem={selectedColor} />
 Selected color: {selectedColor}`;
 
   // --------------------
 
-  let colorList = [
+  const colorList = [
     { id: 1, name: "White", code: "#FFFFFF" },
     { id: 2, name: "Red", code: "#FF0000" },
     { id: 3, name: "Yellow", code: "#FF00FF" },
@@ -31,7 +31,7 @@ Selected color: {selectedColor}`;
   let selectedColorObject;
   let selectedColorValue;
 
-  let example2Code = `let colorList = [
+  const example2Code = `const colorList = [
   { id: 1, name: "White", code: "#FFFFFF" },
   { id: 2, name: "Red", code: "#FF0000" },
   { id: 3, name: "Yellow", code: "#FF00FF" },
@@ -59,6 +59,8 @@ let selectedColorValue;
 <section class="section">
   <div class="container content">
     <h1>Svelte Simple Autocomplete Demo</h1>
+
+    <p>Github: <a href="https://github.com/pstanoev/simple-svelte-autocomplete">https://github.com/pstanoev/simple-svelte-autocomplete</a>
 
     <h3>Simple example:</h3>
 
