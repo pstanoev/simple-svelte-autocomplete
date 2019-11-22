@@ -41,6 +41,8 @@
   };
   export let onChange = function(newSelectedItem) {};
 
+  export let selectFirstIfEmpty = false;
+
   function safeStringFunction(theFunction, argument) {
     if (typeof theFunction !== "function") {
       console.error(
@@ -392,7 +394,6 @@
       console.log("onEsc");
     }
 
-    //if (text) return clear();
     e.stopPropagation();
     if (opened) {
       input.focus();
@@ -454,6 +455,11 @@
       console.log("close");
     }
     opened = false;
+
+    if (!text && selectFirstIfEmpty) {
+      highlightFilter = 0;
+      selectItem();
+    }
   }
 
   function clear() {
