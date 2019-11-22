@@ -394,6 +394,7 @@
       console.log("onEsc");
     }
 
+    //if (text) return clear();
     e.stopPropagation();
     if (opened) {
       input.focus();
