@@ -2,7 +2,6 @@
 
 Autocomplete / Select / Typeahead component made with [Svelte](https://svelte.dev/) based on  https://github.com/tborychowski/svelte-autocomplete
 
-
 * no dependencies
 * use plain lists or array of objects 
 * option to define a label field or function
@@ -10,10 +9,16 @@ Autocomplete / Select / Typeahead component made with [Svelte](https://svelte.de
 
 #### See live demo at http://simple-svelte-autocomplete.surge.sh/
 
+Install the component:
+
+```bash
+npm i -D simple-svelte-autocomplete
+```
+
 Import the component and define items:
 
 ````javascript
-import AutoComplete from "./SimpleAutocomplete.svelte";
+import AutoComplete from "simple-svelte-autocomplete";
 
 const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
 let selectedColor;
