@@ -1,6 +1,6 @@
 {
   "name": "simple-svelte-autocomplete",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Autocomplete / Select / Typeahead component made with Svelte 3",
   "svelte": "src/SimpleAutocomplete.svelte",
   "module": "index.mjs",
@@ -17,8 +17,7 @@
     "sirv-cli": "^0.4.4",
     "bulma": "^0.7.5"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "scripts": {
     "build": "rollup -c",
     "autobuild": "rollup -c rollup.dev.config.js -w",
