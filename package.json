@@ -20,12 +20,16 @@
   "dependencies": {},
   "scripts": {
     "build": "rollup -c",
+    "prepublishOnly": "npm run build",
     "autobuild": "rollup -c rollup.dev.config.js -w",
     "dev": "run-p start:dev autobuild",
     "start": "sirv public --single",
     "start:dev": "sirv public --single --dev"
   },
-  "repository": "https://github.com/pstanoev/simple-svelte-autocomplete",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pstanoev/simple-svelte-autocomplete"
+  },
   "keywords": [
     "svelte",
     "autocomplete",
