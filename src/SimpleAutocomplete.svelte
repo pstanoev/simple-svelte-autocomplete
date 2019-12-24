@@ -490,7 +490,7 @@
 
   function isMinCharsToSearchReached() {
     return (
-      minCharactersToSearch > 0 && filteredTextLength < minCharactersToSearch
+      minCharactersToSearch > 1 && filteredTextLength < minCharactersToSearch
     );
   }
 
