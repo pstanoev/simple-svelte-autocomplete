@@ -43,6 +43,10 @@
 
   export let selectFirstIfEmpty = false;
 
+  export let minCharactersToSearch = 1;
+  export let maxItemsToShowInList = 0;
+  export let noResultsText = "No results found";
+
   function safeStringFunction(theFunction, argument) {
     if (typeof theFunction !== "function") {
       console.error(
@@ -108,6 +112,7 @@
   export let selectedItem = undefined;
   export let value = undefined;
   let text;
+  let filteredTextLength = 0;
 
   function onSelectedItemChanged() {
     value = valueFunction(selectedItem);
@@ -130,16 +135,17 @@
 
   let listItems = [];
 
-  function preparelistItems() {
+  function prepareListItems() {
     let tStart;
     if (debug) {
       tStart = performance.now();
       console.log("prepare items to search");
       console.log("items: " + JSON.stringify(items));
     }
-    listItems = new Array(items ? items.length : 0);
+    const length = items ? items.length : 0;
+    listItems = new Array(length);
 
-    if (items && items.length > 0) {
+    if (length > 0) {
       items.forEach((item, i) => {
         listItems[i] = getListItem(item);
       });
@@ -167,15 +173,24 @@
     };
   }
 
-  $: items, preparelistItems();
+  $: items, prepareListItems();
 
-  function preprareUserEnteredText(userEnteredText) {
+  function prepareUserEnteredText(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {
       return "";
     }
+
     const textFiltered = userEnteredText
       .replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " ")
       .trim();
+
+    filteredTextLength = textFiltered.length;
+
+    if (minCharactersToSearch > 1) {
+      if (filteredTextLength < minCharactersToSearch) {
+        return "";
+      }
+    }
 
     const cleanUserEnteredText = textCleanFunction(textFiltered);
     const textFilteredLowerCase = cleanUserEnteredText.toLowerCase().trim();
@@ -199,10 +214,11 @@
       console.log("Searching user entered text: '" + text + "'");
     }
 
-    const textFiltered = preprareUserEnteredText(text);
+    const textFiltered = prepareUserEnteredText(text);
 
     if (textFiltered === "") {
       filteredListItems = listItems;
+      closeIfMinCharsToSearchReached();
       if (debug) {
         console.log(
           "User entered text is empty set the list of items to all items"
@@ -213,7 +229,7 @@
 
     const searchWords = textFiltered.split(" ");
 
-    const tempfilteredListItems = listItems.filter(listItem => {
+    let tempfilteredListItems = listItems.filter(listItem => {
       const itemKeywords = listItem.keywords;
 
       let matches = 0;
@@ -228,7 +244,9 @@
 
     const hlfilter = highlightFilter(textFiltered, ["label"]);
     const filteredListItemsHighlighted = tempfilteredListItems.map(hlfilter);
+
     filteredListItems = filteredListItemsHighlighted;
+    closeIfMinCharsToSearchReached();
     if (debug) {
       const tEnd = performance.now();
       console.log(
@@ -416,6 +434,7 @@
     }
 
     filteredListItems = listItems;
+
     open();
 
     // find selected item
@@ -448,6 +467,12 @@
     if (debug) {
       console.log("open");
     }
+
+    // check if the search text has more than the min chars required
+    if (isMinCharsToSearchReached()) {
+      return;
+    }
+
     opened = true;
   }
 
@@ -460,6 +485,18 @@
     if (!text && selectFirstIfEmpty) {
       highlightFilter = 0;
       selectItem();
+    }
+  }
+
+  function isMinCharsToSearchReached() {
+    return (
+      minCharactersToSearch > 0 && filteredTextLength < minCharactersToSearch
+    );
+  }
+
+  function closeIfMinCharsToSearchReached() {
+    if (isMinCharsToSearchReached()) {
+      close();
     }
   }
 
@@ -534,11 +571,18 @@
     cursor: pointer;
     line-height: 1;
   }
+
   .autocomplete-list-item:hover,
   .autocomplete-list-item.selected {
     background-color: #2e69e2;
     color: #fff;
   }
+  .autocomplete-list-item-no-results {
+    padding: 5px 15px;
+    color: #999;
+    line-height: 1;
+  }
+
   .autocomplete-list.hidden {
     display: none;
   }
@@ -562,18 +606,28 @@
   <div
     class="autocomplete-list {opened ? '' : 'hidden'} is-fullwidth"
     bind:this={list}>
-    {#if filteredListItems}
+    {#if filteredListItems && filteredListItems.length > 0}
       {#each filteredListItems as listItem, i}
-        <div
-          class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
-          on:click={() => onListItemClick(listItem)}>
-          {#if listItem.highlighted}
-            {@html listItem.highlighted.label}
-          {:else}
-            {@html listItem.label}
-          {/if}
-        </div>
+        {#if maxItemsToShowInList <= 0 || i < maxItemsToShowInList}
+          <div
+            class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
+            on:click={() => onListItemClick(listItem)}>
+            {#if listItem.highlighted}
+              {@html listItem.highlighted.label}
+            {:else}
+              {@html listItem.label}
+            {/if}
+          </div>
+        {/if}
       {/each}
+
+      {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
+        <div class="autocomplete-list-item-no-results">
+          ...{filteredListItems.length - maxItemsToShowInList} results not shown
+        </div>
+      {/if}
+    {:else if noResultsText}
+      <div class="autocomplete-list-item-no-results">{noResultsText}</div>
     {/if}
   </div>
 </div>

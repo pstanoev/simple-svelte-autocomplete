@@ -89,6 +89,9 @@ Props you may want to specify include:
 - `keywordsCleanFunction` - optional function to additionally process the derived keywords from the item
 - `textCleanFunction` - optional function to additionally process the user entered text
 - `selectFirstIfEmpty` - set to true to select the first item if the user clears the text and closes the dropdown. Defaults to false.
+- `minCharactersToSearch` - minimum length of search text to perform search, defaults to 1
+- `maxItemsToShowInList` - maximum number of items to show in the dropdown list, defaults 0 (no limit)
+- `noResultsText` - text to show in the dropdown when the search text does not match any item. Defaults to "No results found". Can be set to "" to not show anything.
 - `debug` - flag to enable detailed log statements from the component
 
 ## Style
