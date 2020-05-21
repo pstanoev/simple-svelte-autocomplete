@@ -47,6 +47,8 @@
   export let maxItemsToShowInList = 0;
   export let noResultsText = "No results found";
 
+  const uniqueId = "sautocomplete-" + Math.floor(Math.random() * 1000);
+
   function safeStringFunction(theFunction, argument) {
     if (typeof theFunction !== "function") {
       console.error(
@@ -343,17 +345,17 @@
     if (debug) {
       console.log("onDocumentClick: " + JSON.stringify(e.target));
     }
-    if (!e.target.closest(".autocomplete")) {
+    if (e.target.closest("." + uniqueId)) {
+      if (debug) {
+        console.log("onDocumentClick inside");
+      }
+      // resetListToAllItemsAndOpen();
+      highlight();
+    } else {
       if (debug) {
         console.log("onDocumentClick outside");
       }
       close();
-    } else {
-      // if (debug) {
-      //   console.log("onDocumentClick inside");
-      // }
-      // resetListToAllItemsAndOpen();
-      highlight();
     }
   }
 
@@ -588,7 +590,7 @@
   }
 </style>
 
-<div class="{className} autocomplete select is-fullwidth">
+<div class="{className} autocomplete select is-fullwidth {uniqueId}">
   <input
     type="text"
     class="input autocomplete-input"
