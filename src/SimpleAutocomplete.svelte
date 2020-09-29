@@ -36,6 +36,8 @@
     return userEnteredText;
   };
 
+  export let searchFunction = false;
+
   export let beforeChange = function(oldSelectedItem, newSelectedItem) {
     return true;
   };
@@ -209,7 +211,7 @@
     return textFilteredLowerCase;
   }
 
-  function search() {
+  async function search() {
     let tStart;
     if (debug) {
       tStart = performance.now();
@@ -229,7 +231,12 @@
       return;
     }
 
-    const searchWords = textFiltered.split(" ");
+    if (searchFunction) {
+      items = await searchFunction(textFiltered);
+      prepareListItems();
+    }
+
+    const searchWords = textFiltered.split(' ');
 
     let tempfilteredListItems = listItems.filter(listItem => {
       const itemKeywords = listItem.keywords;
