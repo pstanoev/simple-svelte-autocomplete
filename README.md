@@ -1,20 +1,23 @@
 # Simple Svelte Autocomplete
 
-Autocomplete / Select / Typeahead component made with [Svelte](https://svelte.dev/) based on  https://github.com/tborychowski/svelte-autocomplete
+Autocomplete / Select / Typeahead component made with [Svelte](https://svelte.dev/) based on https://github.com/tborychowski/svelte-autocomplete
+
+### Live demo http://simple-svelte-autocomplete.surge.sh/
 
 * no dependencies
-* use plain lists or array of objects 
+* use plain lists or array of objects
 * option to define a label field or function
 * option to define more fields used for search
+* support for async load of items
 
-#### See live demo at http://simple-svelte-autocomplete.surge.sh/
 
-Install the component:
+## Install
 
 ```bash
 npm i -D simple-svelte-autocomplete
 ```
 
+## Usage
 Import the component and define items:
 
 ````javascript
@@ -67,7 +70,44 @@ By default the component searches by the item label, but it can also search by c
   keywordsFunction={color => color.name + ' ' + color.code} />
 ````
 
-## Props
+## Asynchronious loading of items
+
+Define a `searchFunction` which will be called asynchronisuly with `keyword` parameter.
+If you have `searchFunction` defined you don't need to specify `items` since the function will be used for loading.
+
+```html
+<AutoComplete searchFunction={getItems} labelFieldName="name" valueFieldName="id" bind:selectedItem={myValue} />
+```
+
+```js
+async function getItems(keyword) {
+  const url = '/api/my-items/?format=json&name=' + encodeURIComponent(keyword);
+
+  const response = await fetch(url);
+  const json = await response.json();
+
+  return json.results;
+}
+```
+
+```json
+{
+  "results": [
+    {
+      "id": 1,
+      "name": "Sample One",
+      "date": "2020-09-25",
+    },
+    {
+      "id": 2,
+      "name": "Sample Two",
+      "date": "2020-09-26",
+    }
+  ]
+}
+```
+
+## Properties
 
 Props you may want to specify include:
 
@@ -77,7 +117,8 @@ Props you may want to specify include:
 - `placeholder` - change the text displayed when no option is selected
 - `beforeChange` - function called before a new value is selected
 - `onChange` - function called after new value is selected
-- `items` - array of items the user can select from
+- `items` - array of items the user can select from (optional, use `searchFunction` for async loading of items)
+- `searchFunction` - optional function to load items asynchroniously from HTTP call for example
 - `selectedItem` - the current item that is selected (object if the array of items contains objects)
 - `labelFieldName` - the name of the field to be used for showing the items as text in the droprown
 - `keywordsFieldName` - the name of the filed to search by
@@ -95,4 +136,5 @@ Props you may want to specify include:
 - `debug` - flag to enable detailed log statements from the component
 
 ## Style
+
 The component is inteded to use with [Builma](https://bulma.io/) but it can be adapted to use Boostrap or anything else.
