@@ -70,9 +70,9 @@ By default the component searches by the item label, but it can also search by c
   keywordsFunction={color => color.name + ' ' + color.code} />
 ````
 
-## Asynchronious loading of items
+## Asynchronous loading of items
 
-Define a `searchFunction` which will be called asynchronisuly with `keyword` parameter.
+Define a `searchFunction` which will be called with `keyword` parameter.
 If you have `searchFunction` defined you don't need to specify `items` since the function will be used for loading.
 
 ```html
