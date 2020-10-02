@@ -153,4 +153,4 @@ Props you may want to specify include:
 - `autocomplete-list` the class applied to the dropdown list
 - `autocomplete-list-item` the class applied to items in the dropdown list
 
-The component is inteded to use with [Builma](https://bulma.io/) but it can be adapted to use Boostrap or anything else.
+The component is inteded to use with [Bulma](https://bulma.io/) but it can be adapted to use Boostrap or anything else.
