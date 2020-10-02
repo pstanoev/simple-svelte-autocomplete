@@ -145,6 +145,9 @@
   let opened = false;
   let highlightIndex = -1;
 
+  $: showList =
+    opened && ((items && items.length > 0) || filteredTextLength > 0);
+
   // view model
   let filteredListItems;
 
@@ -157,12 +160,25 @@
       console.log("prepare items to search");
       console.log("items: " + JSON.stringify(items));
     }
+
+    if (!Array.isArray(items)) {
+      console.warn(
+        "Autocomplete items / search function did not return array but",
+        items
+      );
+      items = [];
+    }
+
     const length = items ? items.length : 0;
     listItems = new Array(length);
 
     if (length > 0) {
       items.forEach((item, i) => {
-        listItems[i] = getListItem(item);
+        const listItem = getListItem(item);
+        if (listItem == undefined) {
+          console.log("Undefined item for: ", item);
+        }
+        listItems[i] = listItem;
       });
     }
 
@@ -250,6 +266,9 @@
     const searchWords = textFiltered.split(" ");
 
     let tempfilteredListItems = listItems.filter(listItem => {
+      if (!listItem) {
+        return false;
+      }
       const itemKeywords = listItem.keywords;
 
       let matches = 0;
@@ -637,7 +656,8 @@
 </style>
 
 <div
-  class="{className ? className : ''} {hideArrow ? 'hide-arrow' : ''} autocomplete select is-fullwidth {uniqueId}">
+  class="{className ? className : ''}
+  {hideArrow ? 'hide-arrow' : ''} autocomplete select is-fullwidth {uniqueId}">
   <input
     type="text"
     class="{inputClassName ? inputClassName : ''} input autocomplete-input"
@@ -653,21 +673,23 @@
     on:click={onInputClick}
     on:keypress={onKeyPress} />
   <div
-    class="{dropdownClassName ? dropdownClassName : ''} autocomplete-list {opened ? '' : 'hidden'}
+    class="{dropdownClassName ? dropdownClassName : ''} autocomplete-list {showList ? '' : 'hidden'}
     is-fullwidth"
     bind:this={list}>
     {#if filteredListItems && filteredListItems.length > 0}
       {#each filteredListItems as listItem, i}
         {#if maxItemsToShowInList <= 0 || i < maxItemsToShowInList}
-          <div
-            class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
-            on:click={() => onListItemClick(listItem)}>
-            {#if listItem.highlighted}
-              {@html listItem.highlighted.label}
-            {:else}
-              {@html listItem.label}
-            {/if}
-          </div>
+          {#if listItem}
+            <div
+              class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
+              on:click={() => onListItemClick(listItem)}>
+              {#if listItem.highlighted}
+                {@html listItem.highlighted.label}
+              {:else}
+                {@html listItem.label}
+              {/if}
+            </div>
+          {/if}
         {/if}
       {/each}
 

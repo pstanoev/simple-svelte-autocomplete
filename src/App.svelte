@@ -49,7 +49,19 @@ let selectedColorValue;
 	bind:value={selectedColorValue}
 	labelFieldName="name"
 	valueFieldName="id"
-	keywordsFunction={color => color.name + ' ' + color.code} />`;
+  keywordsFunction={color => color.name + ' ' + color.code} />`;
+
+  async function searchCountry(keyword) {
+    const url =
+      "https://restcountries.eu/rest/v2/name/" +
+      encodeURIComponent(keyword) +
+      "?fields=name;alpha2Code";
+
+    const response = await fetch(url);
+    const json = await response.json();
+
+    return json;
+  }
 </script>
 
 <style>
@@ -60,8 +72,13 @@ let selectedColorValue;
   <div class="container content">
     <h1>Svelte Simple Autocomplete Demo</h1>
 
-    <p>Github: <a href="https://github.com/pstanoev/simple-svelte-autocomplete">https://github.com/pstanoev/simple-svelte-autocomplete</a>
+    <p>
+      Github:
+      <a href="https://github.com/pstanoev/simple-svelte-autocomplete">
+        https://github.com/pstanoev/simple-svelte-autocomplete
+      </a>
 
+    </p>
     <h3>Simple example:</h3>
 
     <div class="columns">
@@ -109,7 +126,7 @@ let selectedColorValue;
         </p>
 
         <div>
-        <p>Change selected item from outside:</p>
+          <p>Change selected item from outside:</p>
           <button
             class="button"
             on:click={() => (selectedColorObject = colorList[colorList.length - 1])}>
@@ -126,30 +143,17 @@ let selectedColorValue;
       </div>
     </div>
 
-    <!-- <h3>Large example:</h3>
+    <h3>Async example:</h3>
     <h5>Pick a country:</h5>
     <AutoComplete
-      items={countryList}
+      searchFunction={searchCountry}
       bind:selectedItem={selectedCountry}
-      {disabled}
-      placeholder={showPlacehoder ? 'Please select country' : ''} />
+      labelFieldName="name"
+      maxItemsToShowInList="10" />
 
-    <div class="field is-grouped">
-      <div class="control">
-        <label class="checkbox">
-          <input type="checkbox" bind:checked={showPlacehoder} />
-          Placehoder Text
-        </label>
-      </div>
-      <div class="control">
-        <label class="checkbox">
-          <input type="checkbox" bind:checked={disabled} />
-          Disabled
-        </label>
-      </div>
-
+    <div style="margin-bottom: 10rem;">
+      <p>Selected country: {JSON.stringify(selectedCountry)}</p>
     </div>
- -->
 
   </div>
 </section>
