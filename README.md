@@ -111,12 +111,8 @@ async function getItems(keyword) {
 
 Props you may want to specify include:
 
-- `className` - apply a className to the control
-- `disabled` - disable the control
-- `name` - generate an HTML input with this name, containing the current value
-- `placeholder` - change the text displayed when no option is selected
-- `beforeChange` - function called before a new value is selected
-- `onChange` - function called after new value is selected
+### Behaviour
+
 - `items` - array of items the user can select from (optional, use `searchFunction` for async loading of items)
 - `searchFunction` - optional function to load items asynchroniously from HTTP call for example
 - `selectedItem` - the current item that is selected (object if the array of items contains objects)
@@ -132,9 +128,28 @@ Props you may want to specify include:
 - `selectFirstIfEmpty` - set to true to select the first item if the user clears the text and closes the dropdown. Defaults to false.
 - `minCharactersToSearch` - minimum length of search text to perform search, defaults to 1
 - `maxItemsToShowInList` - maximum number of items to show in the dropdown list, defaults 0 (no limit)
+- `disabled` - disable the control
+
+### Events
+
+- `beforeChange` - function called before a new value is selected
+- `onChange` - function called after new value is selected
+
+### Style and UI options
+
+- `placeholder` - change the text displayed when no option is selected
 - `noResultsText` - text to show in the dropdown when the search text does not match any item. Defaults to "No results found". Can be set to "" to not show anything.
+- `hideArrow` - set to true to not show the blue dropdown arrow
+- `className` - apply a className to the control
+- `inputClassName` - apply a className to the input control
+- `dropdownClassName` - apply a className to the dropdown div showing the list of items
+- `name` - generate an HTML input with this name, containing the current value
 - `debug` - flag to enable detailed log statements from the component
 
-## Style
+#### CSS properties
+- `autocomplete` the class applied to the main control
+- `autocomplete-input` the class applied to the input list
+- `autocomplete-list` the class applied to the dropdown list
+- `autocomplete-list-item` the class applied to items in the dropdown list
 
 The component is inteded to use with [Builma](https://bulma.io/) but it can be adapted to use Boostrap or anything else.

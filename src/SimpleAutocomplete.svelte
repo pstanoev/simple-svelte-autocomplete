@@ -104,8 +104,19 @@
   export let placeholder = undefined;
   // apply a className to the control
   export let className = undefined;
+
+  // apply a className to the input control
+  export let inputClassName = undefined;
+
   // generate an HTML input with this name, containing the current value
   export let name = undefined;
+
+  // apply a className to the dropdown div
+  export let dropdownClassName = undefined;
+
+  // option to hide the dropdown arrow
+  export let hideArrow = false;
+
   // adds the disabled tag to the HTML input
   export let disabled = false;
   // add the title to the HTML input
@@ -236,7 +247,7 @@
       prepareListItems();
     }
 
-    const searchWords = textFiltered.split(' ');
+    const searchWords = textFiltered.split(" ");
 
     let tempfilteredListItems = listItems.filter(listItem => {
       const itemKeywords = listItem.keywords;
@@ -549,7 +560,35 @@
 <style>
   .autocomplete {
     min-width: 200px;
+    display: inline-block;
+    max-width: 100%;
+    position: relative;
+    vertical-align: top;
+    height: 2.25em;
   }
+
+  .autocomplete:not(.hide-arrow)::after {
+    border: 3px solid transparent;
+    border-radius: 2px;
+    border-right: 0;
+    border-top: 0;
+    content: " ";
+    display: block;
+    height: 0.625em;
+    margin-top: -0.4375em;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    width: 0.625em;
+    border-color: #3273dc;
+    right: 1.125em;
+    z-index: 4;
+  }
+
   .autocomplete * {
     box-sizing: border-box;
   }
@@ -597,10 +636,11 @@
   }
 </style>
 
-<div class="{className} autocomplete select is-fullwidth {uniqueId}">
+<div
+  class="{className ? className : ''} {hideArrow ? 'hide-arrow' : ''} autocomplete select is-fullwidth {uniqueId}">
   <input
     type="text"
-    class="input autocomplete-input"
+    class="{inputClassName ? inputClassName : ''} input autocomplete-input"
     {placeholder}
     {name}
     {disabled}
@@ -613,7 +653,8 @@
     on:click={onInputClick}
     on:keypress={onKeyPress} />
   <div
-    class="autocomplete-list {opened ? '' : 'hidden'} is-fullwidth"
+    class="{dropdownClassName ? dropdownClassName : ''} autocomplete-list {opened ? '' : 'hidden'}
+    is-fullwidth"
     bind:this={list}>
     {#if filteredListItems && filteredListItems.length > 0}
       {#each filteredListItems as listItem, i}
