@@ -108,6 +108,9 @@
   // apply a className to the input control
   export let inputClassName = undefined;
 
+  // apply a id to the input control
+  export let inputId = undefined;
+
   // generate an HTML input with this name, containing the current value
   export let name = undefined;
 
@@ -661,6 +664,7 @@
   <input
     type="text"
     class="{inputClassName ? inputClassName : ''} input autocomplete-input"
+    id="{inputId ? inputId : ''} "
     {placeholder}
     {name}
     {disabled}

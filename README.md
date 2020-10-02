@@ -142,6 +142,7 @@ Props you may want to specify include:
 - `hideArrow` - set to true to not show the blue dropdown arrow
 - `className` - apply a className to the control
 - `inputClassName` - apply a className to the input control
+- `inputId` - apply an id attribute to the the input control
 - `dropdownClassName` - apply a className to the dropdown div showing the list of items
 - `name` - generate an HTML input with this name, containing the current value
 - `debug` - flag to enable detailed log statements from the component
