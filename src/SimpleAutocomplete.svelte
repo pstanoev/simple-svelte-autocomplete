@@ -488,6 +488,12 @@
       }
       for (let i = 0; i < listItems.length; i++) {
         const listItem = listItems[i];
+        if ('undefined' === typeof listItem) {
+          if (debug) {
+            console.log(`listItem ${i} is undefined. Skipping.`)
+          }
+          continue;
+        }
         if (debug) {
           console.log("Item " + i + ": " + JSON.stringify(listItem));
         }
@@ -682,7 +688,7 @@
     bind:this={list}>
     {#if filteredListItems && filteredListItems.length > 0}
       {#each filteredListItems as listItem, i}
-        {#if maxItemsToShowInList <= 0 || i < maxItemsToShowInList}
+        {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
           {#if listItem}
             <div
               class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
