@@ -307,10 +307,17 @@
     if (debug) {
       console.log("selectListItem");
     }
+    if ("undefined" === typeof listItem) {
+      if (debug) {
+        console.log(`listItem ${i} is undefined. Can not select.`);
+      }
+      return false;
+    }
     const newSelectedItem = listItem.item;
     if (beforeChange(selectedItem, newSelectedItem)) {
       selectedItem = newSelectedItem;
     }
+    return true;
   }
 
   function selectItem() {
@@ -318,8 +325,9 @@
       console.log("selectItem");
     }
     const listItem = filteredListItems[highlightIndex];
-    selectListItem(listItem);
-    close();
+    if (selectListItem(listItem)) {
+      close();
+    }
   }
 
   function up() {
@@ -377,8 +385,9 @@
       console.log("onListItemClick");
     }
 
-    selectListItem(listItem);
-    close();
+    if (selectListItem(listItem)) {
+      close();
+    }
   }
 
   function onDocumentClick(e) {
@@ -488,9 +497,9 @@
       }
       for (let i = 0; i < listItems.length; i++) {
         const listItem = listItems[i];
-        if ('undefined' === typeof listItem) {
+        if ("undefined" === typeof listItem) {
           if (debug) {
-            console.log(`listItem ${i} is undefined. Skipping.`)
+            console.log(`listItem ${i} is undefined. Skipping.`);
           }
           continue;
         }
@@ -670,7 +679,8 @@
   <input
     type="text"
     class="{inputClassName ? inputClassName : ''} input autocomplete-input"
-    id="{inputId ? inputId : ''} "
+    id="{inputId ? inputId : ''}
+    "
     {placeholder}
     {name}
     {disabled}
