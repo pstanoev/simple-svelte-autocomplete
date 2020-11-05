@@ -18,7 +18,7 @@
     if (item === undefined || item === null) {
       return "";
     }
-    return keywordsFieldName ? item[keywordsFieldName] : item;
+    return keywordsFieldName ? item[keywordsFieldName] : labelFunction(item);
   };
 
   export let valueFunction = function(item) {
