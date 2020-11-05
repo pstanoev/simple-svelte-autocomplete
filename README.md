@@ -140,6 +140,7 @@ Props you may want to specify include:
 - `placeholder` - change the text displayed when no option is selected
 - `noResultsText` - text to show in the dropdown when the search text does not match any item. Defaults to "No results found". Can be set to "" to not show anything.
 - `hideArrow` - set to true to not show the blue dropdown arrow
+- `showClear` - set to true to show X button that can be used to deselect the selected item
 - `className` - apply a className to the control
 - `inputClassName` - apply a className to the input control
 - `inputId` - apply an id attribute to the the input control

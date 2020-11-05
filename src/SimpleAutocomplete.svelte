@@ -120,6 +120,9 @@
   // option to hide the dropdown arrow
   export let hideArrow = false;
 
+  // option to show clear selection button
+  export let showClear = false;
+
   // adds the disabled tag to the HTML input
   export let disabled = false;
   // add the title to the HTML input
@@ -563,7 +566,12 @@
     }
 
     text = "";
-    setTimeout(() => input.focus());
+    selectedItem = undefined;
+
+    setTimeout(() => {
+      input.focus();
+      close();
+    });
   }
 
   function onBlur() {
@@ -626,6 +634,10 @@
     z-index: 4;
   }
 
+  .autocomplete.show-clear:not(.hide-arrow)::after {
+    right: 2.3em;
+  }
+
   .autocomplete * {
     box-sizing: border-box;
   }
@@ -635,6 +647,17 @@
     height: 100%;
     padding: 5px 11px;
   }
+
+  .autocomplete:not(.hide-arrow) .autocomplete-input {
+    padding-right: 2em;
+  }
+  .autocomplete.show-clear:not(.hide-arrow) .autocomplete-input {
+    padding-right: 3.2em;
+  }
+  .autocomplete.hide-arrow.show-clear .autocomplete-input {
+    padding-right: 2em;
+  }
+
   .autocomplete-list {
     background: #fff;
     position: relative;
@@ -671,16 +694,34 @@
   .autocomplete-list.hidden {
     display: none;
   }
+
+  .autocomplete.show-clear .autocomplete-clear-button {
+    cursor: pointer;
+    display: block;
+    text-align: center;
+    position: absolute;
+    right: 0.1em;
+    padding: 0.3em 0.6em;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    z-index: 4;
+  }
+
+  .autocomplete:not(.show-clear) .autocomplete-clear-button {
+    display: none;
+  }
 </style>
 
 <div
   class="{className ? className : ''}
-  {hideArrow ? 'hide-arrow' : ''} autocomplete select is-fullwidth {uniqueId}">
+  {hideArrow ? 'hide-arrow is-multiple' : ''}
+  {showClear ? 'show-clear' : ''} autocomplete select is-fullwidth {uniqueId}">
   <input
     type="text"
     class="{inputClassName ? inputClassName : ''} input autocomplete-input"
-    id="{inputId ? inputId : ''}
-    "
+    id={inputId ? inputId : ''}
     {placeholder}
     {name}
     {disabled}
@@ -692,6 +733,9 @@
     on:keydown={onKeyDown}
     on:click={onInputClick}
     on:keypress={onKeyPress} />
+  {#if showClear}
+    <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
+  {/if}
   <div
     class="{dropdownClassName ? dropdownClassName : ''} autocomplete-list {showList ? '' : 'hidden'}
     is-fullwidth"
