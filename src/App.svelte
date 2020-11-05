@@ -117,6 +117,8 @@ let selectedColorValue;
           valueFieldName="id"
           keywordsFunction={color => color.name + ' ' + color.code}
           {disabled}
+          showClear={true}
+          hideArrow={false}
           placeholder={showPlacehoder ? 'Please select color' : ''} />
 
         <p>
