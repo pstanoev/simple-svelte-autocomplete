@@ -1,6 +1,6 @@
 <script>
   // the list of items  the user can select from
-  export let items;
+  export let items = [];
 
   // field of each item that's used for the labels in the list
   export let labelFieldName = undefined;
