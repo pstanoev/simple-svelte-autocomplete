@@ -37,6 +37,7 @@
   };
 
   export let searchFunction = false;
+  export let highlightsFunction = false;
 
   export let beforeChange = function(oldSelectedItem, newSelectedItem) {
     return true;
@@ -98,6 +99,10 @@
       );
     }
     return result;
+  }
+
+  function safeHighlightsFunction(item) {
+    return safeStringFunction(highlightsFunction, item);
   }
 
   // the text displayed when no option is selected
@@ -205,8 +210,12 @@
       keywords: safeKeywordsFunction(item),
       // item label
       label: safeLabelFunction(item),
-      // store reference to the origial item
-      item: item
+      // store reference to the original item
+      item: item,
+      // highlighted item
+      highlighted: {
+        "label": safeHighlightsFunction(item)
+      }
     };
   }
 
@@ -264,33 +273,41 @@
       return;
     }
 
+    let tempfilteredListItems;
+
     if (searchFunction) {
       items = await searchFunction(textFiltered);
       prepareListItems();
+      tempfilteredListItems = listItems;
+    } else{
+
+      const searchWords = textFiltered.split(" ");
+
+      tempfilteredListItems = listItems.filter(listItem => {
+        if (!listItem) {
+          return false;
+        }
+        const itemKeywords = listItem.keywords;
+
+        let matches = 0;
+        searchWords.forEach(searchWord => {
+          if (itemKeywords.includes(searchWord)) {
+            matches++;
+          }
+        });
+
+        return matches >= searchWords.length;
+      });
     }
 
-    const searchWords = textFiltered.split(" ");
+    if (highlightsFunction) {
+      filteredListItems = listItems;
+    } else {
+      const hlfilter = highlightFilter(textFiltered, ["label"]);
+      const filteredListItemsHighlighted = tempfilteredListItems.map(hlfilter);
+      filteredListItems = filteredListItemsHighlighted;
+    }
 
-    let tempfilteredListItems = listItems.filter(listItem => {
-      if (!listItem) {
-        return false;
-      }
-      const itemKeywords = listItem.keywords;
-
-      let matches = 0;
-      searchWords.forEach(searchWord => {
-        if (itemKeywords.includes(searchWord)) {
-          matches++;
-        }
-      });
-
-      return matches >= searchWords.length;
-    });
-
-    const hlfilter = highlightFilter(textFiltered, ["label"]);
-    const filteredListItemsHighlighted = tempfilteredListItems.map(hlfilter);
-
-    filteredListItems = filteredListItemsHighlighted;
     closeIfMinCharsToSearchReached();
     if (debug) {
       const tEnd = performance.now();
@@ -582,23 +599,23 @@
   }
   // 'item number one'.replace(/(it)(.*)(nu)(.*)(one)/ig, '<b>$1</b>$2 <b>$3</b>$4 <b>$5</b>')
   function highlightFilter(q, fields) {
-    const qs = "(" + q.trim().replace(/\s/g, ")(.*)(") + ")";
-    const reg = new RegExp(qs, "ig");
-    let n = 1;
-    const len = qs.split(")(").length + 1;
-    let repl = "";
-    for (; n < len; n++) repl += n % 2 ? `<b>$${n}</b>` : `$${n}`;
+      const qs = "(" + q.trim().replace(/\s/g, ")(.*)(") + ")";
+      const reg = new RegExp(qs, "ig");
+      let n = 1;
+      const len = qs.split(")(").length + 1;
+      let repl = "";
+      for (; n < len; n++) repl += n % 2 ? `<b>$${n}</b>` : `$${n}`;
 
-    return i => {
-      const newI = Object.assign({ highlighted: {} }, i);
-      if (fields) {
-        fields.forEach(f => {
-          if (!newI[f]) return;
-          newI.highlighted[f] = newI[f].replace(reg, repl);
-        });
-      }
-      return newI;
-    };
+      return i => {
+        const newI = Object.assign({ highlighted: {} }, i);
+        if (fields) {
+          fields.forEach(f => {
+            if (!newI[f]) return;
+            newI.highlighted[f] = newI[f].replace(reg, repl);
+          });
+        }
+        return newI;
+      };
   }
 </script>
 
