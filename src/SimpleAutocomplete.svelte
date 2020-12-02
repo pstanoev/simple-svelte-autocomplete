@@ -362,7 +362,7 @@
     if (debug) {
       console.log("Seaching DOM element: " + query + " in " + list);
     }
-    const el = list.querySelector(query);
+    const el = list && list.querySelector(query);
     if (el) {
       if (typeof el.scrollIntoViewIfNeeded === "function") {
         if (debug) {
