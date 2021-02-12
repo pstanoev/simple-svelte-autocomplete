@@ -680,7 +680,6 @@
     line-height: 1;
   }
 
-  .autocomplete-list-item:hover,
   .autocomplete-list-item.selected {
     background-color: #2e69e2;
     color: #fff;
@@ -746,7 +745,8 @@
           {#if listItem}
             <div
               class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
-              on:click={() => onListItemClick(listItem)}>
+              on:click={() => onListItemClick(listItem)}
+              on:pointerenter={() => {highlightIndex = i;}}>
               {#if listItem.highlighted}
                 {@html listItem.highlighted.label}
               {:else}
