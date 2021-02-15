@@ -147,6 +147,7 @@ Props you may want to specify include:
 - `dropdownClassName` - apply a className to the dropdown div showing the list of items
 - `name` - generate an HTML input with this name, containing the current value
 - `debug` - flag to enable detailed log statements from the component
+- `html5autocomplete` - flag to enable or disable the [HTML5 autocomplete](https://developer.mozilla.org/fr/docs/Web/HTML/Element/form#attr-autocomplete) attribute
 
 #### CSS properties
 - `autocomplete` the class applied to the main control
