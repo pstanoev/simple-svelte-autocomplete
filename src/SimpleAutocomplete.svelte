@@ -129,6 +129,9 @@
   export let title = undefined;
   export let debug = false;
 
+  // enable the html5 autocompletion
+  export let html5autocomplete = undefined;
+
   // selected item state
   export let selectedItem = undefined;
   export let value = undefined;
@@ -722,6 +725,7 @@
     type="text"
     class="{inputClassName ? inputClassName : ''} input autocomplete-input"
     id={inputId ? inputId : ''}
+    autocomplete={html5autocomplete ? 'on' : 'off'}
     {placeholder}
     {name}
     {disabled}
