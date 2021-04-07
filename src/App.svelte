@@ -29,7 +29,9 @@ Selected color: {selectedColor}`;
   ];
 
   let selectedColorObject;
+  let selectedColorObjectCustom;
   let selectedColorValue;
+  let selectedColorValueCustom;
 
   const example2Code = `const colorList = [
   { id: 1, name: "White", code: "#FFFFFF" },
@@ -50,6 +52,34 @@ let selectedColorValue;
 	labelFieldName="name"
 	valueFieldName="id"
   keywordsFunction={color => color.name + ' ' + color.code} />`;
+
+  const example3Code = `const colorList = [
+  { id: 1, name: "White", code: "#FFFFFF" },
+  { id: 2, name: "Red", code: "#FF0000" },
+  { id: 3, name: "Yellow", code: "#FF00FF" },
+  { id: 4, name: "Green", code: "#00FF00" },
+  { id: 5, name: "Blue", code: "#0000FF" },
+  { id: 6, name: "Black", code: "#000000" }
+];
+
+let selectedColorObject;
+let selectedColorValue;
+
+<AutoComplete
+    items={colorList}
+    bind:selectedItem={selectedColorObject}
+    bind:value={selectedColorValue}
+    labelFieldName="name"
+    valueFieldName="id"
+    keywordsFunction={color => color.name + ' ' + color.code}>
+
+    <div slot="item" let:item={item} let:label={label}>
+        {@html label}
+        <span style="color:{item.item.code}">{item.item.code}</span>
+    </div>
+
+</AutoComplete>`;
+
 
   async function searchCountry(keyword) {
     const url =
@@ -140,6 +170,55 @@ let selectedColorValue;
         <div class="column">
           <pre>
             <code class="language-html" data-lang="html">{example2Code}</code>
+          </pre>
+        </div>
+      </div>
+    </div>
+
+    <h3>Custom items:</h3>
+    <p>
+    </p>
+
+    <div class="columns">
+      <div class="column is-one-third">
+        <h5>Pick a color:</h5>
+        <AutoComplete
+          items={colorList}
+          bind:selectedItem={selectedColorObjectCustom}
+          bind:value={selectedColorValueCustom}
+          labelFieldName="name"
+          valueFieldName="id"
+          keywordsFunction={color => color.name + ' ' + color.code}
+          {disabled}
+          showClear={true}
+          hideArrow={false}
+          placeholder={showPlacehoder ? 'Please select color' : ''}
+          >
+          <div slot="item" let:item={item} let:label={label}>
+              {@html label}
+              <span style="color:{item.item.code}">{item.item.code}</span>
+          </div>
+        </AutoComplete>
+
+        <p>
+          Selected color item: {JSON.stringify(selectedColorObjectCustom)}
+          <br />
+          Selected value: {selectedColorValueCustom}
+        </p>
+
+        <div>
+          <p>Change selected item from outside:</p>
+          <button
+            class="button"
+            on:click={() => (selectedColorObjectCustom = colorList[colorList.length - 1])}>
+            Set color to Black
+          </button>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column">
+          <pre>
+            <code class="language-html" data-lang="html">{example3Code}</code>
           </pre>
         </div>
       </div>

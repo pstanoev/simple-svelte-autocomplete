@@ -751,11 +751,13 @@
               class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
               on:click={() => onListItemClick(listItem)}
               on:pointerenter={() => {highlightIndex = i;}}>
-              {#if listItem.highlighted}
-                {@html listItem.highlighted.label}
-              {:else}
-                {@html listItem.label}
-              {/if}
+              <slot name="item" item={listItem} label={listItem.highlighted ? listItem.highlighted.label : listItem.label}>
+                {#if listItem.highlighted}
+                  {@html listItem.highlighted.label}
+                {:else}
+                  {@html listItem.label}
+                {/if}
+              </slot>
             </div>
           {/if}
         {/if}
@@ -763,11 +765,17 @@
 
       {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
         <div class="autocomplete-list-item-no-results">
-          ...{filteredListItems.length - maxItemsToShowInList} results not shown
+          <slot name="results-not-shown">
+            ...{filteredListItems.length - maxItemsToShowInList} results not shown
+          </slot>
         </div>
       {/if}
     {:else if noResultsText}
-      <div class="autocomplete-list-item-no-results">{noResultsText}</div>
+      <div class="autocomplete-list-item-no-results">
+        <slot name="no-result">
+          {noResultsText}
+        </slot>
+      </div>
     {/if}
   </div>
 </div>
