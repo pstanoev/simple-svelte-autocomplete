@@ -135,6 +135,10 @@
   // selected item state
   export let selectedItem = undefined;
   export let value = undefined;
+
+  // delay to wait after a keypress to search for new items
+  export let delay = 0;
+
   let text;
   let filteredTextLength = 0;
 
@@ -161,6 +165,8 @@
   let filteredListItems;
 
   let listItems = [];
+
+  let timeout;
 
   function prepareListItems() {
     let tStart;
@@ -452,6 +458,19 @@
     }
 
     text = e.target.value;
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    if (delay) {
+      timeout = setTimeout(process_input, delay);
+    }
+    else {
+      process_input();
+    }
+  }
+
+  function process_input() {
     search();
     highlightIndex = 0;
     open();

@@ -129,6 +129,8 @@ Props you may want to specify include:
 - `minCharactersToSearch` - minimum length of search text to perform search, defaults to 1
 - `maxItemsToShowInList` - maximum number of items to show in the dropdown list, defaults 0 (no limit)
 - `disabled` - disable the control
+- `delay` - the delay to wait after an input to call `searchFunction` (in milliseconds) defaults to 0. A value like 200 allows to not
+   produce too many requests.
 
 ### Events
 
