@@ -167,6 +167,14 @@ async function getItems(keyword) {
 </pre>
 ```
 The noResultsText variable is optional and can be ommited.
+- `loading` - customize the div that shows the "loading" text:
+```html
+<pre>
+<div slot="loading" let:loadingText={loadingText}>
+    <span>{loadingText}</strong>
+</div>
+</pre>
+```
 
 #### CSS properties
 - `autocomplete` the class applied to the main control

@@ -59,6 +59,9 @@
   // text displayed when no items match the input text
   export let noResultsText = "No results found";
 
+  // text displayed when async data is being loaded
+  export let loadingText = "Loading results...";
+
   // the text displayed when no option is selected
   export let placeholder = undefined;
 
@@ -106,6 +109,7 @@
 
   // UI state
   let opened = false;
+  let loading = false;
   let highlightIndex = -1;
   let text;
   let filteredTextLength = 0;
@@ -292,6 +296,7 @@
     if (searchFunction) {
       lastRequestId = lastRequestId + 1;
       var currentRequestId = lastRequestId;
+      loading = true;
 
       let result = await searchFunction(textFiltered);
 
@@ -305,6 +310,7 @@
       lastResponseId = currentRequestId;
       items = result;
       prepareListItems();
+      loading = false;
     }
 
     // local search
@@ -599,6 +605,7 @@
       console.log("close");
     }
     opened = false;
+    loading = false;
 
     if (!text && selectFirstIfEmpty) {
       highlightFilter = 0;
@@ -670,7 +677,7 @@
     height: 2.25em;
   }
 
-  .autocomplete:not(.hide-arrow)::after {
+  .autocomplete:not(.hide-arrow):not(.is-loading)::after {
     border: 3px solid transparent;
     border-radius: 2px;
     border-right: 0;
@@ -747,6 +754,10 @@
     color: #999;
     line-height: 1;
   }
+  .autocomplete-list-item-loading {
+    padding: 5px 15px;
+    line-height: 1;
+  }
 
   .autocomplete-list.hidden {
     display: none;
@@ -774,7 +785,9 @@
 <div
   class="{className ? className : ''}
   {hideArrow || !items.length ? 'hide-arrow is-multiple' : ''}
-  {showClear ? 'show-clear' : ''} autocomplete select is-fullwidth {uniqueId}">
+  {showClear ? 'show-clear' : ''} autocomplete select is-fullwidth {uniqueId}"
+  class:is-loading={loading}
+  >
   <input
     type="text"
     class="{inputClassName ? inputClassName : ''} input autocomplete-input"
@@ -828,6 +841,12 @@
           ...{filteredListItems.length - maxItemsToShowInList} results not shown
         </div>
       {/if}
+    {:else if loading && loadingText}
+      <div class="autocomplete-list-item-loading">
+        <slot name="loading" {loadingText}>
+          {loadingText}
+        </slot>
+      </div>
     {:else if noResultsText}
       <div class="autocomplete-list-item-no-results">
         <slot name="no-results" {noResultsText}>{noResultsText}</slot>
