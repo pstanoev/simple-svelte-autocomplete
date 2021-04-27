@@ -327,20 +327,49 @@
       var currentRequestId = lastRequestId;
       loading = true;
 
-      let result = await searchFunction(textFiltered);
+      const AsyncGenerator = (async function*(){}).constructor;
 
-      // If a response to a newer request has been received
-      // while responses to this request were being loaded,
-      // then we can just throw away this outdated results.
-      if (currentRequestId < lastResponseId) {
-        return false;
+      // searchFunction is a generator
+      if (searchFunction instanceof AsyncGenerator) {
+        for await (const chunk of searchFunction(textFiltered)) {
+          // a chunk of an old response: throw it away
+          if (currentRequestId < lastResponseId) {
+            return false;
+          }
+
+          // a chunk for a new response: reset the item list
+          if (currentRequestId > lastResponseId) {
+            items = [];
+          }
+
+          lastResponseId = currentRequestId;
+          items = [...items, ...chunk];
+          processListItems(textFiltered);
+        }
       }
 
-      lastResponseId = currentRequestId;
-      items = result;
-      prepareListItems();
+      // searchFunction is a regular function
+      else {
+        let result = await searchFunction(textFiltered);
+
+        // If a response to a newer request has been received
+        // while responses to this request were being loaded,
+        // then we can just throw away this outdated results.
+        if (currentRequestId < lastResponseId) {
+          return false;
+        }
+
+        lastResponseId = currentRequestId;
+        items = result;
+        processListItems(textFiltered);
+      }
+
       loading = false;
     }
+  }
+
+  function processListItems(textFiltered) {
+    prepareListItems();
 
     // local search
     let tempfilteredListItems;

@@ -91,6 +91,53 @@ async function searchCountry(keyword) {
 The delay parameter makes the component wait for 200ms after you typed something before generating a request. 
 Set localFiltering to false if your search function already returnes filtered results.`;
 
+  const example5Code = `const colors = ["White Rabbit", "White Horse", "Black Rabbit", "Black Horse", "Black Black Rabbit"];
+let selectedAnimal;
+<AutoComplete items={animals} bind:selectedItem={selectedAnimal} matchAllKeywords={false} sortByPertinence={true} />
+Selected color: {selectedAnimal}`;
+
+  async function* searchCountryGenerator(keyword) {
+    const url =
+      "https://restcountries.eu/rest/v2/name/" +
+      encodeURIComponent(keyword) +
+      "?fields=name;alpha2Code";
+
+    const response = await fetch(url);
+    const chunks = await response.json();
+    if (chunks) {
+      for (const chunk of chunks) {
+        yield [chunk];
+        await new Promise(r => setTimeout(r, 1000));
+      }
+    }
+  }
+
+  const example6Code = `let selectedCountry;
+async function* searchCountryGenerator(keyword) {
+  const url = "https://restcountries.eu/rest/v2/name/"
+    + encodeURIComponent(keyword) + "?fields=name;alpha2Code";
+
+  const response = await fetch(url);
+  const chunks = await response.json();
+
+  // Here we artificially simulate delay between chunks
+  // but you can see a real-life snippet here:
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of#iterating_over_async_generators
+  for (const chunk of chunks) {
+    yield [chunk];
+    await new Promise(r => setTimeout(r, 1000));
+  }
+}
+
+<AutoComplete
+  searchFunction={searchCountry}
+  bind:selectedItem={selectedCountry}
+  labelFieldName="name"
+  maxItemsToShowInList="10"
+  delay=200
+  localFiltering=false />`;
+
+
   async function searchCountry(keyword) {
     const url =
       "https://restcountries.eu/rest/v2/name/" +
@@ -106,10 +153,6 @@ Set localFiltering to false if your search function already returnes filtered re
       return searchCountry(keyword);
   }
 
-  const example5Code = `const colors = ["White Rabbit", "White Horse", "Black Rabbit", "Black Horse", "Black Black Rabbit"];
-let selectedAnimal;
-<AutoComplete items={animals} bind:selectedItem={selectedAnimal} matchAllKeywords={false} sortByPertinence={true} />
-Selected color: {selectedAnimal}`;
 
 </script>
 
@@ -270,11 +313,43 @@ Selected color: {selectedAnimal}`;
 
         <AutoComplete items={animals} bind:selectedItem={selectedAnimal} matchAllKeywords={false} sortByPertinence={true} />
         <p>Selected animal: {selectedAnimal}</p>
-
       </div>
+
       <div class="column">
         <pre>
           <code class="language-html" data-lang="html">{example5Code}</code>
+        </pre>
+      </div>
+    </div>
+
+    <h3>Async generator example:</h3>
+    <p>
+      If your async data takes time to generate from your server, you may want to
+      <a href="https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams">stream</a>
+      the response so the end user can have the first suggestions displayed while
+      the latter are being computed.<br>
+      <strong>searchFunction</strong> can be a generator that yields chunks of items.
+    </p>
+
+    <div class="columns">
+      <div class="column is-one-third">
+        <h5>Pick a country:</h5>
+
+        <AutoComplete
+          searchFunction={searchCountryGenerator}
+          bind:selectedItem={selectedCountry}
+          labelFieldName="name"
+          maxItemsToShowInList="10"
+          delay=200
+          localFiltering=false />
+
+        <div style="margin-bottom: 10rem;">
+          <p>Selected country: {JSON.stringify(selectedCountry)}</p>
+        </div>
+      </div>
+      <div class="column">
+        <pre>
+          <code class="language-html" data-lang="html">{example6Code}</code>
         </pre>
       </div>
     </div>
