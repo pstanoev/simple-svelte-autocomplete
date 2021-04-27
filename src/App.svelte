@@ -85,7 +85,7 @@ async function searchCountry(keyword) {
   delay=200 
   localFiltering=false />
   
-The delay parameter nakes the component wait for 200ms after you typed something before generating a request. 
+The delay parameter makes the component wait for 200ms after you typed something before generating a request. 
 Set localFiltering to false if your search function already returnes filtered results.`;
 
   async function searchCountry(keyword) {
