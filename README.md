@@ -74,9 +74,11 @@ By default the component searches by the item label, but it can also search by c
 
 Define a `searchFunction` which will be called with `keyword` parameter.
 If you have `searchFunction` defined you don't need to specify `items` since the function will be used for loading.
-
+The `delay` parameter specifies the time to wait between user input and calling the `searchFunction`.
+It is recommend that delay > 200ms is set when using a remote search function to avoid sending too many requests.
+The `localSearch` parameter can be set to false if the search function already returns filtered items accordind to the user input.
 ```html
-<AutoComplete searchFunction={getItems} labelFieldName="name" valueFieldName="id" bind:selectedItem={myValue} />
+<AutoComplete searchFunction={getItems} delay=200 localSearch=false labelFieldName="name" valueFieldName="id" bind:selectedItem={myValue} />
 ```
 
 ```js
@@ -114,7 +116,9 @@ Props you may want to specify include:
 ### Behaviour
 
 - `items` - array of items the user can select from (optional, use `searchFunction` for async loading of items)
-- `searchFunction` - optional function to load items asynchroniously from HTTP call for example
+- `searchFunction` - optional function to load items asynchroniously from HTTP call for example, the searchFunction can also return all items and addtional local search will still be performed
+- `delay` - delay in miliseconds to wait after user input to do the local searching or call `searchFunction` if provided, defaults to 0
+- `localFiltering` - boolean specifying if `searchFunction` is used, to still peform local filtering of the items to only ones that match the  user input, defaults to true
 - `selectedItem` - the current item that is selected (object if the array of items contains objects)
 - `labelFieldName` - the name of the field to be used for showing the items as text in the droprown
 - `keywordsFieldName` - the name of the filed to search by
@@ -129,8 +133,8 @@ Props you may want to specify include:
 - `minCharactersToSearch` - minimum length of search text to perform search, defaults to 1
 - `maxItemsToShowInList` - maximum number of items to show in the dropdown list, defaults 0 (no limit)
 - `disabled` - disable the control
-- `delay` - the delay to wait after an input to call `searchFunction` (in milliseconds) defaults to 0. A value like 200 allows to not
-   produce too many requests.
+
+- ``
 
 ### Events
 
@@ -150,6 +154,27 @@ Props you may want to specify include:
 - `name` - generate an HTML input with this name, containing the current value
 - `debug` - flag to enable detailed log statements from the component
 - `html5autocomplete` - flag to enable or disable the [HTML5 autocomplete](https://developer.mozilla.org/fr/docs/Web/HTML/Element/form#attr-autocomplete) attribute
+
+### UI Slots
+- `item` - change the apearance of items in the dropdown list:
+```html
+<pre>
+<div slot="item" let:item={item} let:label={label}>
+  {@html label} <!-- to render the default higliglighted item label -->
+  <!-- render anything else -->
+  <span style="color:{item.propertyX}">{item.propertyY}</span>
+</div>
+</pre>
+```
+- `no-results` - customize the div that shows the "no results" text:
+```html
+<pre>
+<div slot="no-results" let:defaultNoResultsText={defaultNoResultsText}>
+    <span>{defaultNoResultsText}</strong>
+</div>
+</pre>
+```
+The defaultNoResultsText variable is optional and can be ommited.
 
 #### CSS properties
 - `autocomplete` the class applied to the main control

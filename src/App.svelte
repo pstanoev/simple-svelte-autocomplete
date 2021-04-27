@@ -53,33 +53,40 @@ let selectedColorValue;
 	valueFieldName="id"
   keywordsFunction={color => color.name + ' ' + color.code} />`;
 
-  const example3Code = `const colorList = [
-  { id: 1, name: "White", code: "#FFFFFF" },
-  { id: 2, name: "Red", code: "#FF0000" },
-  { id: 3, name: "Yellow", code: "#FF00FF" },
-  { id: 4, name: "Green", code: "#00FF00" },
-  { id: 5, name: "Blue", code: "#0000FF" },
-  { id: 6, name: "Black", code: "#000000" }
-];
-
-let selectedColorObject;
-let selectedColorValue;
-
-<AutoComplete
-    items={colorList}
-    bind:selectedItem={selectedColorObject}
-    bind:value={selectedColorValue}
-    labelFieldName="name"
-    valueFieldName="id"
-    keywordsFunction={color => color.name + ' ' + color.code}>
+  const example3Code = `
+<AutoComplete ...>
 
     <div slot="item" let:item={item} let:label={label}>
         {@html label}
-        <span style="color:{item.item.code}">{item.item.code}</span>
+        <span style="color:{item.code}">{item.code}</span>
+    </div>
+
+    <div slot="no-results" let:noResultsText={noResultsText}>
+       <strong>NO RESULTS - {noResultsText}</strong>
     </div>
 
 </AutoComplete>`;
 
+  const example4Code = `
+let selectedCountry;
+async function searchCountry(keyword) {
+  const url = "https://restcountries.eu/rest/v2/name/" 
+    + encodeURIComponent(keyword) + "?fields=name;alpha2Code";
+
+  const response = await fetch(url);
+  return await response.json();
+}
+
+<AutoComplete
+  searchFunction={searchCountry}
+  bind:selectedItem={selectedCountry}
+  labelFieldName="name"
+  maxItemsToShowInList="10"
+  delay=200 
+  localFiltering=false />
+  
+The delay parameter nakes the component wait for 200ms after you typed something before generating a request. 
+Set localFiltering to false if your search function already returnes filtered results.`;
 
   async function searchCountry(keyword) {
     const url =
@@ -88,9 +95,7 @@ let selectedColorValue;
       "?fields=name;alpha2Code";
 
     const response = await fetch(url);
-    const json = await response.json();
-
-    return json;
+    return await response.json();
   }
 </script>
 
@@ -175,9 +180,7 @@ let selectedColorValue;
       </div>
     </div>
 
-    <h3>Custom items:</h3>
-    <p>
-    </p>
+    <h3>Custom items using &lt;slot&gt;:</h3>
 
     <div class="columns">
       <div class="column is-one-third">
@@ -192,28 +195,16 @@ let selectedColorValue;
           {disabled}
           showClear={true}
           hideArrow={false}
-          placeholder={showPlacehoder ? 'Please select color' : ''}
-          >
-          <div slot="item" let:item={item} let:label={label}>
-              {@html label}
-              <span style="color:{item.item.code}">{item.item.code}</span>
+          placeholder={showPlacehoder ? 'Please select color' : ''}>
+          <div slot="item" let:item let:label>
+            {@html label}
+            <span style="color:{item.code}">{item.code}</span>
+          </div>
+          <div slot="no-results" let:noResultsText>
+            <strong>NO RESULTS - {noResultsText}</strong>
           </div>
         </AutoComplete>
 
-        <p>
-          Selected color item: {JSON.stringify(selectedColorObjectCustom)}
-          <br />
-          Selected value: {selectedColorValueCustom}
-        </p>
-
-        <div>
-          <p>Change selected item from outside:</p>
-          <button
-            class="button"
-            on:click={() => (selectedColorObjectCustom = colorList[colorList.length - 1])}>
-            Set color to Black
-          </button>
-        </div>
       </div>
       <div class="columns">
         <div class="column">
@@ -225,28 +216,29 @@ let selectedColorValue;
     </div>
 
     <h3>Async example:</h3>
-    <h5>Pick a country:</h5>
-    <AutoComplete
-      searchFunction={searchCountry}
-      bind:selectedItem={selectedCountry}
-      labelFieldName="name"
-      maxItemsToShowInList="10" />
 
-    <div style="margin-bottom: 10rem;">
-      <p>Selected country: {JSON.stringify(selectedCountry)}</p>
+    <div class="columns">
+      <div class="column is-one-third">
+        <h5>Pick a country:</h5>
+
+        <AutoComplete
+          searchFunction={searchCountry}
+          bind:selectedItem={selectedCountry}
+          labelFieldName="name"
+          maxItemsToShowInList="10"
+          delay=200
+          localFiltering=false />
+
+        <div style="margin-bottom: 10rem;">
+          <p>Selected country: {JSON.stringify(selectedCountry)}</p>
+        </div>
+      </div>
+      <div class="column">
+        <pre>
+          <code class="language-html" data-lang="html">{example4Code}</code>
+        </pre>
+      </div>
     </div>
-
-    <h3>Delay example:</h3>
-    <p>The component waits 1 second after you typed something before generating a request. You
-    can open your browser network panel, and see that there has probably been fewer requests than
-    character you typed.</p>
-    <h5>Pick a country:</h5>
-    <AutoComplete
-      searchFunction={searchCountry}
-      bind:selectedItem={selectedCountry}
-      labelFieldName="name"
-      maxItemsToShowInList="10"
-      delay=1000 />
 
   </div>
 </section>

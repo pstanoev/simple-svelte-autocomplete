@@ -2,6 +2,9 @@
   // the list of items  the user can select from
   export let items = [];
 
+  // function to use to get all items (alternative to providing items)
+  export let searchFunction = false;
+
   // field of each item that's used for the labels in the list
   export let labelFieldName = undefined;
   export let keywordsFieldName = labelFieldName;
@@ -36,21 +39,97 @@
     return userEnteredText;
   };
 
-  export let searchFunction = false;
-
   export let beforeChange = function(oldSelectedItem, newSelectedItem) {
     return true;
   };
   export let onChange = function(newSelectedItem) {};
 
+  // Behaviour properties
   export let selectFirstIfEmpty = false;
-
   export let minCharactersToSearch = 1;
   export let maxItemsToShowInList = 0;
+
+  // delay to wait after a keypress to search for new items
+  export let delay = 0;
+
+  // true to perform local filtering of items, even if searchFunction is provided
+  export let localFiltering = true;
+
+  // UI properties
+  // text displayed when no items match the input text
   export let noResultsText = "No results found";
 
+  // the text displayed when no option is selected
+  export let placeholder = undefined;
+
+  // apply a className to the control
+  export let className = undefined;
+
+  // HTML input UI properties
+  // apply a className to the input control
+  export let inputClassName = undefined;
+  // apply a id to the input control
+  export let inputId = undefined;
+  // generate an HTML input with this name, containing the current value
+  export let name = undefined;
+  // add the title to the HTML input
+  export let title = undefined;
+  // enable the html5 autocompletion to the HTML input
+  export let html5autocomplete = undefined;
+
+  // apply a className to the dropdown div
+  export let dropdownClassName = undefined;
+
+  // option to hide the dropdown arrow
+  export let hideArrow = false;
+
+  // option to show clear selection button
+  export let showClear = false;
+
+  // adds the disabled tag to the HTML input
+  export let disabled = false;
+
+  export let debug = false;
+
+  // --- Public State ----
+
+  // selected item state
+  export let selectedItem = undefined;
+  export let value = undefined;
+
+  // --- Internal State ----
   const uniqueId = "sautocomplete-" + Math.floor(Math.random() * 1000);
 
+  // HTML elements
+  let input;
+  let list;
+
+  // UI state
+  let opened = false;
+  let highlightIndex = -1;
+  let text;
+  let filteredTextLength = 0;
+
+  // view model
+  let filteredListItems;
+  let listItems = [];
+
+  // other state
+  let inputDelayTimeout;
+
+  // -- Reactivity --
+  function onSelectedItemChanged() {
+    value = valueFunction(selectedItem);
+    text = safeLabelFunction(selectedItem);
+    onChange(selectedItem);
+  }
+
+  $: selectedItem, onSelectedItemChanged();
+
+  $: showList =
+    opened && ((items && items.length > 0) || filteredTextLength > 0);
+
+  // --- Functions ---
   function safeStringFunction(theFunction, argument) {
     if (typeof theFunction !== "function") {
       console.error(
@@ -99,74 +178,6 @@
     }
     return result;
   }
-
-  // the text displayed when no option is selected
-  export let placeholder = undefined;
-  // apply a className to the control
-  export let className = undefined;
-
-  // apply a className to the input control
-  export let inputClassName = undefined;
-
-  // apply a id to the input control
-  export let inputId = undefined;
-
-  // generate an HTML input with this name, containing the current value
-  export let name = undefined;
-
-  // apply a className to the dropdown div
-  export let dropdownClassName = undefined;
-
-  // option to hide the dropdown arrow
-  export let hideArrow = false;
-
-  // option to show clear selection button
-  export let showClear = false;
-
-  // adds the disabled tag to the HTML input
-  export let disabled = false;
-  // add the title to the HTML input
-  export let title = undefined;
-  export let debug = false;
-
-  // enable the html5 autocompletion
-  export let html5autocomplete = undefined;
-
-  // selected item state
-  export let selectedItem = undefined;
-  export let value = undefined;
-
-  // delay to wait after a keypress to search for new items
-  export let delay = 0;
-
-  let text;
-  let filteredTextLength = 0;
-
-  function onSelectedItemChanged() {
-    value = valueFunction(selectedItem);
-    text = safeLabelFunction(selectedItem);
-    onChange(selectedItem);
-  }
-
-  $: selectedItem, onSelectedItemChanged();
-
-  // HTML elements
-  let input;
-  let list;
-
-  // UI state
-  let opened = false;
-  let highlightIndex = -1;
-
-  $: showList =
-    opened && ((items && items.length > 0) || filteredTextLength > 0);
-
-  // view model
-  let filteredListItems;
-
-  let listItems = [];
-
-  let timeout;
 
   function prepareListItems() {
     let tStart;
@@ -273,28 +284,35 @@
       return;
     }
 
+    // external search which provides items
     if (searchFunction) {
       items = await searchFunction(textFiltered);
       prepareListItems();
     }
 
-    const searchWords = textFiltered.split(" ");
+    // local search
+    let tempfilteredListItems;
+    if (localFiltering) {
+      const searchWords = textFiltered.split(" ");
 
-    let tempfilteredListItems = listItems.filter(listItem => {
-      if (!listItem) {
-        return false;
-      }
-      const itemKeywords = listItem.keywords;
-
-      let matches = 0;
-      searchWords.forEach(searchWord => {
-        if (itemKeywords.includes(searchWord)) {
-          matches++;
+      tempfilteredListItems = listItems.filter(listItem => {
+        if (!listItem) {
+          return false;
         }
-      });
+        const itemKeywords = listItem.keywords;
 
-      return matches >= searchWords.length;
-    });
+        let matches = 0;
+        searchWords.forEach(searchWord => {
+          if (itemKeywords.includes(searchWord)) {
+            matches++;
+          }
+        });
+
+        return matches >= searchWords.length;
+      });
+    } else {
+      tempfilteredListItems = listItems;
+    }
 
     const hlfilter = highlightFilter(textFiltered, ["label"]);
     const filteredListItemsHighlighted = tempfilteredListItems.map(hlfilter);
@@ -458,19 +476,18 @@
     }
 
     text = e.target.value;
-    if (timeout) {
-      clearTimeout(timeout);
+    if (inputDelayTimeout) {
+      clearTimeout(inputDelayTimeout);
     }
 
     if (delay) {
-      timeout = setTimeout(process_input, delay);
-    }
-    else {
-      process_input();
+      inputDelayTimeout = setTimeout(processInput, delay);
+    } else {
+      processInput();
     }
   }
 
-  function process_input() {
+  function processInput() {
     search();
     highlightIndex = 0;
     open();
@@ -769,8 +786,13 @@
             <div
               class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
               on:click={() => onListItemClick(listItem)}
-              on:pointerenter={() => {highlightIndex = i;}}>
-              <slot name="item" item={listItem} label={listItem.highlighted ? listItem.highlighted.label : listItem.label}>
+              on:pointerenter={() => {
+                highlightIndex = i;
+              }}>
+              <slot
+                name="item"
+                item={listItem.item}
+                label={listItem.highlighted ? listItem.highlighted.label : listItem.label}>
                 {#if listItem.highlighted}
                   {@html listItem.highlighted.label}
                 {:else}
@@ -784,16 +806,12 @@
 
       {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
         <div class="autocomplete-list-item-no-results">
-          <slot name="results-not-shown">
-            ...{filteredListItems.length - maxItemsToShowInList} results not shown
-          </slot>
+          ...{filteredListItems.length - maxItemsToShowInList} results not shown
         </div>
       {/if}
     {:else if noResultsText}
       <div class="autocomplete-list-item-no-results">
-        <slot name="no-result">
-          {noResultsText}
-        </slot>
+        <slot name="no-results" {noResultsText}>{noResultsText}</slot>
       </div>
     {/if}
   </div>
