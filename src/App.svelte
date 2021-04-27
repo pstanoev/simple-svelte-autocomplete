@@ -157,5 +157,17 @@ let selectedColorValue;
       <p>Selected country: {JSON.stringify(selectedCountry)}</p>
     </div>
 
+    <h3>Delay example:</h3>
+    <p>The component waits 1 second after you typed something before generating a request. You
+    can open your browser network panel, and see that there has probably been fewer requests than
+    character you typed.</p>
+    <h5>Pick a country:</h5>
+    <AutoComplete
+      searchFunction={searchCountry}
+      bind:selectedItem={selectedCountry}
+      labelFieldName="name"
+      maxItemsToShowInList="10"
+      delay=1000 />
+
   </div>
 </section>
