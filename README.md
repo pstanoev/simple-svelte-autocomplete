@@ -111,8 +111,6 @@ async function getItems(keyword) {
 
 ## Properties
 
-Props you may want to specify include:
-
 ### Behaviour
 
 - `items` - array of items the user can select from (optional, use `searchFunction` for async loading of items)
