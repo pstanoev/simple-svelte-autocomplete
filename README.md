@@ -134,8 +134,6 @@ Props you may want to specify include:
 - `maxItemsToShowInList` - maximum number of items to show in the dropdown list, defaults 0 (no limit)
 - `disabled` - disable the control
 
-- ``
-
 ### Events
 
 - `beforeChange` - function called before a new value is selected
@@ -158,20 +156,16 @@ Props you may want to specify include:
 ### UI Slots
 - `item` - change the apearance of items in the dropdown list:
 ```html
-<pre>
 <div slot="item" let:item={item} let:label={label}>
   {@html label} <!-- to render the default higliglighted item label -->
   <!-- render anything else -->
   <span style="color:{item.propertyX}">{item.propertyY}</span>
 </div>
-</pre>
 ```
 - `no-results` - customize the div that shows the "no results" text:
 ```html
-<pre>
 <div slot="no-results" let:defaultNoResultsText={defaultNoResultsText}>
     <span>{defaultNoResultsText}</strong>
-</div>
 </pre>
 ```
 The defaultNoResultsText variable is optional and can be ommited.
