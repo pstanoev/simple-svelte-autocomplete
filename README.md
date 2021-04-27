@@ -164,11 +164,11 @@ Props you may want to specify include:
 ```
 - `no-results` - customize the div that shows the "no results" text:
 ```html
-<div slot="no-results" let:defaultNoResultsText={defaultNoResultsText}>
-    <span>{defaultNoResultsText}</strong>
+<div slot="no-results" let:noResultsText={noResultsText}>
+    <span>{noResultsText}</strong>
 </pre>
 ```
-The defaultNoResultsText variable is optional and can be ommited.
+The noResultsText variable is optional and can be ommited.
 
 #### CSS properties
 - `autocomplete` the class applied to the main control
