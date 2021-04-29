@@ -9,6 +9,7 @@ Autocomplete / Select / Typeahead component made with [Svelte](https://svelte.de
 * option to define a label field or function
 * option to define more fields used for search
 * support for async load of items
+* can hold one or several values
 
 
 ## Install
@@ -113,6 +114,7 @@ async function getItems(keyword) {
 
 ### Behaviour
 
+- `multiple` - enable multiple selection (false by default)
 - `items` - array of items the user can select from (optional, use `searchFunction` for async loading of items)
 - `searchFunction` - optional function to load items asynchroniously from HTTP call for example, the searchFunction can also return all items and addtional local search will still be performed
 - `delay` - delay in miliseconds to wait after user input to do the local searching or call `searchFunction` if provided, defaults to 0
@@ -153,6 +155,8 @@ async function getItems(keyword) {
 - `name` - generate an HTML input with this name, containing the current value
 - `debug` - flag to enable detailed log statements from the component
 - `html5autocomplete` - flag to enable or disable the [HTML5 autocomplete](https://developer.mozilla.org/fr/docs/Web/HTML/Element/form#attr-autocomplete) attribute
+- `selectName` - apply a name attribute to the <select> tag that holds the selected value
+- `selectId` - apply an id attribute to the <select> tag that holds the selected value
 
 ### UI Slots
 - `item` - change the apearance of items in the dropdown list:
@@ -178,6 +182,12 @@ The noResultsText variable is optional and can be ommited.
 </div>
 </pre>
 ```
+- `tag` - customize the tag blocks displayed when multiple selection is enabled:
+```html
+<slot name="tag" let:label={label} let:item={item} let:unselectItem={unselectItem}>
+  <span class="tag">{label}</span>
+  <span class="delete-tag" on:click|preventDefault={unselectItem(item)}></span>
+</slot>```
 
 #### CSS properties
 - `autocomplete` the class applied to the main control

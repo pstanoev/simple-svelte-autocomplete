@@ -7,6 +7,8 @@
 
   let selectedColor;
   let selectedAnimal;
+  let selectedColorsItems;
+  let selectedColorsValues;
   let items = countryList;
   let selectedCountry;
 
@@ -137,6 +139,18 @@ async function* searchCountryGenerator(keyword) {
   delay=200
   localFiltering=false />`;
 
+  const example7Code = `let selectedColorsItems;
+let selectedColorsValues;
+
+<AutoComplete
+    multiple=true
+    items={colorList}
+    labelFieldName="name"
+    valueFieldName="id"
+    bind:selectedItem={selectedColorsItems}
+    bind:value={selectedColorsValues}
+    />`;
+
 
   async function searchCountry(keyword) {
     const url =
@@ -234,6 +248,38 @@ async function* searchCountryGenerator(keyword) {
             <code class="language-html" data-lang="html">{example2Code}</code>
           </pre>
         </div>
+      </div>
+    </div>
+
+    <h3>Multiple example:</h3>
+    <p>
+    The <strong>multiple</strong> attribute allows you to select several items
+    </p>
+
+    <div class="columns">
+      <div class="column is-one-third">
+        <h5>Pick a color:</h5>
+
+        <AutoComplete
+            multiple=true
+            items={colorList}
+            labelFieldName="name"
+            valueFieldName="id"
+            showClear={true}
+            bind:selectedItem={selectedColorsItems}
+            bind:value={selectedColorsValues}
+            />
+        <p>
+          Selected color items: {JSON.stringify(selectedColorsItems)}
+          <br />
+          Selected color values: {JSON.stringify(selectedColorsValues)}
+        </p>
+
+      </div>
+      <div class="column">
+        <pre>
+          <code class="language-html" data-lang="html">{example7Code}</code>
+        </pre>
       </div>
     </div>
 
