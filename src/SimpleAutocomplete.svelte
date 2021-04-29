@@ -167,7 +167,7 @@
     // console.log("safeKeywordsFunction");
     const keywords = safeStringFunction(keywordsFunction, item);
     let result = safeStringFunction(keywordsCleanFunction, keywords);
-    result = result.toLowerCase().trim();
+    result = removeDiacritics(result.toLowerCase().trim());
     if (debug) {
       console.log(
         "Extracted keywords: '" +
@@ -293,7 +293,7 @@
     // local search
     let tempfilteredListItems;
     if (localFiltering) {
-      const searchWords = textFiltered.split(" ");
+      const searchWords = removeDiacritics(textFiltered).split(" ");
 
       tempfilteredListItems = listItems.filter(listItem => {
         if (!listItem) {
@@ -638,6 +638,10 @@
       }
       return newI;
     };
+  }
+
+  function removeDiacritics(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 </script>
 
