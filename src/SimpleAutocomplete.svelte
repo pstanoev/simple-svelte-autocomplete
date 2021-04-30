@@ -464,7 +464,7 @@
       console.log("onKeyPress");
     }
 
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && opened) {
       e.preventDefault();
       selectItem();
     }
