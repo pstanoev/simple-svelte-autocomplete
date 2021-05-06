@@ -773,7 +773,7 @@
 
 <div
   class="{className ? className : ''}
-  {hideArrow ? 'hide-arrow is-multiple' : ''}
+  {hideArrow || !items.length ? 'hide-arrow is-multiple' : ''}
   {showClear ? 'show-clear' : ''} autocomplete select is-fullwidth {uniqueId}">
   <input
     type="text"
