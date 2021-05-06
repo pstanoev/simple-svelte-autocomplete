@@ -131,6 +131,7 @@ async function getItems(keyword) {
 - `minCharactersToSearch` - minimum length of search text to perform search, defaults to 1
 - `maxItemsToShowInList` - maximum number of items to show in the dropdown list, defaults 0 (no limit)
 - `disabled` - disable the control
+- `ignoreAccents` - ignores the accents to match items, defaults to true.
 
 ### Events
 

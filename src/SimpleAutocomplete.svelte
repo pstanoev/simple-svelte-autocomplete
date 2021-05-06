@@ -89,6 +89,9 @@
   // adds the disabled tag to the HTML input
   export let disabled = false;
 
+  // ignores the accents when matching items
+  export let ignoreAccents = true;
+
   export let debug = false;
 
   // --- Public State ----
@@ -167,7 +170,11 @@
     // console.log("safeKeywordsFunction");
     const keywords = safeStringFunction(keywordsFunction, item);
     let result = safeStringFunction(keywordsCleanFunction, keywords);
-    result = removeDiacritics(result.toLowerCase().trim());
+    result = result.toLowerCase().trim();
+    if (ignoreAccents) {
+      result = removeDiacritics(result);
+    }
+
     if (debug) {
       console.log(
         "Extracted keywords: '" +
@@ -293,7 +300,10 @@
     // local search
     let tempfilteredListItems;
     if (localFiltering) {
-      const searchWords = removeDiacritics(textFiltered).split(" ");
+      var searchWords = textFiltered.split(" ");
+      if (ignoreAccents) {
+        searchWords = searchWords.map(word => removeDiacritics(word));
+      }
 
       tempfilteredListItems = listItems.filter(listItem => {
         if (!listItem) {
