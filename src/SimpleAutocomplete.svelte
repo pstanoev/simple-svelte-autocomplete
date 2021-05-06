@@ -114,6 +114,10 @@
   let filteredListItems;
   let listItems = [];
 
+  // requests/responses counters
+  let lastRequestId = 0;
+  let lastResponseId = 0;
+
   // other state
   let inputDelayTimeout;
 
@@ -286,7 +290,20 @@
 
     // external search which provides items
     if (searchFunction) {
-      items = await searchFunction(textFiltered);
+      lastRequestId = lastRequestId + 1;
+      var currentRequestId = lastRequestId;
+
+      let result = await searchFunction(textFiltered);
+
+      // If a response to a newer request has been received
+      // while responses to this request were being loaded,
+      // then we can just throw away this outdated results.
+      if (currentRequestId < lastResponseId) {
+        return false;
+      }
+
+      lastResponseId = currentRequestId;
+      items = result;
       prepareListItems();
     }
 
@@ -329,6 +346,7 @@
           " items"
       );
     }
+    return true;
   }
 
   // $: text, search();
@@ -488,9 +506,10 @@
   }
 
   function processInput() {
-    search();
-    highlightIndex = 0;
-    open();
+    if(search()) {
+      highlightIndex = 0;
+      open();
+    }
   }
 
   function onInputClick() {
