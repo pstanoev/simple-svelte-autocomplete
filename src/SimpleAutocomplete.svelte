@@ -191,10 +191,11 @@
   }
 
   function prepareListItems() {
-    let tStart;
+    let timerId;
     if (debug) {
-      tStart = performance.now();
-      console.log("prepare items to search");
+      timerId = `Autocomplete prepare list ${inputId? `(id: ${inputId})` : ''})`;
+      console.time(timerId);
+      console.log("Prepare items to search");
       console.log("items: " + JSON.stringify(items));
     }
 
@@ -220,13 +221,9 @@
     }
 
     if (debug) {
-      const tEnd = performance.now();
-      console.log(
-        listItems.length +
-          " items to search prepared in " +
-          (tEnd - tStart) +
-          " milliseconds"
-      );
+      console.log(listItems.length +
+          " items to search")
+      console.timeEnd(timerId);
     }
   }
 
@@ -276,9 +273,10 @@
   }
 
   async function search() {
-    let tStart;
+    let timerId;
     if (debug) {
-      tStart = performance.now();
+      timerId = `Autocomplete search ${inputId? `(id: ${inputId})` : ''})`;
+      console.time(timerId);
       console.log("Searching user entered text: '" + text + "'");
     }
 
@@ -291,6 +289,7 @@
         console.log(
           "User entered text is empty set the list of items to all items"
         );
+        console.timeEnd(timerId);
       }
       return;
     }
@@ -347,11 +346,9 @@
     filteredListItems = filteredListItemsHighlighted;
     closeIfMinCharsToSearchReached();
     if (debug) {
-      const tEnd = performance.now();
+      console.timeEnd(timerId);
       console.log(
-        "Search took " +
-          (tEnd - tStart) +
-          " milliseconds, found " +
+        "Search found " +
           filteredListItems.length +
           " items"
       );
