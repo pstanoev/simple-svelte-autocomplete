@@ -92,6 +92,12 @@
   // ignores the accents when matching items
   export let ignoreAccents = true;
 
+  // all the input keywords should be matched in the item keywords
+  export let matchAllKeywords = true;
+
+  // sorts the items by the number of matchink keywords
+  export let sortByPertinence = false;
+
   export let debug = false;
 
   // --- Public State ----
@@ -272,6 +278,23 @@
     return textFilteredLowerCase;
   }
 
+  function numberOfMatches(listItem, searchWords) {
+    if (!listItem) {
+      return 0;
+    }
+
+    const itemKeywords = listItem.keywords;
+
+    let matches = 0;
+    searchWords.forEach(searchWord => {
+      if (itemKeywords.includes(searchWord)) {
+        matches++;
+      }
+    });
+
+    return matches;
+  }
+
   async function search() {
     let timerId;
     if (debug) {
@@ -322,20 +345,21 @@
       }
 
       tempfilteredListItems = listItems.filter(listItem => {
-        if (!listItem) {
-          return false;
+        var matches = numberOfMatches(listItem, searchWords);
+        if (matchAllKeywords) {
+            return matches >= searchWords.length;
         }
-        const itemKeywords = listItem.keywords;
-
-        let matches = 0;
-        searchWords.forEach(searchWord => {
-          if (itemKeywords.includes(searchWord)) {
-            matches++;
-          }
-        });
-
-        return matches >= searchWords.length;
+        else {
+            return matches > 0;
+        }
       });
+
+      if (sortByPertinence) {
+        tempfilteredListItems = tempfilteredListItems.sort((obj1, obj2) => {
+          return numberOfMatches(obj2, searchWords) - numberOfMatches(obj1, searchWords);
+        });
+      }
+
     } else {
       tempfilteredListItems = listItems;
     }
@@ -645,25 +669,26 @@
     }
     close();
   }
-  // 'item number one'.replace(/(it)(.*)(nu)(.*)(one)/ig, '<b>$1</b>$2 <b>$3</b>$4 <b>$5</b>')
-  function highlightFilter(q, fields) {
-    const qs = "(" + q.trim().replace(/\s/g, ")(.*)(") + ")";
-    const reg = new RegExp(qs, "ig");
-    let n = 1;
-    const len = qs.split(")(").length + 1;
-    let repl = "";
-    for (; n < len; n++) repl += n % 2 ? `<b>$${n}</b>` : `$${n}`;
 
-    return i => {
-      const newI = Object.assign({ highlighted: {} }, i);
+  function highlightFilter(keywords, fields) {
+    keywords = keywords.split(/\s/g);
+    return item => {
+      const newItem = Object.assign({ highlighted: {} }, item);
       if (fields) {
-        fields.forEach(f => {
-          if (!newI[f]) return;
-          newI.highlighted[f] = newI[f].replace(reg, repl);
+        fields.forEach(field => {
+          if (newItem[field] && !newItem.highlighted[field]) {
+            newItem.highlighted[field] = newItem[field];
+          }
+          if (newItem.highlighted[field]) {
+            keywords.forEach(keyword => {
+              const reg = new RegExp("(" + keyword + ")", "ig");
+              newItem.highlighted[field] = newItem.highlighted[field].replace(reg, "<b>$1</b>");
+            });
+          }
         });
       }
-      return newI;
-    };
+      return newItem;
+    }
   }
 
   function removeDiacritics(str) {
