@@ -3,7 +3,10 @@
   import { countryList } from "./country-list.js";
 
   const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
+  const animals = ["White Rabbit", "White Horse", "Black Rabbit", "Black Horse", "Black Black Rabbit"];
+
   let selectedColor;
+  let selectedAnimal;
   let items = countryList;
   let selectedCountry;
 
@@ -97,6 +100,12 @@ Set localFiltering to false if your search function already returnes filtered re
     const response = await fetch(url);
     return await response.json();
   }
+
+  const example5Code = `const colors = ["White Rabbit", "White Horse", "Black Rabbit", "Black Horse", "Black Black Rabbit"];
+let selectedAnimal;
+<AutoComplete items={animals} bind:selectedItem={selectedAnimal} matchAllKeywords={false} sortByPertinence={true} />
+Selected color: {selectedAnimal}`;
+
 </script>
 
 <style>
@@ -239,6 +248,24 @@ Set localFiltering to false if your search function already returnes filtered re
         </pre>
       </div>
     </div>
+
+    <h3>Matching keyword strategy:</h3>
+
+    <div class="columns">
+      <div class="column is-one-third">
+        <h5>Pick an animal:</h5>
+
+        <AutoComplete items={animals} bind:selectedItem={selectedAnimal} matchAllKeywords={false} sortByPertinence={true} />
+        <p>Selected animal: {selectedAnimal}</p>
+
+      </div>
+      <div class="column">
+        <pre>
+          <code class="language-html" data-lang="html">{example5Code}</code>
+        </pre>
+      </div>
+    </div>
+
 
   </div>
 </section>
