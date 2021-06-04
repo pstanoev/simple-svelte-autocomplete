@@ -101,6 +101,11 @@ Set localFiltering to false if your search function already returnes filtered re
     return await response.json();
   }
 
+  async function searchCountrySlow(keyword) {
+      await new Promise(r => setTimeout(r, 3000));
+      return searchCountry(keyword);
+  }
+
   const example5Code = `const colors = ["White Rabbit", "White Horse", "Black Rabbit", "Black Horse", "Black Black Rabbit"];
 let selectedAnimal;
 <AutoComplete items={animals} bind:selectedItem={selectedAnimal} matchAllKeywords={false} sortByPertinence={true} />
@@ -223,6 +228,14 @@ Selected color: {selectedAnimal}`;
         </div>
       </div>
     </div>
+
+    <h3>Activity indicator:</h3>
+    <p>Those requests takes 3s to compute, an activity indicator is shown during this time.</p>
+    <h5>Pick a country:</h5>
+    <AutoComplete
+      searchFunction={searchCountrySlow}
+      labelFieldName="name"
+      maxItemsToShowInList="10" />
 
     <h3>Async example:</h3>
 
