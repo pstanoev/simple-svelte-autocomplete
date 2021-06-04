@@ -92,6 +92,15 @@
   // adds the disabled tag to the HTML input
   export let disabled = false;
 
+  // ignores the accents when matching items
+  export let ignoreAccents = true;
+
+  // all the input keywords should be matched in the item keywords
+  export let matchAllKeywords = true;
+
+  // sorts the items by the number of matchink keywords
+  export let sortByPertinence = false;
+
   export let debug = false;
 
   // --- Public State ----
@@ -176,6 +185,10 @@
     const keywords = safeStringFunction(keywordsFunction, item);
     let result = safeStringFunction(keywordsCleanFunction, keywords);
     result = result.toLowerCase().trim();
+    if (ignoreAccents) {
+      result = removeDiacritics(result);
+    }
+
     if (debug) {
       console.log(
         "Extracted keywords: '" +
@@ -188,10 +201,11 @@
   }
 
   function prepareListItems() {
-    let tStart;
+    let timerId;
     if (debug) {
-      tStart = performance.now();
-      console.log("prepare items to search");
+      timerId = `Autocomplete prepare list ${inputId? `(id: ${inputId})` : ''})`;
+      console.time(timerId);
+      console.log("Prepare items to search");
       console.log("items: " + JSON.stringify(items));
     }
 
@@ -217,13 +231,9 @@
     }
 
     if (debug) {
-      const tEnd = performance.now();
-      console.log(
-        listItems.length +
-          " items to search prepared in " +
-          (tEnd - tStart) +
-          " milliseconds"
-      );
+      console.log(listItems.length +
+          " items to search")
+      console.timeEnd(timerId);
     }
   }
 
@@ -272,10 +282,28 @@
     return textFilteredLowerCase;
   }
 
+  function numberOfMatches(listItem, searchWords) {
+    if (!listItem) {
+      return 0;
+    }
+
+    const itemKeywords = listItem.keywords;
+
+    let matches = 0;
+    searchWords.forEach(searchWord => {
+      if (itemKeywords.includes(searchWord)) {
+        matches++;
+      }
+    });
+
+    return matches;
+  }
+
   async function search() {
-    let tStart;
+    let timerId;
     if (debug) {
-      tStart = performance.now();
+      timerId = `Autocomplete search ${inputId? `(id: ${inputId})` : ''})`;
+      console.time(timerId);
       console.log("Searching user entered text: '" + text + "'");
     }
 
@@ -288,6 +316,7 @@
         console.log(
           "User entered text is empty set the list of items to all items"
         );
+        console.timeEnd(timerId);
       }
       return;
     }
@@ -316,23 +345,27 @@
     // local search
     let tempfilteredListItems;
     if (localFiltering) {
-      const searchWords = textFiltered.split(" ");
+      var searchWords = textFiltered.split(" ");
+      if (ignoreAccents) {
+        searchWords = searchWords.map(word => removeDiacritics(word));
+      }
 
       tempfilteredListItems = listItems.filter(listItem => {
-        if (!listItem) {
-          return false;
+        var matches = numberOfMatches(listItem, searchWords);
+        if (matchAllKeywords) {
+            return matches >= searchWords.length;
         }
-        const itemKeywords = listItem.keywords;
-
-        let matches = 0;
-        searchWords.forEach(searchWord => {
-          if (itemKeywords.includes(searchWord)) {
-            matches++;
-          }
-        });
-
-        return matches >= searchWords.length;
+        else {
+            return matches > 0;
+        }
       });
+
+      if (sortByPertinence) {
+        tempfilteredListItems = tempfilteredListItems.sort((obj1, obj2) => {
+          return numberOfMatches(obj2, searchWords) - numberOfMatches(obj1, searchWords);
+        });
+      }
+
     } else {
       tempfilteredListItems = listItems;
     }
@@ -343,11 +376,9 @@
     filteredListItems = filteredListItemsHighlighted;
     closeIfMinCharsToSearchReached();
     if (debug) {
-      const tEnd = performance.now();
+      console.timeEnd(timerId);
       console.log(
-        "Search took " +
-          (tEnd - tStart) +
-          " milliseconds, found " +
+        "Search found " +
           filteredListItems.length +
           " items"
       );
@@ -488,7 +519,7 @@
       console.log("onKeyPress");
     }
 
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && opened) {
       e.preventDefault();
       selectItem();
     }
@@ -645,25 +676,30 @@
     }
     close();
   }
-  // 'item number one'.replace(/(it)(.*)(nu)(.*)(one)/ig, '<b>$1</b>$2 <b>$3</b>$4 <b>$5</b>')
-  function highlightFilter(q, fields) {
-    const qs = "(" + q.trim().replace(/\s/g, ")(.*)(") + ")";
-    const reg = new RegExp(qs, "ig");
-    let n = 1;
-    const len = qs.split(")(").length + 1;
-    let repl = "";
-    for (; n < len; n++) repl += n % 2 ? `<b>$${n}</b>` : `$${n}`;
 
-    return i => {
-      const newI = Object.assign({ highlighted: {} }, i);
+  function highlightFilter(keywords, fields) {
+    keywords = keywords.split(/\s/g);
+    return item => {
+      const newItem = Object.assign({ highlighted: {} }, item);
       if (fields) {
-        fields.forEach(f => {
-          if (!newI[f]) return;
-          newI.highlighted[f] = newI[f].replace(reg, repl);
+        fields.forEach(field => {
+          if (newItem[field] && !newItem.highlighted[field]) {
+            newItem.highlighted[field] = newItem[field];
+          }
+          if (newItem.highlighted[field]) {
+            keywords.forEach(keyword => {
+              const reg = new RegExp("(" + keyword + ")", "ig");
+              newItem.highlighted[field] = newItem.highlighted[field].replace(reg, "<b>$1</b>");
+            });
+          }
         });
       }
-      return newI;
-    };
+      return newItem;
+    }
+  }
+
+  function removeDiacritics(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 </script>
 
