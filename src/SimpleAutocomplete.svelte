@@ -24,11 +24,16 @@
     return keywordsFieldName ? item[keywordsFieldName] : labelFunction(item);
   };
 
-  export let valueFunction = function(item) {
+  export let valueFunction = function(item, force_single=false) {
     if (item === undefined || item === null) {
       return item;
     }
-    return valueFieldName ? item[valueFieldName] : item;
+    if (!multiple || force_single) {
+      return valueFieldName ? item[valueFieldName] : item;
+    }
+    else {
+      return item.map(i => valueFieldName ? i[valueFieldName] : i);
+    }
   };
 
   export let keywordsCleanFunction = function(keywords) {
@@ -48,6 +53,7 @@
   export let selectFirstIfEmpty = false;
   export let minCharactersToSearch = 1;
   export let maxItemsToShowInList = 0;
+  export let multiple = false;
 
   // delay to wait after a keypress to search for new items
   export let delay = 0;
@@ -73,8 +79,12 @@
   export let inputClassName = undefined;
   // apply a id to the input control
   export let inputId = undefined;
-  // generate an HTML input with this name, containing the current value
+  // generate an HTML input with this name
   export let name = undefined;
+  // generate a <select> tag that holds the value
+  export let selectName = undefined;
+  // apply a id to the <select>
+  export let selectId = undefined;
   // add the title to the HTML input
   export let title = undefined;
   // enable the html5 autocompletion to the HTML input
@@ -137,7 +147,7 @@
   // -- Reactivity --
   function onSelectedItemChanged() {
     value = valueFunction(selectedItem);
-    text = safeLabelFunction(selectedItem);
+    text = !multiple ? safeLabelFunction(selectedItem) : '';
     onChange(selectedItem);
   }
 
@@ -429,7 +439,22 @@
     }
     const newSelectedItem = listItem.item;
     if (beforeChange(selectedItem, newSelectedItem)) {
-      selectedItem = newSelectedItem;
+      // simple selection
+      if (!multiple) {
+        selectedItem = newSelectedItem;
+      }
+      // first selection of multiple ones
+      else if (!selectedItem){
+        selectedItem = [newSelectedItem];
+      }
+      // selecting something already selected => unselect it
+      else if (selectedItem.includes(newSelectedItem)) {
+        selectedItem = selectedItem.filter(i => i !== newSelectedItem);
+      }
+      // adds the element to the selection
+      else {
+        selectedItem = [...selectedItem, newSelectedItem];
+      }
     }
     return true;
   }
@@ -441,6 +466,9 @@
     const listItem = filteredListItems[highlightIndex];
     if (selectListItem(listItem)) {
       close();
+      if (multiple) {
+        input.focus();
+      }
     }
   }
 
@@ -501,6 +529,9 @@
 
     if (selectListItem(listItem)) {
       close();
+      if (multiple) {
+        input.focus();
+      }
     }
   }
 
@@ -534,7 +565,10 @@
       ShiftTab: opened ? up.bind(this) : null,
       ArrowDown: down.bind(this),
       ArrowUp: up.bind(this),
-      Escape: onEsc.bind(this)
+      Escape: onEsc.bind(this),
+      Backspace: multiple && selectedItem && selectedItem.length && !text
+        ? onBackspace.bind(this)
+        : null,
     };
     const fn = fnmap[key];
     if (typeof fn === "function") {
@@ -571,6 +605,14 @@
     }
   }
 
+  function unselectItem(tag) {
+    if (debug) {
+      console.log("unselectItem", tag);
+    }
+    selectedItem = selectedItem.filter(i => i !== tag);
+    input.focus();
+  }
+
   function processInput() {
     if(search()) {
       highlightIndex = 0;
@@ -596,6 +638,14 @@
       input.focus();
       close();
     }
+  }
+
+  function onBackspace(e) {
+    if (debug) {
+      console.log("onBackspace");
+    }
+
+    unselectItem(selectedItem[selectedItem.length-1]);
   }
 
   function onFocus() {
@@ -730,6 +780,25 @@
   function removeDiacritics(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
+
+  // workaround for
+  // ValidationError: 'multiple' attribute cannot be dynamic if select uses two-way binding
+  function multipleAction(node){
+    node.multiple = multiple;
+  }
+
+  function isConfirmed(listItem){
+    if (!selectedItem) {
+      return false;
+    }
+    if (multiple) {
+      return selectedItem.includes(listItem);
+    }
+    else {
+      return listItem == selectedItem;
+    }
+  }
+
 </script>
 
 <style>
@@ -810,6 +879,10 @@
     line-height: 1;
   }
 
+  .autocomplete-list-item.confirmed {
+    background-color: #789fed;
+    color: #fff;
+  }
   .autocomplete-list-item.selected {
     background-color: #2e69e2;
     color: #fff;
@@ -845,14 +918,83 @@
   .autocomplete:not(.show-clear) .autocomplete-clear-button {
     display: none;
   }
+
+  .autocomplete select{
+    display: none;
+  }
+
+  .autocomplete.is-multiple .input-container {
+    height: auto;
+    box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+    border-radius: 4px;
+    border: 1px solid #b5b5b5;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    background-color: #FFF;
+  }
+
+  .autocomplete.is-multiple .tag{
+    display: flex;
+    margin-top: 0.5em;
+    margin-bottom: 0.3em;
+  }
+
+  .autocomplete.is-multiple .tag.is-delete{
+    cursor: pointer;
+  }
+
+  .autocomplete.is-multiple .tags{
+    margin-right: 0.3em;
+    margin-bottom: 0;
+  }
+
+  .autocomplete.is-multiple .autocomplete-input{
+    display: flex;
+    width: 100%;
+    flex: 1 1 50px;
+    min-width: 3em;
+    border: none;
+    box-shadow: none;
+    background: none;
+  }
+
 </style>
 
 <div
   class="{className ? className : ''}
-  {hideArrow || !items.length ? 'hide-arrow is-multiple' : ''}
+  {hideArrow || !items.length ? 'hide-arrow' : ''}
+  {multiple ? 'is-multiple' : ''}
   {showClear ? 'show-clear' : ''} autocomplete select is-fullwidth {uniqueId}"
   class:is-loading={loading}
   >
+  <select
+    name={selectName}
+    id={selectId}
+    bind:value={value}
+    use:multipleAction
+    >
+    {#if !multiple && value}
+        <option value="{value}" selected>{text}</option>
+    {:else if multiple && selectedItem}
+      {#each selectedItem as i}
+        <option value="{valueFunction(i, true)}" selected>{safeLabelFunction(i)}</option>
+      {/each}
+    {/if}
+  </select>
+  <div class="input-container">
+  {#if multiple && selectedItem}
+    {#each selectedItem as tagItem}
+    <slot name="tag" label={safeLabelFunction(tagItem)} item={tagItem} {unselectItem}>
+      <div class="tags has-addons">
+       <span class="tag">{safeLabelFunction(tagItem)}</span>
+       <span class="tag is-delete" on:click|preventDefault={unselectItem(tagItem)}></span>
+      </div>
+    </slot>
+    {/each}
+  {/if}
   <input
     type="text"
     class="{inputClassName ? inputClassName : ''} input autocomplete-input"
@@ -872,6 +1014,7 @@
   {#if showClear}
     <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
   {/if}
+  </div>
   <div
     class="{dropdownClassName ? dropdownClassName : ''} autocomplete-list {showList ? '' : 'hidden'}
     is-fullwidth"
@@ -882,6 +1025,7 @@
           {#if listItem}
             <div
               class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
+              class:confirmed={isConfirmed(listItem.item)}
               on:click={() => onListItemClick(listItem)}
               on:pointerenter={() => {
                 highlightIndex = i;
