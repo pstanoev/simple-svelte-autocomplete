@@ -5,6 +5,7 @@ import AutoComplete from "./SimpleAutocomplete.svelte";
 
 import SimpleExample from "./SimpleExample.svelte";
 import AdvancedExample from "./AdvancedExample.svelte";
+import LockedExample from "./LockedExample.svelte";
 import MultipleExample from "./MultipleExample.svelte";
 import CustomizationExample from "./CustomizationExample.svelte";
 import ActivityIndicatorExample from "./ActivityIndicatorExample.svelte";
@@ -29,6 +30,7 @@ import AsyncGeneratorExample from "./AsyncGeneratorExample.svelte";
         </p>
 
         <SimpleExample />
+        <LockedExample />
         <AdvancedExample />
         <MultipleExample />
         <CustomizationExample />
