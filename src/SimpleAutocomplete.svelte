@@ -331,8 +331,12 @@
       return;
     }
 
+    if (!searchFunction) {
+        processListItems(textFiltered);
+    }
+
     // external search which provides items
-    if (searchFunction) {
+    else{
       lastRequestId = lastRequestId + 1;
       var currentRequestId = lastRequestId;
       loading = true;
@@ -661,7 +665,9 @@
       console.log("resetListToAllItemsAndOpen");
     }
 
-    filteredListItems = listItems;
+    if (!text) {
+        filteredListItems = listItems;
+    }
 
     open();
 
