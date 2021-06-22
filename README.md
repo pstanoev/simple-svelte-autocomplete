@@ -187,7 +187,8 @@ The noResultsText variable is optional and can be ommited.
 <slot name="tag" let:label={label} let:item={item} let:unselectItem={unselectItem}>
   <span class="tag">{label}</span>
   <span class="delete-tag" on:click|preventDefault={unselectItem(item)}></span>
-</slot>```
+</slot>
+```
 
 #### CSS properties
 - `autocomplete` the class applied to the main control
