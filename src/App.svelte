@@ -12,6 +12,7 @@ import ActivityIndicatorExample from "./ActivityIndicatorExample.svelte";
 import AsyncExample from "./AsyncExample.svelte";
 import MatchingStrategyExample from "./MatchingStrategyExample.svelte";
 import AsyncGeneratorExample from "./AsyncGeneratorExample.svelte";
+import AsyncPreloadedExample from "./AsyncPreloadedExample.svelte";
 </script>
 
 <svelte:head>
@@ -38,5 +39,6 @@ import AsyncGeneratorExample from "./AsyncGeneratorExample.svelte";
         <AsyncExample />
         <MatchingStrategyExample />
         <AsyncGeneratorExample />
+        <AsyncPreloadedExample />
     </div>
 </section>

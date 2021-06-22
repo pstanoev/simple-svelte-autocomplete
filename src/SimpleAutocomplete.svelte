@@ -674,6 +674,12 @@
         filteredListItems = listItems;
     }
 
+    // When an async component is initialized, the item list
+    // must be loaded when the input is focused.
+    else if (!listItems.length && selectedItem && searchFunction) {
+      search();
+    }
+
     open();
 
     // find selected item
