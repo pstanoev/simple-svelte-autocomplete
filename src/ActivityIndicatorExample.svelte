@@ -1,6 +1,5 @@
 <script>
 import AutoComplete from "./SimpleAutocomplete.svelte";
-import { countryList } from "./country-list.js";
 
 async function searchCountry(keyword) {
     const url =
