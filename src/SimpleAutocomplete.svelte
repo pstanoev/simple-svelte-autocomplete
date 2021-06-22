@@ -54,6 +54,7 @@
   export let minCharactersToSearch = 1;
   export let maxItemsToShowInList = 0;
   export let multiple = false;
+  export let lock = false;
 
   // delay to wait after a keypress to search for new items
   export let delay = 0;
@@ -89,6 +90,8 @@
   export let title = undefined;
   // enable the html5 autocompletion to the HTML input
   export let html5autocomplete = undefined;
+  // make the input readonly
+  export let readonly = undefined;
 
   // apply a className to the dropdown div
   export let dropdownClassName = undefined;
@@ -155,6 +158,8 @@
 
   $: showList =
     opened && ((items && items.length > 0) || filteredTextLength > 0);
+
+  $: clearable = showClear || ((lock || multiple) && selectedItem)
 
   // --- Functions ---
   function safeStringFunction(theFunction, argument) {
@@ -973,7 +978,8 @@
   class="{className ? className : ''}
   {hideArrow || !items.length ? 'hide-arrow' : ''}
   {multiple ? 'is-multiple' : ''}
-  {showClear ? 'show-clear' : ''} autocomplete select is-fullwidth {uniqueId}"
+  autocomplete select is-fullwidth {uniqueId}"
+  class:show-clear={clearable}
   class:is-loading={loading}
   >
   <select
@@ -1010,14 +1016,16 @@
     {name}
     {disabled}
     {title}
+    readonly={readonly || (lock && selectedItem)}
     bind:this={input}
     bind:value={text}
     on:input={onInput}
     on:focus={onFocus}
     on:keydown={onKeyDown}
     on:click={onInputClick}
-    on:keypress={onKeyPress} />
-  {#if showClear}
+    on:keypress={onKeyPress}
+    />
+  {#if clearable}
     <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
   {/if}
   </div>

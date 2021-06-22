@@ -136,6 +136,7 @@ async function getItems(keyword) {
 - `ignoreAccents` - ignores the accents to match items, defaults to true.
 - `matchAllKeywords` - defaults to true. If false, any item will be suggested if it shares at least one common keyword with the input.
 - `sortByPertinence` - defaults to false. If true, items are sorted by pertinence.
+- `lock` - defaults to false. Locks the input when an item has been selected.
 
 ### Events
 
@@ -157,6 +158,7 @@ async function getItems(keyword) {
 - `html5autocomplete` - flag to enable or disable the [HTML5 autocomplete](https://developer.mozilla.org/fr/docs/Web/HTML/Element/form#attr-autocomplete) attribute
 - `selectName` - apply a name attribute to the <select> tag that holds the selected value
 - `selectId` - apply an id attribute to the <select> tag that holds the selected value
+- `readonly` - make the input readonly
 
 ### UI Slots
 - `item` - change the apearance of items in the dropdown list:
