@@ -774,7 +774,7 @@
   }
 
   function highlightFilter(keywords, fields) {
-    keywords = keywords.split(/\s/g);
+    keywords = keywords.split(/\s+/g);
     return item => {
       const newItem = Object.assign({ highlighted: {} }, item);
       if (fields) {
