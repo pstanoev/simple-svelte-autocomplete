@@ -325,12 +325,24 @@
     const textFiltered = prepareUserEnteredText(text);
 
     if (textFiltered === "") {
-      filteredListItems = listItems;
+      if (searchFunction) {
+        // we will need to rerun the search
+        items = [];
+        if (debug) {
+          console.log(
+            "User entered text is empty clear list of items"
+          );
+        }
+      } else {
+        filteredListItems = listItems;
+        if (debug) {
+          console.log(
+            "User entered text is empty set the list of items to all items"
+          );
+        }
+      }
       closeIfMinCharsToSearchReached();
       if (debug) {
-        console.log(
-          "User entered text is empty set the list of items to all items"
-        );
         console.timeEnd(timerId);
       }
       return;
