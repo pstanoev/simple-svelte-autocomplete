@@ -114,13 +114,13 @@ async function getItems(keyword) {
 
 ### Behaviour
 
-- `multiple` - enable multiple selection (false by default)
 - `items` - array of items the user can select from (optional, use `searchFunction` for async loading of items)
-- `searchFunction` - optional function to load items asynchroniously from HTTP call for example, the searchFunction can also return all items and addtional local search will still be performed
-- `delay` - delay in miliseconds to wait after user input to do the local searching or call `searchFunction` if provided, defaults to 0
-- `localFiltering` - boolean specifying if `searchFunction` is used, to still peform local filtering of the items to only ones that match the  user input, defaults to true
+- `searchFunction` - optional function to load items asynchronously from HTTP call for example, the searchFunction can also return all items and additional local search will still be performed
+- `delay` - delay in milliseconds to wait after user input to do the local searching or call `searchFunction` if provided, defaults to 0
+- `localFiltering` - boolean specifying if `searchFunction` is used, to still perform local filtering of the items to only ones that match the  user input, defaults to true
+- `multiple` - enable multiple selection (false by default)
 - `selectedItem` - the current item that is selected (object if the array of items contains objects)
-- `labelFieldName` - the name of the field to be used for showing the items as text in the droprown
+- `labelFieldName` - the name of the field to be used for showing the items as text in the dropdown
 - `keywordsFieldName` - the name of the filed to search by
 - `value` - derived value from the `selectedItem`, equals to `selectedItem` if `valueFieldName` is not specified
 - `valueFieldName` - field to use to derive the value from the selected item
@@ -129,36 +129,38 @@ async function getItems(keyword) {
 - `valueFunction` - optional function that derives the value from the selected item. If used `valueFieldName` is ignored
 - `keywordsCleanFunction` - optional function to additionally process the derived keywords from the item
 - `textCleanFunction` - optional function to additionally process the user entered text
-- `selectFirstIfEmpty` - set to true to select the first item if the user clears the text and closes the dropdown. Defaults to false.
+- `selectFirstIfEmpty` - set to true to select the first item if the user clears the text and closes the dropdown, defaults to false
 - `minCharactersToSearch` - minimum length of search text to perform search, defaults to 1
 - `maxItemsToShowInList` - maximum number of items to show in the dropdown list, defaults 0 (no limit)
-- `disabled` - disable the control
-- `ignoreAccents` - ignores the accents to match items, defaults to true.
-- `matchAllKeywords` - defaults to true. If false, any item will be suggested if it shares at least one common keyword with the input.
-- `sortByPertinence` - defaults to false. If true, items are sorted by pertinence.
-- `lock` - defaults to false. Locks the input when an item has been selected.
+- `ignoreAccents` - ignores the accents/umlauts (è,ü,ö etc) to match items, defaults to true
+- `matchAllKeywords` - defaults to true, if false, any item will be suggested if it shares at least one common keyword with the input
+- `sortByMatchedKeywords` - defaults to false, if true, items are sorted by the number of matched keywords, only useful if `matchAllKeywords` is false
+- `disabled` - disable the control completely
+- `readonly` - make the input readonly, no user entered text (simulates combobox), item from the list can still be selected
+- `lock` - defaults to false, locks the input for user entered text when an item has been selected
+- `debug` - flag to enable detailed log statements from the component
 
 ### Events
 
 - `beforeChange` - function called before a new value is selected
 - `onChange` - function called after new value is selected
 
-### Style and UI options
-
+### UI options
 - `placeholder` - change the text displayed when no option is selected
 - `noResultsText` - text to show in the dropdown when the search text does not match any item. Defaults to "No results found". Can be set to "" to not show anything.
 - `hideArrow` - set to true to not show the blue dropdown arrow
 - `showClear` - set to true to show X button that can be used to deselect the selected item
+- `showLoadingIndicator` - defaults to false, set to true to show loading spinner when the async `searchFunction` is executed, bulma class 'is-loading' is added to the input control
+
+### CSS classes and IDs
 - `className` - apply a className to the control
 - `inputClassName` - apply a className to the input control
 - `inputId` - apply an id attribute to the the input control
 - `dropdownClassName` - apply a className to the dropdown div showing the list of items
 - `name` - generate an HTML input with this name, containing the current value
-- `debug` - flag to enable detailed log statements from the component
 - `html5autocomplete` - flag to enable or disable the [HTML5 autocomplete](https://developer.mozilla.org/fr/docs/Web/HTML/Element/form#attr-autocomplete) attribute
 - `selectName` - apply a name attribute to the <select> tag that holds the selected value
 - `selectId` - apply an id attribute to the <select> tag that holds the selected value
-- `readonly` - make the input readonly
 
 ### UI Slots
 - `item` - change the apearance of items in the dropdown list:
