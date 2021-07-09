@@ -33,7 +33,7 @@ let selectedColorsValues;
 <div>
     <h3>Multiple example:</h3>
     <p>
-        The <strong>multiple</strong> attribute allows you to select several items
+        The <strong>multiple</strong> attribute allows you to select several items.
     </p>
 
     <div class="columns">

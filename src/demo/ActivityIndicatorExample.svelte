@@ -1,7 +1,9 @@
 <script>
-import AutoComplete from "../SimpleAutocomplete.svelte";
+  import Highlight from "svelte-highlight";
+  import AutoComplete from "../SimpleAutocomplete.svelte";
+  import xml from "svelte-highlight/src/languages/xml";
 
-async function searchCountry(keyword) {
+  async function searchCountry(keyword) {
     const url =
       "https://restcountries.eu/rest/v2/name/" +
       encodeURIComponent(keyword) +
@@ -9,27 +11,44 @@ async function searchCountry(keyword) {
 
     const response = await fetch(url);
     return await response.json();
-}
+  }
 
-async function searchCountrySlow(keyword) {
+  async function searchCountrySlow(keyword) {
     await new Promise(r => setTimeout(r, 3000));
     return searchCountry(keyword);
-}
+  }
 
+  const code = `
+<AutoComplete
+  searchFunction={searchCountrySlow}
+  showLoadingIndicator={true} />
+`;
 </script>
 
 <div>
-    <h3 class="mt-3">Activity indicator:</h3>
+  <h3 class="mt-3">Loading indicator:</h3>
+  <p>
+    When `showLoadingIndicator` is set to true, loading spinner is shown when
+    the async `searchFunction` is executed.
+    <br />
+    Bulma class 'is-loading' is added to the input control. If you do not use
+    Bulma you need to add style for the 'is-loading' class.
+  </p>
+  <div class="columns">
+    <div class="column is-one-third">
+      <h5>Pick a country:</h5>
 
-    <div class="columns">
-        <div class="column">
-            <p>Those requests takes 3s to compute, an activity indicator is shown during this time.</p>
+      <AutoComplete
+        searchFunction={searchCountrySlow}
+        labelFieldName="name"
+        maxItemsToShowInList="10"
+        showLoadingIndicator={true} />
 
-            <h5>Pick a country:</h5>
-            <AutoComplete
-                searchFunction={searchCountrySlow}
-                labelFieldName="name"
-                maxItemsToShowInList="10" />
-        </div>
     </div>
+
+    <div class="column">
+      <Highlight language={xml} {code} />
+    </div>
+  </div>
+
 </div>

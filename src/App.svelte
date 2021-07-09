@@ -44,9 +44,7 @@
 </svelte:head>
 <section class="section">
   <div class="container content">
-    <h1 class="title">
-      Svelte Simple Autocomplete Demo
-    </h1>
+    <h1 class="title">Svelte Simple Autocomplete Demo</h1>
 
     <p>
       <a href="https://github.com/pstanoev/simple-svelte-autocomplete">
@@ -83,9 +81,10 @@
 
     <div class="tab-content simple">
       <SimpleExample />
-      <LockedExample />
       <AdvancedExample />
       <MultipleExample />
+
+      <LockedExample />
     </div>
 
     <div class="tab-content customization">
