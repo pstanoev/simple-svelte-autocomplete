@@ -54,6 +54,17 @@
   export let minCharactersToSearch = 1;
   export let maxItemsToShowInList = 0;
   export let multiple = false;
+
+ // ignores the accents when matching items
+  export let ignoreAccents = true;
+
+  // all the input keywords should be matched in the item keywords
+  export let matchAllKeywords = true;
+
+  // sorts the items by the number of matchink keywords
+  export let sortByMatchedKeywords = false;
+
+  // do not allow re-selection after initial selection
   export let lock = false;
 
   // delay to wait after a keypress to search for new items
@@ -63,6 +74,16 @@
   export let localFiltering = true;
 
   // UI properties
+
+   // option to hide the dropdown arrow
+  export let hideArrow = false;
+
+  // option to show clear selection button
+  export let showClear = false;
+
+  // option to show loading indicator when the async function is executed
+  export let showLoadingIndicator = false;
+
   // text displayed when no items match the input text
   export let noResultsText = "No results found";
 
@@ -92,27 +113,10 @@
   export let html5autocomplete = undefined;
   // make the input readonly
   export let readonly = undefined;
-
   // apply a className to the dropdown div
   export let dropdownClassName = undefined;
-
-  // option to hide the dropdown arrow
-  export let hideArrow = false;
-
-  // option to show clear selection button
-  export let showClear = false;
-
   // adds the disabled tag to the HTML input
   export let disabled = false;
-
-  // ignores the accents when matching items
-  export let ignoreAccents = true;
-
-  // all the input keywords should be matched in the item keywords
-  export let matchAllKeywords = true;
-
-  // sorts the items by the number of matchink keywords
-  export let sortByPertinence = false;
 
   export let debug = false;
 
@@ -201,7 +205,7 @@
     let result = safeStringFunction(keywordsCleanFunction, keywords);
     result = result.toLowerCase().trim();
     if (ignoreAccents) {
-      result = removeDiacritics(result);
+      result = removeAccents(result);
     }
 
     if (debug) {
@@ -355,7 +359,7 @@
     // external search which provides items
     else{
       lastRequestId = lastRequestId + 1;
-      var currentRequestId = lastRequestId;
+      const currentRequestId = lastRequestId;
       loading = true;
 
       const AsyncGenerator = (async function*(){}).constructor;
@@ -407,7 +411,7 @@
     if (localFiltering) {
       var searchWords = textFiltered.split(" ");
       if (ignoreAccents) {
-        searchWords = searchWords.map(word => removeDiacritics(word));
+        searchWords = searchWords.map(word => removeAccents(word));
       }
 
       tempfilteredListItems = listItems.filter(listItem => {
@@ -420,7 +424,7 @@
         }
       });
 
-      if (sortByPertinence) {
+      if (sortByMatchedKeywords) {
         tempfilteredListItems = tempfilteredListItems.sort((obj1, obj2) => {
           return numberOfMatches(obj2, searchWords) - numberOfMatches(obj1, searchWords);
         });
@@ -806,7 +810,7 @@
     }
   }
 
-  function removeDiacritics(str) {
+  function removeAccents(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
@@ -998,7 +1002,7 @@
   {multiple ? 'is-multiple' : ''}
   autocomplete select is-fullwidth {uniqueId}"
   class:show-clear={clearable}
-  class:is-loading={loading}
+  class:is-loading={showLoadingIndicator && loading}
   >
   <select
     name={selectName}
