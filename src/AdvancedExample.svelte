@@ -39,7 +39,7 @@ let selectedColorValue;
 </script>
 
 <div>
-    <h3>Advanced example:</h3>
+    <h3 class="mt-3">Advanced example:</h3>
     <p>
         If you have an array of objects as items, they can be feed directly into
         the AutoComplete component and you can specify which field to use as

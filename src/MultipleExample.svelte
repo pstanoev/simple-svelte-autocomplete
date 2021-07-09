@@ -31,7 +31,7 @@ let selectedColorsValues;
 </script>
 
 <div>
-    <h3>Multiple example:</h3>
+    <h3 class="mt-3">Multiple example:</h3>
     <p>
         The <strong>multiple</strong> attribute allows you to select several items
     </p>

@@ -15,7 +15,7 @@ Selected color: {selectedColor}`;
 </script>
 
 <div>
-    <h3>Simple lock example:</h3>
+    <h3 class="mt-3">Simple lock example:</h3>
     <p>
         This example is liked the previous one except that the input is <em>lock</em>. This means that only the suggested values are available.
     </p>

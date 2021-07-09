@@ -36,7 +36,7 @@ async function searchCountry(keyword) {
 </script>
 
 <div>
-    <h3>Preloaded async example:</h3>
+    <h3 class="mt-3">Preloaded async example:</h3>
 
     <p>
         When an async autocomplete compenent is initialized with a value,

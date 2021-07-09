@@ -19,7 +19,7 @@ async function searchCountrySlow(keyword) {
 </script>
 
 <div>
-    <h3>Activity indicator:</h3>
+    <h3 class="mt-3">Activity indicator:</h3>
 
     <div class="columns">
         <div class="column">

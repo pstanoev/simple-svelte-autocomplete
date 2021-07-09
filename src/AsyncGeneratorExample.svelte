@@ -48,7 +48,7 @@ async function* searchCountryGenerator(keyword) {
 </script>
 
 <div>
-    <h3>Async generator example:</h3>
+    <h3 class="mt-3">Async generator example:</h3>
     <p>
         If your async data takes time to generate from your server, you may want to
         <a href="https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams">stream</a>

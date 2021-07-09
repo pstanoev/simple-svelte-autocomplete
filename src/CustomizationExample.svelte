@@ -30,7 +30,7 @@ const code = `<AutoComplete ...>
 </script>
 
 <div>
-    <h3>Custom items using &lt;slot&gt;:</h3>
+    <h3 class="mt-3">Custom items using &lt;slot&gt;:</h3>
 
     <div class="columns">
         <div class="column is-one-third">

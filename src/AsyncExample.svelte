@@ -36,7 +36,7 @@ async function searchCountry(keyword) {
 </script>
 
 <div>
-    <h3>Async example:</h3>
+    <h3 class="mt-3">Async example:</h3>
 
     <p>
         The delay parameter makes the component wait for 200ms after you typed
