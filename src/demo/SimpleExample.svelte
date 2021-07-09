@@ -1,5 +1,5 @@
 <script>
-import AutoComplete from "./SimpleAutocomplete.svelte";
+import AutoComplete from "../SimpleAutocomplete.svelte";
 import Highlight from "svelte-highlight";
 import xml from "svelte-highlight/src/languages/xml";
 
@@ -15,7 +15,7 @@ Selected color: {selectedColor}`;
 </script>
 
 <div>
-    <h3 class="mt-3">Simple example:</h3>
+    <h3 class="mt-3">Simple example 1:</h3>
 
     <div class="columns">
         <div class="column is-one-third">

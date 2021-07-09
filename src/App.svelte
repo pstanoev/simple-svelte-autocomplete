@@ -5,16 +5,16 @@
 
   import AutoComplete from "./SimpleAutocomplete.svelte";
 
-  import SimpleExample from "./SimpleExample.svelte";
-  import AdvancedExample from "./AdvancedExample.svelte";
-  import LockedExample from "./LockedExample.svelte";
-  import MultipleExample from "./MultipleExample.svelte";
-  import CustomizationExample from "./CustomizationExample.svelte";
-  import ActivityIndicatorExample from "./ActivityIndicatorExample.svelte";
-  import AsyncExample from "./AsyncExample.svelte";
-  import MatchingStrategyExample from "./MatchingStrategyExample.svelte";
-  import AsyncGeneratorExample from "./AsyncGeneratorExample.svelte";
-  import AsyncPreloadedExample from "./AsyncPreloadedExample.svelte";
+  import SimpleExample from "./demo/SimpleExample.svelte";
+  import AdvancedExample from "./demo/AdvancedExample.svelte";
+  import LockedExample from "./demo/LockedExample.svelte";
+  import MultipleExample from "./demo/MultipleExample.svelte";
+  import CustomizationExample from "./demo/CustomizationExample.svelte";
+  import ActivityIndicatorExample from "./demo/ActivityIndicatorExample.svelte";
+  import AsyncExample from "./demo/AsyncExample.svelte";
+  import MatchingStrategyExample from "./demo/MatchingStrategyExample.svelte";
+  import AsyncGeneratorExample from "./demo/AsyncGeneratorExample.svelte";
+  import AsyncPreloadedExample from "./demo/AsyncPreloadedExample.svelte";
 
   function showTab(e, tab) {
     console.log("Show tab", e, tab);
@@ -38,12 +38,6 @@
     showTab(simpleTab, "simple");
   });
 </script>
-
-<style>
-  h1.title a {
-    float: right;
-  }
-</style>
 
 <svelte:head>
   {@html solarized}

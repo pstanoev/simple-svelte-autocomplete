@@ -1,5 +1,5 @@
 <script>
-import AutoComplete from "./SimpleAutocomplete.svelte";
+import AutoComplete from "../SimpleAutocomplete.svelte";
 import Highlight from "svelte-highlight";
 import xml from "svelte-highlight/src/languages/xml";
 
