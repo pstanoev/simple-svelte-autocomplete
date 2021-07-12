@@ -138,16 +138,21 @@ async function getItems(keyword) {
 - `disabled` - disable the control completely
 - `readonly` - make the input readonly, no user entered text (simulates combobox), item from the list can still be selected
 - `lock` - defaults to false, locks the input for user entered text when an item has been selected
+- `create` - true to enable accepting of unlisted values
 - `debug` - flag to enable detailed log statements from the component
 
 ### Events
 
 - `beforeChange` - function called before a new value is selected
 - `onChange` - function called after new value is selected
+- `onFocus` - function called on focus of the input control
+- `onBlur` - function called on blur of the input control
+- `onCreate` - function called when `create` is true and the user presses enter
 
 ### UI options
 - `placeholder` - change the text displayed when no option is selected
 - `noResultsText` - text to show in the dropdown when the search text does not match any item. Defaults to "No results found". Can be set to "" to not show anything.
+- `createText` - text to show when `create` is true, and the user text doesn't match any of the items
 - `hideArrow` - set to true to not show the blue dropdown arrow
 - `showClear` - set to true to show X button that can be used to deselect the selected item
 - `showLoadingIndicator` - defaults to false, set to true to show loading spinner when the async `searchFunction` is executed, bulma class 'is-loading' is added to the input control
