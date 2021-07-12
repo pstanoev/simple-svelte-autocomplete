@@ -15,7 +15,7 @@ Selected color: {selectedColor}`;
 </script>
 
 <div>
-    <h3 class="mt-3">Simple example 1:</h3>
+    <h3 class="mt-3">Simple example:</h3>
 
     <div class="columns">
         <div class="column is-one-third">

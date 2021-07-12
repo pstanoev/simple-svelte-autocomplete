@@ -24,15 +24,14 @@
     return keywordsFieldName ? item[keywordsFieldName] : labelFunction(item);
   };
 
-  export let valueFunction = function(item, force_single=false) {
+  export let valueFunction = function(item, force_single = false) {
     if (item === undefined || item === null) {
       return item;
     }
     if (!multiple || force_single) {
       return valueFieldName ? item[valueFieldName] : item;
-    }
-    else {
-      return item.map(i => valueFieldName ? i[valueFieldName] : i);
+    } else {
+      return item.map(i => (valueFieldName ? i[valueFieldName] : i));
     }
   };
 
@@ -44,18 +43,27 @@
     return userEnteredText;
   };
 
+  // events
   export let beforeChange = function(oldSelectedItem, newSelectedItem) {
     return true;
   };
   export let onChange = function(newSelectedItem) {};
+  export let onFocus = function() {};
+  export let onBlur = function() {};
+  export let onCreate = function(text) {
+    if (debug) {
+      console.log("onCreate: " + text);
+    }
+  };
 
   // Behaviour properties
   export let selectFirstIfEmpty = false;
   export let minCharactersToSearch = 1;
   export let maxItemsToShowInList = 0;
   export let multiple = false;
+  export let create = false;
 
- // ignores the accents when matching items
+  // ignores the accents when matching items
   export let ignoreAccents = true;
 
   // all the input keywords should be matched in the item keywords
@@ -75,7 +83,7 @@
 
   // UI properties
 
-   // option to hide the dropdown arrow
+  // option to hide the dropdown arrow
   export let hideArrow = false;
 
   // option to show clear selection button
@@ -89,6 +97,9 @@
 
   // text displayed when async data is being loaded
   export let loadingText = "Loading results...";
+
+  // text displayed when async data is being loaded
+  export let createText = "Not found, add anyway?";
 
   // the text displayed when no option is selected
   export let placeholder = undefined;
@@ -137,7 +148,7 @@
   let opened = false;
   let loading = false;
   let highlightIndex = -1;
-  let text;
+  export let text;
   let filteredTextLength = 0;
 
   // view model
@@ -154,7 +165,7 @@
   // -- Reactivity --
   function onSelectedItemChanged() {
     value = valueFunction(selectedItem);
-    text = !multiple ? safeLabelFunction(selectedItem) : '';
+    text = !multiple ? safeLabelFunction(selectedItem) : "";
     onChange(selectedItem);
   }
 
@@ -163,7 +174,7 @@
   $: showList =
     opened && ((items && items.length > 0) || filteredTextLength > 0);
 
-  $: clearable = showClear || ((lock || multiple) && selectedItem)
+  $: clearable = showClear || ((lock || multiple) && selectedItem);
 
   // --- Functions ---
   function safeStringFunction(theFunction, argument) {
@@ -222,7 +233,9 @@
   function prepareListItems() {
     let timerId;
     if (debug) {
-      timerId = `Autocomplete prepare list ${inputId? `(id: ${inputId})` : ''})`;
+      timerId = `Autocomplete prepare list ${
+        inputId ? `(id: ${inputId})` : ""
+      })`;
       console.time(timerId);
       console.log("Prepare items to search");
       console.log("items: " + JSON.stringify(items));
@@ -250,8 +263,7 @@
     }
 
     if (debug) {
-      console.log(listItems.length +
-          " items to search")
+      console.log(listItems.length + " items to search");
       console.timeEnd(timerId);
     }
   }
@@ -321,7 +333,7 @@
   async function search() {
     let timerId;
     if (debug) {
-      timerId = `Autocomplete search ${inputId? `(id: ${inputId})` : ''})`;
+      timerId = `Autocomplete search ${inputId ? `(id: ${inputId})` : ""})`;
       console.time(timerId);
       console.log("Searching user entered text: '" + text + "'");
     }
@@ -333,9 +345,7 @@
         // we will need to rerun the search
         items = [];
         if (debug) {
-          console.log(
-            "User entered text is empty clear list of items"
-          );
+          console.log("User entered text is empty clear list of items");
         }
       } else {
         filteredListItems = listItems;
@@ -353,16 +363,16 @@
     }
 
     if (!searchFunction) {
-        processListItems(textFiltered);
+      processListItems(textFiltered);
     }
 
     // external search which provides items
-    else{
+    else {
       lastRequestId = lastRequestId + 1;
       const currentRequestId = lastRequestId;
       loading = true;
 
-      const AsyncGenerator = (async function*(){}).constructor;
+      const AsyncGenerator = async function*() {}.constructor;
 
       // searchFunction is a generator
       if (searchFunction instanceof AsyncGenerator) {
@@ -401,6 +411,11 @@
 
       loading = false;
     }
+
+    if (debug) {
+      console.timeEnd(timerId);
+      console.log("Search found " + filteredListItems.length + " items");
+    }
   }
 
   function processListItems(textFiltered) {
@@ -417,19 +432,20 @@
       tempfilteredListItems = listItems.filter(listItem => {
         var matches = numberOfMatches(listItem, searchWords);
         if (matchAllKeywords) {
-            return matches >= searchWords.length;
-        }
-        else {
-            return matches > 0;
+          return matches >= searchWords.length;
+        } else {
+          return matches > 0;
         }
       });
 
       if (sortByMatchedKeywords) {
         tempfilteredListItems = tempfilteredListItems.sort((obj1, obj2) => {
-          return numberOfMatches(obj2, searchWords) - numberOfMatches(obj1, searchWords);
+          return (
+            numberOfMatches(obj2, searchWords) -
+            numberOfMatches(obj1, searchWords)
+          );
         });
       }
-
     } else {
       tempfilteredListItems = listItems;
     }
@@ -439,14 +455,6 @@
 
     filteredListItems = filteredListItemsHighlighted;
     closeIfMinCharsToSearchReached();
-    if (debug) {
-      console.timeEnd(timerId);
-      console.log(
-        "Search found " +
-          filteredListItems.length +
-          " items"
-      );
-    }
     return true;
   }
 
@@ -457,8 +465,13 @@
       console.log("selectListItem");
     }
     if ("undefined" === typeof listItem) {
+      // allow undefined items if create is enabled
+      if (create) {
+        onCreate(text);
+        return true;
+      }
       if (debug) {
-        console.log(`listItem ${i} is undefined. Can not select.`);
+        console.log(`listItem is undefined. Can not select.`);
       }
       return false;
     }
@@ -469,7 +482,7 @@
         selectedItem = newSelectedItem;
       }
       // first selection of multiple ones
-      else if (!selectedItem){
+      else if (!selectedItem) {
         selectedItem = [newSelectedItem];
       }
       // selecting something already selected => unselect it
@@ -589,11 +602,11 @@
       Tab: opened ? down.bind(this) : null,
       ShiftTab: opened ? up.bind(this) : null,
       ArrowDown: down.bind(this),
-      ArrowUp: up.bind(this),
       Escape: onEsc.bind(this),
-      Backspace: multiple && selectedItem && selectedItem.length && !text
-        ? onBackspace.bind(this)
-        : null,
+      Backspace:
+        multiple && selectedItem && selectedItem.length && !text
+          ? onBackspace.bind(this)
+          : null
     };
     const fn = fnmap[key];
     if (typeof fn === "function") {
@@ -609,8 +622,12 @@
 
     if (e.key === "Enter" && opened) {
       e.preventDefault();
-      selectItem();
+      onEnter();
     }
+  }
+
+  function onEnter() {
+    selectItem();
   }
 
   function onInput(e) {
@@ -639,7 +656,7 @@
   }
 
   function processInput() {
-    if(search()) {
+    if (search()) {
       highlightIndex = 0;
       open();
     }
@@ -670,15 +687,25 @@
       console.log("onBackspace");
     }
 
-    unselectItem(selectedItem[selectedItem.length-1]);
+    unselectItem(selectedItem[selectedItem.length - 1]);
   }
 
-  function onFocus() {
+  function onFocusInternal() {
     if (debug) {
       console.log("onFocus");
     }
 
+    onFocus();
+
     resetListToAllItemsAndOpen();
+  }
+
+  function onBlurInternal() {
+    if (debug) {
+      console.log("onBlur");
+    }
+
+    onBlur();
   }
 
   function resetListToAllItemsAndOpen() {
@@ -687,7 +714,7 @@
     }
 
     if (!text) {
-        filteredListItems = listItems;
+      filteredListItems = listItems;
     }
 
     // When an async component is initialized, the item list
@@ -782,13 +809,6 @@
     });
   }
 
-  function onBlur() {
-    if (debug) {
-      console.log("onBlur");
-    }
-    close();
-  }
-
   function highlightFilter(keywords, fields) {
     keywords = keywords.split(/\s+/g);
     return item => {
@@ -801,13 +821,16 @@
           if (newItem.highlighted[field]) {
             keywords.forEach(keyword => {
               const reg = new RegExp("(" + keyword + ")", "ig");
-              newItem.highlighted[field] = newItem.highlighted[field].replace(reg, "<b>$1</b>");
+              newItem.highlighted[field] = newItem.highlighted[field].replace(
+                reg,
+                "<b>$1</b>"
+              );
             });
           }
         });
       }
       return newItem;
-    }
+    };
   }
 
   function removeAccents(str) {
@@ -816,22 +839,20 @@
 
   // workaround for
   // ValidationError: 'multiple' attribute cannot be dynamic if select uses two-way binding
-  function multipleAction(node){
+  function multipleAction(node) {
     node.multiple = multiple;
   }
 
-  function isConfirmed(listItem){
+  function isConfirmed(listItem) {
     if (!selectedItem) {
       return false;
     }
     if (multiple) {
       return selectedItem.includes(listItem);
-    }
-    else {
+    } else {
       return listItem == selectedItem;
     }
   }
-
 </script>
 
 <style>
@@ -925,6 +946,10 @@
     color: #999;
     line-height: 1;
   }
+  .autocomplete-list-item-create {
+    padding: 5px 15px;
+    line-height: 1;
+  }
   .autocomplete-list-item-loading {
     padding: 5px 15px;
     line-height: 1;
@@ -952,7 +977,7 @@
     display: none;
   }
 
-  .autocomplete select{
+  .autocomplete select {
     display: none;
   }
 
@@ -966,25 +991,25 @@
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
-    background-color: #FFF;
+    background-color: #fff;
   }
 
-  .autocomplete.is-multiple .tag{
+  .autocomplete.is-multiple .tag {
     display: flex;
     margin-top: 0.5em;
     margin-bottom: 0.3em;
   }
 
-  .autocomplete.is-multiple .tag.is-delete{
+  .autocomplete.is-multiple .tag.is-delete {
     cursor: pointer;
   }
 
-  .autocomplete.is-multiple .tags{
+  .autocomplete.is-multiple .tags {
     margin-right: 0.3em;
     margin-bottom: 0;
   }
 
-  .autocomplete.is-multiple .autocomplete-input{
+  .autocomplete.is-multiple .autocomplete-input {
     display: flex;
     width: 100%;
     flex: 1 1 50px;
@@ -993,63 +1018,63 @@
     box-shadow: none;
     background: none;
   }
-
 </style>
 
 <div
   class="{className ? className : ''}
   {hideArrow || !items.length ? 'hide-arrow' : ''}
-  {multiple ? 'is-multiple' : ''}
-  autocomplete select is-fullwidth {uniqueId}"
+  {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
   class:show-clear={clearable}
-  class:is-loading={showLoadingIndicator && loading}
-  >
-  <select
-    name={selectName}
-    id={selectId}
-    bind:value={value}
-    use:multipleAction
-    >
+  class:is-loading={showLoadingIndicator && loading}>
+  <select name={selectName} id={selectId} bind:value use:multipleAction>
     {#if !multiple && value}
-        <option value="{value}" selected>{text}</option>
+      <option {value} selected>{text}</option>
     {:else if multiple && selectedItem}
       {#each selectedItem as i}
-        <option value="{valueFunction(i, true)}" selected>{safeLabelFunction(i)}</option>
+        <option value={valueFunction(i, true)} selected>
+          {safeLabelFunction(i)}
+        </option>
       {/each}
     {/if}
   </select>
   <div class="input-container">
-  {#if multiple && selectedItem}
-    {#each selectedItem as tagItem}
-    <slot name="tag" label={safeLabelFunction(tagItem)} item={tagItem} {unselectItem}>
-      <div class="tags has-addons">
-       <span class="tag">{safeLabelFunction(tagItem)}</span>
-       <span class="tag is-delete" on:click|preventDefault={unselectItem(tagItem)}></span>
-      </div>
-    </slot>
-    {/each}
-  {/if}
-  <input
-    type="text"
-    class="{inputClassName ? inputClassName : ''} input autocomplete-input"
-    id={inputId ? inputId : ''}
-    autocomplete={html5autocomplete ? 'on' : 'off'}
-    {placeholder}
-    {name}
-    {disabled}
-    {title}
-    readonly={readonly || (lock && selectedItem)}
-    bind:this={input}
-    bind:value={text}
-    on:input={onInput}
-    on:focus={onFocus}
-    on:keydown={onKeyDown}
-    on:click={onInputClick}
-    on:keypress={onKeyPress}
-    />
-  {#if clearable}
-    <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
-  {/if}
+    {#if multiple && selectedItem}
+      {#each selectedItem as tagItem}
+        <slot
+          name="tag"
+          label={safeLabelFunction(tagItem)}
+          item={tagItem}
+          {unselectItem}>
+          <div class="tags has-addons">
+            <span class="tag">{safeLabelFunction(tagItem)}</span>
+            <span
+              class="tag is-delete"
+              on:click|preventDefault={unselectItem(tagItem)} />
+          </div>
+        </slot>
+      {/each}
+    {/if}
+    <input
+      type="text"
+      class="{inputClassName ? inputClassName : ''} input autocomplete-input"
+      id={inputId ? inputId : ''}
+      autocomplete={html5autocomplete ? 'on' : 'off'}
+      {placeholder}
+      {name}
+      {disabled}
+      {title}
+      readonly={readonly || (lock && selectedItem)}
+      bind:this={input}
+      bind:value={text}
+      on:input={onInput}
+      on:focus={onFocusInternal}
+      on:blur={onBlurInternal}
+      on:keydown={onKeyDown}
+      on:click={onInputClick}
+      on:keypress={onKeyPress} />
+    {#if clearable}
+      <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
+    {/if}
   </div>
   <div
     class="{dropdownClassName ? dropdownClassName : ''} autocomplete-list {showList ? '' : 'hidden'}
@@ -1088,9 +1113,11 @@
       {/if}
     {:else if loading && loadingText}
       <div class="autocomplete-list-item-loading">
-        <slot name="loading" {loadingText}>
-          {loadingText}
-        </slot>
+        <slot name="loading" {loadingText}>{loadingText}</slot>
+      </div>
+    {:else if create}
+      <div class="autocomplete-list-item-create" on:click={selectItem}>
+        <slot name="create" {createText}>{createText}</slot>
       </div>
     {:else if noResultsText}
       <div class="autocomplete-list-item-no-results">

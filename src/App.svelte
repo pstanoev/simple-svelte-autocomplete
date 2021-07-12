@@ -15,6 +15,7 @@
   import MatchingStrategyExample from "./demo/MatchingStrategyExample.svelte";
   import AsyncGeneratorExample from "./demo/AsyncGeneratorExample.svelte";
   import AsyncPreloadedExample from "./demo/AsyncPreloadedExample.svelte";
+  import CreatableExample from "./demo/CreatableExample.svelte";
 
   function showTab(e, tab) {
     console.log("Show tab", e, tab);
@@ -100,6 +101,7 @@
 
     <div class="tab-content advanced">
       <MatchingStrategyExample />
+      <CreatableExample />
     </div>
   </div>
 </section>
