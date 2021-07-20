@@ -72,6 +72,12 @@
   // sorts the items by the number of matchink keywords
   export let sortByMatchedKeywords = false;
 
+  // allow users to use a custom item filter function
+  export let itemFilterFunction = undefined;
+
+  // allow users to use a custom item sort function
+  export let itemSortFunction = undefined;
+
   // do not allow re-selection after initial selection
   export let lock = false;
 
@@ -418,33 +424,57 @@
     }
   }
 
+  function defaultItemFilterFunction(listItem, searchWords){
+    var matches = numberOfMatches(listItem, searchWords);
+    if (matchAllKeywords) {
+      return matches >= searchWords.length;
+    } else {
+      return matches > 0;
+    }
+  }
+
+  function defaultItemSortFunction(obj1, obj2, searchWords) {
+    return (
+      numberOfMatches(obj2, searchWords) -
+      numberOfMatches(obj1, searchWords)
+    );
+  }
+
   function processListItems(textFiltered) {
+    // cleans, filters, orders, and highlights the list items
     prepareListItems();
 
     // local search
     let tempfilteredListItems;
     if (localFiltering) {
-      var searchWords = textFiltered.split(" ");
-      if (ignoreAccents) {
-        searchWords = searchWords.map(word => removeAccents(word));
+      if (textFiltered) {
+        var searchWords = textFiltered;
+        if (ignoreAccents) {
+          searchWords = removeAccents(searchWords);
+        }
+        searchWords = searchWords.split(" ")
       }
 
-      tempfilteredListItems = listItems.filter(listItem => {
-        var matches = numberOfMatches(listItem, searchWords);
-        if (matchAllKeywords) {
-          return matches >= searchWords.length;
-        } else {
-          return matches > 0;
-        }
-      });
+      if (itemFilterFunction) {
+        tempfilteredListItems = listItems.filter(
+          item => itemFilterFunction(item, searchWords)
+        );
+      } else {
+        tempfilteredListItems = listItems.filter(
+          item => defaultItemFilterFunction(item, searchWords)
+        );
+      }
 
       if (sortByMatchedKeywords) {
-        tempfilteredListItems = tempfilteredListItems.sort((obj1, obj2) => {
-          return (
-            numberOfMatches(obj2, searchWords) -
-            numberOfMatches(obj1, searchWords)
+        if (itemSortFunction) {
+          tempfilteredListItems = tempfilteredListItems.sort(
+              (item1, item2) => itemSortFunction(item1, item2, searchWords)
           );
-        });
+        } else {
+          tempfilteredListItems = tempfilteredListItems.sort(
+              (item1, item2) => defaultItemSortFunction(item1, item2, searchWords)
+          );
+        }
       }
     } else {
       tempfilteredListItems = listItems;
