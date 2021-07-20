@@ -1,0 +1,39 @@
+body {
+    padding: 0 3em;
+    font-family:helvetica;
+}
+
+ul{
+    list-style-type: none;
+}
+
+.tabs{
+    text-align: center;
+}
+
+.tab{
+    cursor: pointer;
+    display: inline-block;
+    margin: auto 1em;
+}
+
+.tab:hover{
+    color: #6c71c4;
+}
+
+.tab-content.is-hidden{
+    display: none;
+}
+
+.tab.is-active{
+    color: #268bd2;
+}
+
+.column{
+     display: inline-block;
+     width: 66%;
+}
+
+.column.is-one-third{
+     width: 33%;
+}
