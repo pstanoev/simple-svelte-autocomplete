@@ -17,6 +17,8 @@
   import AsyncPreloadedExample from "./demo/AsyncPreloadedExample.svelte";
   import CreatableExample from "./demo/CreatableExample.svelte";
 
+  let bulma = true;
+
   function showTab(e, tab) {
     console.log("Show tab", e, tab);
     for (let el of document.getElementsByClassName("tab")) {
@@ -42,18 +44,26 @@
 
 <svelte:head>
   {@html solarized}
+  {#if bulma}
+    <link rel="stylesheet" href="bulma.css">
+  {:else}
+    <link rel="stylesheet" href="default.css">
+  {/if}
 </svelte:head>
+
 <section class="section">
   <div class="container content">
     <h1 class="title">Svelte Simple Autocomplete Demo</h1>
-
     <p>
       <a href="https://github.com/pstanoev/simple-svelte-autocomplete">
         <i class="fab fa-github" />
         https://github.com/pstanoev/simple-svelte-autocomplete
       </a>
     </p>
-
+    <div class="field">
+      <input class=is-checkradio id=bulma type=checkbox bind:checked={bulma}>
+      <label for="bulma">Bulma</label>
+    </div>
     <div class="tabs is-centered">
       <ul class="ml-0">
         <li
