@@ -16,6 +16,7 @@
   import AsyncGeneratorExample from "./demo/AsyncGeneratorExample.svelte";
   import AsyncPreloadedExample from "./demo/AsyncPreloadedExample.svelte";
   import CreatableExample from "./demo/CreatableExample.svelte";
+  import CustomFunctionsExample from "./demo/CustomFunctionsExample.svelte";
 
   let bulma = true;
 
@@ -112,6 +113,7 @@
     <div class="tab-content advanced">
       <MatchingStrategyExample />
       <CreatableExample />
+      <CustomFunctionsExample />
     </div>
   </div>
 </section>
