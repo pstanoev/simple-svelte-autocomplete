@@ -77,9 +77,9 @@ Define a `searchFunction` which will be called with `keyword` parameter.
 If you have `searchFunction` defined you don't need to specify `items` since the function will be used for loading.
 The `delay` parameter specifies the time to wait between user input and calling the `searchFunction`.
 It is recommend that delay > 200ms is set when using a remote search function to avoid sending too many requests.
-The `localSearch` parameter can be set to false if the search function already returns filtered items accordind to the user input.
+The `localFiltering` parameter can be set to false if the search function already returns filtered items accordind to the user input.
 ```html
-<AutoComplete searchFunction={getItems} delay=200 localSearch=false labelFieldName="name" valueFieldName="id" bind:selectedItem={myValue} />
+<AutoComplete searchFunction={getItems} delay=200 localFiltering=false labelFieldName="name" valueFieldName="id" bind:selectedItem={myValue} />
 ```
 
 ```js
