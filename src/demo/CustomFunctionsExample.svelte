@@ -44,20 +44,20 @@ let selectedColorValue;
     labelFieldName="name"
     valueFieldName="id"
     itemFilterFunction={(item, words) => item.item.enabled}
-    itemOrderFunction={(item1, item2, words) => item2.item.order - item1.item.order}
+    itemSortFunction={(item1, item2, words) => item2.item.order - item1.item.order}
     />`;
 </script>
 
 <div>
     <h3 class="mt-3">Custom functions examples:</h3>
     <p>
-        <code>itemFilterFunction</code> and <code>itemOrderFunction</code> allow you to
+        <code>itemFilterFunction</code> and <code>itemSortFunction</code> allow you to
         use custom functions to control which item will be displayed in the list, and
         in which order.<br>
         <code>itemFilterFunction</code> takes for arguments an individual item from the item list,
         and the cleaned up words from the input field. It should return a boolean indicating
         wether to keep the item.
-        <code>itemOrderFunction</code> takes for arguments two distincts item from the item list,
+        <code>itemSortFunction</code> takes for arguments two distincts item from the item list,
         and the cleaned up words from the input field. It should return an integer. If greater than
         0 the first item comes first, if lesser than 0 the second item comes first.
     </p>
@@ -73,7 +73,7 @@ let selectedColorValue;
                 valueFieldName="id"
                 placeholder="Please select color"
                 itemFilterFunction={(item, words) => item.item.enabled}
-                itemOrderFunction={(item1, item2, words) => item2.item.order - item1.item.order}
+                itemSortFunction={(item1, item2, words) => item2.item.order - item1.item.order}
                 />
             <p>
                 Selected color item: {JSON.stringify(selectedColorObject)}
