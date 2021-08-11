@@ -119,7 +119,7 @@ async function getItems(keyword) {
 - `delay` - delay in milliseconds to wait after user input to do the local searching or call `searchFunction` if provided, defaults to 0
 - `localFiltering` - boolean specifying if `searchFunction` is used, to still perform local filtering of the items to only ones that match the  user input, defaults to true
 - `itemFilterFunction` - A custom function to filter items. Paramaters are a list item and the cleaned up search query. Returns a boolean indicated wether to keep the item. unused by default
-- `itemOrderFunction` - A custom function to order items. Parameters are two list items to compare and the cleaned up search query. Returns an integer indicating wether the first item comes before the seconde one. unused by default
+- `itemSortFunction` - A custom function to order items. Parameters are two list items to compare and the cleaned up search query. Returns an integer indicating wether the first item comes before the seconde one. unused by default
 - `multiple` - enable multiple selection (false by default)
 - `selectedItem` - the current item that is selected (object if the array of items contains objects)
 - `labelFieldName` - the name of the field to be used for showing the items as text in the dropdown
