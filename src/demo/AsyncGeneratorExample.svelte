@@ -13,7 +13,7 @@ async function* searchCountryGenerator(keyword) {
 
     const response = await fetch(url);
     const chunks = await response.json();
-    if (chunks) {
+    if (response.status == 200 && chunks) {
         for (const chunk of chunks) {
             yield [chunk];
             await new Promise(r => setTimeout(r, 1000));
