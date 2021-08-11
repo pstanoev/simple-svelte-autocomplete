@@ -397,6 +397,13 @@
           items = [...items, ...chunk];
           processListItems(textFiltered);
         }
+
+        // there was nothing in the chunk
+        if (lastResponseId < currentRequestId) {
+          lastResponseId = currentRequestId
+          items = []
+          processListItems(textFiltered);
+        }
       }
 
       // searchFunction is a regular function
