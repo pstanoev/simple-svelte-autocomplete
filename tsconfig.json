@@ -1,0 +1,6 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "svelte", "jest"]
+  }
+}

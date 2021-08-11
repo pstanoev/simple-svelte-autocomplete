@@ -846,7 +846,7 @@
     });
   }
 
-  function highlightFilter(keywords, fields) {
+  export function highlightFilter(keywords, fields) {
     keywords = keywords.split(/\s+/g);
     return item => {
       const newItem = Object.assign({ highlighted: {} }, item);
