@@ -13,6 +13,7 @@ const colorList = [
 ];
 
 let selectedColorObject;
+let highlightedColorObject;
 let selectedColorValue;
 
 const code = `<script>
@@ -26,12 +27,14 @@ const colorList = [
 ];
 
 let selectedColorObject;
+let highlightedColorObject;
 let selectedColorValue;
 <\/script>
 
 <AutoComplete
     items={colorList}
     bind:selectedItem={selectedColorObject}
+    bind:highlightedItem={highlightedColorObject}
     bind:value={selectedColorValue}
     labelFieldName="name"
     valueFieldName="id"
@@ -52,9 +55,18 @@ let selectedColorValue;
     <div class="columns">
         <div class="column is-one-third">
             <h5>Pick a color:</h5>
+            <p>
+                Selected color item: {JSON.stringify(selectedColorObject)}
+                <br />
+                Highlighted color item: {JSON.stringify(highlightedColorObject)}
+                <br />
+                Selected value: {selectedColorValue}
+            </p>
+
             <AutoComplete
                 items={colorList}
                 bind:selectedItem={selectedColorObject}
+                bind:highlightedItem={highlightedColorObject}
                 bind:value={selectedColorValue}
                 labelFieldName="name"
                 valueFieldName="id"
@@ -63,12 +75,6 @@ let selectedColorValue;
                 hideArrow={false}
                 placeholder="Please select color"
                 />
-
-            <p>
-                Selected color item: {JSON.stringify(selectedColorObject)}
-                <br />
-                Selected value: {selectedColorValue}
-            </p>
 
             <div>
                 <p>Change selected item from outside:</p>

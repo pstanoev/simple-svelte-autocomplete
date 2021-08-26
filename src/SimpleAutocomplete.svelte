@@ -142,6 +142,7 @@
   // selected item state
   export let selectedItem = undefined;
   export let value = undefined;
+  export let highlightedItem = undefined;
 
   // --- Internal State ----
   const uniqueId = "sautocomplete-" + Math.floor(Math.random() * 1000);
@@ -176,6 +177,13 @@
   }
 
   $: selectedItem, onSelectedItemChanged();
+
+  $: highlightedItem = (
+      filteredListItems &&
+      highlightIndex &&
+      highlightIndex >= 0 &&
+      highlightIndex < filteredListItems.length
+    ) ? filteredListItems[highlightIndex].item : null;
 
   $: showList =
     opened && ((items && items.length > 0) || filteredTextLength > 0);

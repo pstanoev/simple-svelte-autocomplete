@@ -122,6 +122,7 @@ async function getItems(keyword) {
 - `itemSortFunction` - A custom function to order items. Parameters are two list items to compare and the cleaned up search query. Returns an integer indicating wether the first item comes before the seconde one. unused by default
 - `multiple` - enable multiple selection (false by default)
 - `selectedItem` - the current item that is selected (object if the array of items contains objects)
+- `highlightedItem` - the current item that is highlighted
 - `labelFieldName` - the name of the field to be used for showing the items as text in the dropdown
 - `keywordsFieldName` - the name of the filed to search by
 - `value` - derived value from the `selectedItem`, equals to `selectedItem` if `valueFieldName` is not specified
