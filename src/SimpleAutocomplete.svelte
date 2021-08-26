@@ -936,12 +936,6 @@
     return regexp
   }
 
-  // workaround for
-  // ValidationError: 'multiple' attribute cannot be dynamic if select uses two-way binding
-  function multipleAction(node) {
-    node.multiple = multiple;
-  }
-
   function isConfirmed(listItem) {
     if (!selectedItem) {
       return false;
@@ -1125,7 +1119,7 @@
   {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
   class:show-clear={clearable}
   class:is-loading={showLoadingIndicator && loading}>
-  <select name={selectName} id={selectId} bind:value use:multipleAction>
+  <select name={selectName} id={selectId}>
     {#if !multiple && value}
       <option {value} selected>{text}</option>
     {:else if multiple && selectedItem}
