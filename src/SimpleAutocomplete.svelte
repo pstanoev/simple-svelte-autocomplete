@@ -378,10 +378,8 @@
       const currentRequestId = lastRequestId;
       loading = true;
 
-      const AsyncGenerator = async function*() {}.constructor;
-
       // searchFunction is a generator
-      if (searchFunction instanceof AsyncGenerator) {
+      if (searchFunction.constructor.name === 'AsyncGeneratorFunction') {
         for await (const chunk of searchFunction(textFiltered)) {
           // a chunk of an old response: throw it away
           if (currentRequestId < lastResponseId) {
