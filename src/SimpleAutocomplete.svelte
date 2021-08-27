@@ -1117,7 +1117,7 @@
   {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
   class:show-clear={clearable}
   class:is-loading={showLoadingIndicator && loading}>
-  <select name={selectName} id={selectId}>
+  <select name={selectName} id={selectId} multiple="{multiple}">
     {#if !multiple && value}
       <option {value} selected>{text}</option>
     {:else if multiple && selectedItem}
