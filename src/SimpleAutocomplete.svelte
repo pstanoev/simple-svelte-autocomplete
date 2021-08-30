@@ -174,7 +174,7 @@
     value = valueFunction(selectedItem);
     text = !multiple ? safeLabelFunction(selectedItem) : "";
 
-    filteredListItems = listItems
+    filteredListItems = listItems;
     onChange(selectedItem);
   }
 
@@ -509,17 +509,27 @@
     if (debug) {
       console.log("selectListItem", listItem);
     }
-    if ("undefined" === typeof listItem) {
+    if ("undefined" === typeof listItem && create) {
       // allow undefined items if create is enabled
-      if (create) {
-        onCreate(text);
-        return true;
+      const createdItem = onCreate(text);
+      if ("undefined" !== typeof createdItem) {
+        prepareListItems();
+        filteredListItems = listItems;
+        const index = findItemIndex(createdItem, filteredListItems);
+        if (index >= 0) {
+          highlightIndex = index;
+          listItem = filteredListItems[highlightIndex];
+        }
       }
+    }
+
+    if ("undefined" === typeof listItem) {
       if (debug) {
         console.log(`listItem is undefined. Can not select.`);
       }
       return false;
     }
+
     const newSelectedItem = listItem.item;
     if (beforeChange(selectedItem, newSelectedItem)) {
       // simple selection
@@ -795,6 +805,9 @@
   }
 
   function findItemIndex(item, items) {
+    if (debug) {
+      console.log("Finding index for item", item);
+    }
     let index = -1;
     for (let i = 0; i < items.length; i++) {
       const listItem = items[i];
@@ -809,15 +822,17 @@
       }
       if (item == listItem.item) {
         index = i;
-        if (debug) {
-          console.log(
-            "Found selected item: " + i + ": " + JSON.stringify(listItem)
-          );
-        }
         break;
       }
     }
 
+    if (debug) {
+      if (index >= 0) {
+        console.log("Found index for item: " + index);
+      } else {
+        console.warn("Not found index for item: " + item);
+      }
+    }
     return index;
   }
 
@@ -1171,8 +1186,6 @@
   {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
   class:show-clear={clearable}
   class:is-loading={showLoadingIndicator && loading}>
-  {text}
-  {highlightIndex}
   <select name={selectName} id={selectId} {multiple}>
     {#if !multiple && value}
       <option {value} selected>{text}</option>
