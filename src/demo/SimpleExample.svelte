@@ -5,9 +5,9 @@ import xml from "svelte-highlight/src/languages/xml";
 
 let selectedColor;
 let highlightedColor;
-const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
+const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck"];
 const code = `<script>
-const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
+const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck"];
 let selectedColor;
 let highlightedColor;
 <\/script>
@@ -25,8 +25,8 @@ Highlighted color: {JSON.stringify(highlightedColor)}
             <h5>Pick a color:</h5>
 
             <p>Selected color: {selectedColor}</p>
-            <p>Highlighted color: {JSON.stringify(highlightedColor)}</p>
-            <AutoComplete items={colors} bind:selectedItem={selectedColor} bind:highlightedItem={highlightedColor}/>
+           
+            <AutoComplete items={colors} bind:selectedItem={selectedColor} bind:highlightedItem={highlightedColor} debug={true}/>
 
         </div>
 

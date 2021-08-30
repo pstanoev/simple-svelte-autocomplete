@@ -14,15 +14,31 @@ let text = 'Non existing color'
 let toCreate = "";
 <\/script>
 
+function handleCreate(newColor) {
+  toCreate = 'Creating ' + newColor; 
+  colors.unshift(newColor);
+  colors = colors;
+  return newColor
+}
+
 <AutoComplete
   items={colors}
   bind:selectedItem={selectedColor}
   bind:text
   create={true}
   createText={"Item doesn't exist, create one?"} .
-  onCreate={(text) => toCreate = "Creating " + text}/>
+  onCreate={handleCreate} />
 Current user entered text: {text}<br />
 Selected color: {selectedColor}`;
+
+ function handleCreate(newColor) {
+    toCreate = 'Creating ' + newColor; 
+    colors.unshift(newColor);
+    colors = colors;
+    return newColor
+  }
+
+  
 </script>
 
 <div>
@@ -48,8 +64,7 @@ Selected color: {selectedColor}`;
         create={true}
         debug={true}
         createText={"Item doesn't exist, create one?"}
-        .
-        onCreate={text => (toCreate = 'Creating ' + text)} />
+        onCreate={handleCreate} />
       <p>Current user entered text: {text}</p>
       <p>Selected color: {selectedColor}</p>
       <p>To create: {toCreate}</p>

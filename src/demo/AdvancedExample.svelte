@@ -58,7 +58,7 @@ let selectedColorValue;
             <p>
                 Selected color item: {JSON.stringify(selectedColorObject)}
                 <br />
-                Highlighted color item: {JSON.stringify(highlightedColorObject)}
+                Highlighted color item: {highlightedColorObject ? highlightedColorObject.name: highlightedColorObject}
                 <br />
                 Selected value: {selectedColorValue}
             </p>
