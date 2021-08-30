@@ -889,12 +889,13 @@
     return item => {
       let label = item[field];
 
-      item.highlighted = label;
+      const newItem = Object.assign({ highlighted: undefined }, item);
+      newItem.highlighted = label;
 
-      let labelLowercase = label.toLowerCase();
-      if (ignoreAccents) {
-        labelLowercase = removeAccents(labelLowercase);
-      }
+      const labelLowercase = label.toLowerCase();
+      const labelLowercaseNoAc = ignoreAccents
+        ? removeAccents(labelLowercase)
+        : labelLowercase;
 
       if (keywords && keywords.length) {
         const positions = [];
@@ -908,7 +909,7 @@
 
           let pos1 = 0;
           do {
-            pos1 = labelLowercase.indexOf(keyword, pos1);
+            pos1 = labelLowercaseNoAc.indexOf(keyword, pos1);
             if (pos1 >= 0) {
               let pos2 = pos1 + keywordLen;
               positions.push([pos1, pos2]);
@@ -918,21 +919,32 @@
         }
 
         if (positions.length > 0) {
+          const keywordPatterns = new Set();
           for (let i = 0; i < positions.length; i++) {
             const pair = positions[i];
             const pos1 = pair[0];
             const pos2 = pair[1];
 
-            const keywordPattern = label.substring(pos1, pos2);
-            const reg = new RegExp("(" + keywordPattern + ")", "g");
+            const keywordPattern = labelLowercase.substring(pos1, pos2);
+            keywordPatterns.add(keywordPattern);
+          }
+          for (let keywordPattern of keywordPatterns) {
+            // FIXME pst: workarond for wrong replacement <b> tags
+            if (keywordPattern === "b") {
+              continue;
+            }
+            const reg = new RegExp("(" + keywordPattern + ")", "ig");
 
-            const newHighlighted = item.highlighted.replace(reg, "<b>$1</b>");
-            item.highlighted = newHighlighted;
+            const newHighlighted = newItem.highlighted.replace(
+              reg,
+              "<b>$1</b>"
+            );
+            newItem.highlighted = newHighlighted;
           }
         }
       }
 
-      return item;
+      return newItem;
     };
   }
 

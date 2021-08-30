@@ -24,7 +24,7 @@ Selected color: {selectedColor}
 
             <p>Selected color: {selectedColor}</p>
            
-            <AutoComplete items={colors} bind:selectedItem={selectedColor} bind:highlightedItem={highlightedColor} selectFirstIfEmpty={true}/>
+            <AutoComplete items={colors} bind:selectedItem={selectedColor} bind:highlightedItem={highlightedColor} />
 
         </div>
 
