@@ -118,13 +118,11 @@ async function getItems(keyword) {
 - `searchFunction` - optional function to load items asynchronously from HTTP call for example, the searchFunction can also return all items and additional local search will still be performed
 - `delay` - delay in milliseconds to wait after user input to do the local searching or call `searchFunction` if provided, defaults to 0
 - `localFiltering` - boolean specifying if `searchFunction` is used, to still perform local filtering of the items to only ones that match the  user input, defaults to true
-- `itemFilterFunction` - A custom function to filter items. Paramaters are a list item and the cleaned up search query. Returns a boolean indicated wether to keep the item. unused by default
-- `itemSortFunction` - A custom function to order items. Parameters are two list items to compare and the cleaned up search query. Returns an integer indicating wether the first item comes before the seconde one. unused by default
 - `multiple` - enable multiple selection (false by default)
 - `selectedItem` - the current item that is selected (object if the array of items contains objects)
-- `highlightedItem` - the current item that is highlighted
+- `highlightedItem` - the current item that is highlighted in the dropdown menu
 - `labelFieldName` - the name of the field to be used for showing the items as text in the dropdown
-- `keywordsFieldName` - the name of the filed to search by
+- `keywordsFieldName` - the name of the field to search by, if not specified the label will be used
 - `value` - derived value from the `selectedItem`, equals to `selectedItem` if `valueFieldName` is not specified
 - `valueFieldName` - field to use to derive the value from the selected item
 - `labelFunction` - optional function that creates label from the item. If used `labelFieldName` is ignored
@@ -136,8 +134,11 @@ async function getItems(keyword) {
 - `minCharactersToSearch` - minimum length of search text to perform search, defaults to 1
 - `maxItemsToShowInList` - maximum number of items to show in the dropdown list, defaults 0 (no limit)
 - `ignoreAccents` - ignores the accents/umlauts (è,ü,ö etc) to match items, defaults to true
-- `matchAllKeywords` - defaults to true, if false, any item will be suggested if it shares at least one common keyword with the input
-- `sortByMatchedKeywords` - defaults to false, if true, items are sorted by the number of matched keywords, only useful if `matchAllKeywords` is false
+- `matchAllKeywords` - defaults to true, if false, any item will be suggested if it shares at least one common keyword with the input. Ignored if sorting function is given with `itemSortFunction`
+- `sortByMatchedKeywords` - defaults to false, if true, items are sorted by the number of matched keywords, only useful if `matchAllKeywords` is false. Ignored if sorting function is given with `itemSortFunction`
+- `itemSortFunction` - Optional custom function to order items. Parameters are two list items to compare and the cleaned up search query. Returns an integer indicating wether the first item comes before the seconde one. Only used if `sortByMatchedKeywords` is true.
+- `itemFilterFunction` - Optional custom function to filter items. Parameters are a list item and the cleaned up search query. Returns a boolean indicated wether to keep the item. If this is used, the `keywordsFieldName` and `keywordsFunction` are ignored
+
 - `disabled` - disable the control completely
 - `readonly` - make the input readonly, no user entered text (simulates combobox), item from the list can still be selected
 - `lock` - defaults to false, locks the input for user entered text when an item has been selected
@@ -150,7 +151,7 @@ async function getItems(keyword) {
 - `onChange` - function called after new value is selected
 - `onFocus` - function called on focus of the input control
 - `onBlur` - function called on blur of the input control
-- `onCreate` - function called when `create` is true and the user presses enter
+- `onCreate` - function called when `create` is true and the user presses enter, the function must return add the created item to the `items` array and return it
 
 ### UI options
 - `placeholder` - change the text displayed when no option is selected

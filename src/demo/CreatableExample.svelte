@@ -62,7 +62,6 @@ Selected color: {selectedColor}`;
         bind:selectedItem={selectedColor}
         bind:text
         create={true}
-        debug={true}
         createText={"Item doesn't exist, create one?"}
         onCreate={handleCreate} />
       <p>Current user entered text: {text}</p>
