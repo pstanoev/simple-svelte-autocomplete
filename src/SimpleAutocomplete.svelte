@@ -1,4 +1,6 @@
 <script>
+  import {tick} from "svelte";
+
   // the list of items  the user can select from
   export let items = [];
 
@@ -502,13 +504,14 @@
 
   // $: text, search();
 
-  function selectListItem(listItem) {
+  async function selectListItem(listItem) {
     if (debug) {
       console.log("selectListItem", listItem);
     }
     if ("undefined" === typeof listItem && create) {
       // allow undefined items if create is enabled
       const createdItem = onCreate(text);
+      await tick();
       if ("undefined" !== typeof createdItem) {
         prepareListItems();
         filteredListItems = listItems;
@@ -550,12 +553,12 @@
     return true;
   }
 
-  function selectItem() {
+  async function selectItem() {
     if (debug) {
       console.log("selectItem", highlightIndex);
     }
     const listItem = filteredListItems[highlightIndex];
-    if (selectListItem(listItem)) {
+    if (await selectListItem(listItem)) {
       close();
       if (multiple) {
         input.focus();
@@ -619,12 +622,12 @@
     }
   }
 
-  function onListItemClick(listItem) {
+  async function onListItemClick(listItem) {
     if (debug) {
       console.log("onListItemClick");
     }
 
-    if (selectListItem(listItem)) {
+    if (await selectListItem(listItem)) {
       close();
       if (multiple) {
         input.focus();

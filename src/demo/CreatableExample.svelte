@@ -3,7 +3,7 @@
   import Highlight from "svelte-highlight";
   import xml from "svelte-highlight/src/languages/xml";
 
-  const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
+  let colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
   let selectedColor;
   let text = "Non existing color";
   let toCreate = "";
@@ -12,14 +12,13 @@ const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
 let selectedColor;
 let text = 'Non existing color'
 let toCreate = "";
-<\/script>
 
 function handleCreate(newColor) {
-  toCreate = 'Creating ' + newColor; 
-  colors.unshift(newColor);
-  colors = colors;
+  toCreate = 'Creating ' + newColor;
+  colors = [newColor, ...colors];
   return newColor
 }
+<\/script>
 
 <AutoComplete
   items={colors}
@@ -32,13 +31,10 @@ Current user entered text: {text}<br />
 Selected color: {selectedColor}`;
 
  function handleCreate(newColor) {
-    toCreate = 'Creating ' + newColor; 
-    colors.unshift(newColor);
-    colors = colors;
+    toCreate = 'Creating ' + newColor;
+    colors = [newColor, ...colors];
     return newColor
   }
-
-  
 </script>
 
 <div>
