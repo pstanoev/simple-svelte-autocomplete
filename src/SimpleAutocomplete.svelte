@@ -634,9 +634,9 @@
 
   function onDocumentClick(e) {
     if (debug) {
-      console.log("onDocumentClick: " + JSON.stringify(e.target));
+      console.log("onDocumentClick: " + JSON.stringify(e.composedPath()));
     }
-    if (e.target.closest("." + uniqueId)) {
+    if (e.composedPath().some(path => path.classList && path.classList.contains(uniqueId))) {
       if (debug) {
         console.log("onDocumentClick inside");
       }
