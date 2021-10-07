@@ -1167,7 +1167,7 @@
       type="text"
       class="{inputClassName ? inputClassName : ''} input autocomplete-input"
       id={inputId ? inputId : ''}
-      autocomplete={html5autocomplete ? 'on' : 'off'}
+      autocomplete={html5autocomplete ? 'on' : 'some-other-text'}
       {placeholder}
       {name}
       {disabled}
