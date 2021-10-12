@@ -170,30 +170,6 @@
   let inputDelayTimeout;
 
   // -- Reactivity --
-  function onSelectedItemChanged() {
-    value = valueFunction(selectedItem);
-    text = !multiple ? safeLabelFunction(selectedItem) : "";
-
-    filteredListItems = listItems;
-    onChange(selectedItem);
-  }
-
-  $: selectedItem, onSelectedItemChanged();
-
-  $: highlightedItem =
-    filteredListItems &&
-    highlightIndex &&
-    highlightIndex >= 0 &&
-    highlightIndex < filteredListItems.length
-      ? filteredListItems[highlightIndex].item
-      : null;
-
-  $: showList =
-    opened && ((items && items.length > 0) || filteredTextLength > 0);
-
-  $: clearable = showClear || ((lock || multiple) && selectedItem);
-
-  // --- Functions ---
   function safeStringFunction(theFunction, argument) {
     if (typeof theFunction !== "function") {
       console.error(
@@ -298,6 +274,30 @@
 
   $: items, prepareListItems();
 
+  function onSelectedItemChanged() {
+    value = valueFunction(selectedItem);
+    text = !multiple ? safeLabelFunction(selectedItem) : "";
+
+    filteredListItems = listItems;
+    onChange(selectedItem);
+  }
+
+  $: selectedItem, onSelectedItemChanged();
+
+  $: highlightedItem =
+          filteredListItems &&
+          highlightIndex &&
+          highlightIndex >= 0 &&
+          highlightIndex < filteredListItems.length
+                  ? filteredListItems[highlightIndex].item
+                  : null;
+
+  $: showList =
+          opened && ((items && items.length > 0) || filteredTextLength > 0);
+
+  $: clearable = showClear || ((lock || multiple) && selectedItem);
+
+  // --- Functions ---
   function prepareUserEnteredText(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {
       return "";
