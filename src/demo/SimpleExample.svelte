@@ -7,6 +7,8 @@ let selectedColor;
 let highlightedColor;
 const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck", "<i>Jét Black</i>"];
 const code = `<script>
+import AutoComplete from 'simple-svelte-autocomplete';
+
 const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck", "<i>Jét Black</i>];
 let selectedColor;
 <\/script>
