@@ -170,34 +170,10 @@
   let inputDelayTimeout;
 
   // -- Reactivity --
-  function onSelectedItemChanged() {
-    value = valueFunction(selectedItem);
-    text = !multiple ? safeLabelFunction(selectedItem) : "";
-
-    filteredListItems = listItems;
-    onChange(selectedItem);
-  }
-
-  $: selectedItem, onSelectedItemChanged();
-
-  $: highlightedItem =
-    filteredListItems &&
-    highlightIndex &&
-    highlightIndex >= 0 &&
-    highlightIndex < filteredListItems.length
-      ? filteredListItems[highlightIndex].item
-      : null;
-
-  $: showList =
-    opened && ((items && items.length > 0) || filteredTextLength > 0);
-
-  $: clearable = showClear || ((lock || multiple) && selectedItem);
-
-  // --- Functions ---
   function safeStringFunction(theFunction, argument) {
     if (typeof theFunction !== "function") {
       console.error(
-        "Not a function: " + theFunction + ", argument: " + argument
+              "Not a function: " + theFunction + ", argument: " + argument
       );
     }
     let originalResult;
@@ -205,10 +181,10 @@
       originalResult = theFunction(argument);
     } catch (error) {
       console.warn(
-        "Error executing Autocomplete function on value: " +
-          argument +
-          " function: " +
-          theFunction
+              "Error executing Autocomplete function on value: " +
+              argument +
+              " function: " +
+              theFunction
       );
     }
     let result = originalResult;
@@ -238,10 +214,10 @@
 
     if (debug) {
       console.log(
-        "Extracted keywords: '" +
-          result +
-          "' from item: " +
-          JSON.stringify(item)
+              "Extracted keywords: '" +
+              result +
+              "' from item: " +
+              JSON.stringify(item)
       );
     }
     return result;
@@ -251,7 +227,7 @@
     let timerId;
     if (debug) {
       timerId = `Autocomplete prepare list ${
-        inputId ? `(id: ${inputId})` : ""
+              inputId ? `(id: ${inputId})` : ""
       }`;
       console.time(timerId);
       console.log("Prepare items to search");
@@ -260,8 +236,8 @@
 
     if (!Array.isArray(items)) {
       console.warn(
-        "Autocomplete items / search function did not return array but",
-        items
+              "Autocomplete items / search function did not return array but",
+              items
       );
       items = [];
     }
@@ -298,6 +274,30 @@
 
   $: items, prepareListItems();
 
+  function onSelectedItemChanged() {
+    value = valueFunction(selectedItem);
+    text = !multiple ? safeLabelFunction(selectedItem) : "";
+
+    filteredListItems = listItems;
+    onChange(selectedItem);
+  }
+
+  $: selectedItem, onSelectedItemChanged();
+
+  $: highlightedItem =
+    filteredListItems &&
+    highlightIndex &&
+    highlightIndex >= 0 &&
+    highlightIndex < filteredListItems.length
+      ? filteredListItems[highlightIndex].item
+      : null;
+
+  $: showList =
+    opened && ((items && items.length > 0) || filteredTextLength > 0);
+
+  $: clearable = showClear || ((lock || multiple) && selectedItem);
+
+  // --- Functions ---
   function prepareUserEnteredText(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {
       return "";
@@ -883,6 +883,10 @@
       input.focus();
       close();
     });
+  }
+
+  export function getDisplayedListClone(){
+    return JSON.parse(JSON.stringify(filteredListItems));
   }
 
   export function highlightFilter(keywords, field) {
