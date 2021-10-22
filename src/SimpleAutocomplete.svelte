@@ -173,7 +173,7 @@
   function safeStringFunction(theFunction, argument) {
     if (typeof theFunction !== "function") {
       console.error(
-              "Not a function: " + theFunction + ", argument: " + argument
+        "Not a function: " + theFunction + ", argument: " + argument
       );
     }
     let originalResult;
@@ -181,10 +181,10 @@
       originalResult = theFunction(argument);
     } catch (error) {
       console.warn(
-              "Error executing Autocomplete function on value: " +
-              argument +
-              " function: " +
-              theFunction
+        "Error executing Autocomplete function on value: " +
+          argument +
+          " function: " +
+          theFunction
       );
     }
     let result = originalResult;
@@ -214,10 +214,10 @@
 
     if (debug) {
       console.log(
-              "Extracted keywords: '" +
-              result +
-              "' from item: " +
-              JSON.stringify(item)
+        "Extracted keywords: '" +
+          result +
+          "' from item: " +
+          JSON.stringify(item)
       );
     }
     return result;
@@ -227,7 +227,7 @@
     let timerId;
     if (debug) {
       timerId = `Autocomplete prepare list ${
-              inputId ? `(id: ${inputId})` : ""
+        inputId ? `(id: ${inputId})` : ""
       }`;
       console.time(timerId);
       console.log("Prepare items to search");
@@ -236,8 +236,8 @@
 
     if (!Array.isArray(items)) {
       console.warn(
-              "Autocomplete items / search function did not return array but",
-              items
+        "Autocomplete items / search function did not return array but",
+        items
       );
       items = [];
     }
