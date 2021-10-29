@@ -880,7 +880,7 @@
     }
 
     text = "";
-    selectedItem = undefined;
+    selectedItem = multiple ? [] : undefined;
 
     setTimeout(() => {
       input.focus();
