@@ -674,7 +674,6 @@
     };
     const fn = fnmap[key];
     if (typeof fn === "function") {
-      e.preventDefault();
       fn(e);
     }
   }
