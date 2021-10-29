@@ -12,7 +12,7 @@ const colorList = [
     { id: 6, name: "Black", code: "#000000" }
 ];
 
-let selectedColorObject;
+let selectedColorObject = colorList[0];
 let highlightedColorObject;
 let selectedColorValue;
 
@@ -26,7 +26,7 @@ const colorList = [
   { id: 6, name: "Black", code: "#000000" }
 ];
 
-let selectedColorObject;
+let selectedColorObject = colorList[0];
 let highlightedColorObject;
 let selectedColorValue;
 <\/script>

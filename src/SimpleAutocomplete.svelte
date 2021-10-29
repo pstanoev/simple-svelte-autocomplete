@@ -169,30 +169,6 @@
   // other state
   let inputDelayTimeout;
 
-  // -- Reactivity --
-  function onSelectedItemChanged() {
-    value = valueFunction(selectedItem);
-    text = !multiple ? safeLabelFunction(selectedItem) : "";
-
-    filteredListItems = listItems;
-    onChange(selectedItem);
-  }
-
-  $: selectedItem, onSelectedItemChanged();
-
-  $: highlightedItem =
-    filteredListItems &&
-    highlightIndex &&
-    highlightIndex >= 0 &&
-    highlightIndex < filteredListItems.length
-      ? filteredListItems[highlightIndex].item
-      : null;
-
-  $: showList =
-    opened && ((items && items.length > 0) || filteredTextLength > 0);
-
-  $: clearable = showClear || ((lock || multiple) && selectedItem);
-
   // --- Functions ---
   function safeStringFunction(theFunction, argument) {
     if (typeof theFunction !== "function") {
@@ -296,7 +272,31 @@
     };
   }
 
+  // -- Reactivity --
   $: items, prepareListItems();
+
+  function onSelectedItemChanged() {
+    value = valueFunction(selectedItem);
+    text = !multiple ? safeLabelFunction(selectedItem) : "";
+
+    filteredListItems = listItems;
+    onChange(selectedItem);
+  }
+
+  $: selectedItem, onSelectedItemChanged();
+
+  $: highlightedItem =
+    filteredListItems &&
+    highlightIndex &&
+    highlightIndex >= 0 &&
+    highlightIndex < filteredListItems.length
+      ? filteredListItems[highlightIndex].item
+      : null;
+
+  $: showList =
+    opened && ((items && items.length > 0) || filteredTextLength > 0);
+
+  $: clearable = showClear || ((lock || multiple) && selectedItem);
 
   function prepareUserEnteredText(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {
@@ -636,7 +636,11 @@
     if (debug) {
       console.log("onDocumentClick: " + JSON.stringify(e.composedPath()));
     }
-    if (e.composedPath().some(path => path.classList && path.classList.contains(uniqueId))) {
+    if (
+      e
+        .composedPath()
+        .some(path => path.classList && path.classList.contains(uniqueId))
+    ) {
       if (debug) {
         console.log("onDocumentClick inside");
       }
