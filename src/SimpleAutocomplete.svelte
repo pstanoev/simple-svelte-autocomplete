@@ -1,263 +1,248 @@
 <script>
   // the list of items  the user can select from
-  export let items = [];
+  export let items = []
 
   // function to use to get all items (alternative to providing items)
-  export let searchFunction = false;
+  export let searchFunction = false
 
   // field of each item that's used for the labels in the list
-  export let labelFieldName = undefined;
-  export let keywordsFieldName = labelFieldName;
-  export let valueFieldName = undefined;
+  export let labelFieldName = undefined
+  export let keywordsFieldName = labelFieldName
+  export let valueFieldName = undefined
 
-  export let labelFunction = function(item) {
+  export let labelFunction = function (item) {
     if (item === undefined || item === null) {
-      return "";
+      return ""
     }
-    return labelFieldName ? item[labelFieldName] : item;
-  };
+    return labelFieldName ? item[labelFieldName] : item
+  }
 
-  export let keywordsFunction = function(item) {
+  export let keywordsFunction = function (item) {
     if (item === undefined || item === null) {
-      return "";
+      return ""
     }
-    return keywordsFieldName ? item[keywordsFieldName] : labelFunction(item);
-  };
+    return keywordsFieldName ? item[keywordsFieldName] : labelFunction(item)
+  }
 
-  export let valueFunction = function(item, forceSingle = false) {
+  export let valueFunction = function (item, forceSingle = false) {
     if (item === undefined || item === null) {
-      return item;
+      return item
     }
     if (!multiple || forceSingle) {
-      return valueFieldName ? item[valueFieldName] : item;
+      return valueFieldName ? item[valueFieldName] : item
     } else {
-      return item.map(i => (valueFieldName ? i[valueFieldName] : i));
+      return item.map((i) => (valueFieldName ? i[valueFieldName] : i))
     }
-  };
+  }
 
-  export let keywordsCleanFunction = function(keywords) {
-    return keywords;
-  };
+  export let keywordsCleanFunction = function (keywords) {
+    return keywords
+  }
 
-  export let textCleanFunction = function(userEnteredText) {
-    return userEnteredText;
-  };
+  export let textCleanFunction = function (userEnteredText) {
+    return userEnteredText
+  }
 
   // events
-  export let beforeChange = function(oldSelectedItem, newSelectedItem) {
-    return true;
-  };
-  export let onChange = function(newSelectedItem) {};
-  export let onFocus = function() {};
-  export let onBlur = function() {};
-  export let onCreate = function(text) {
+  export let beforeChange = function (oldSelectedItem, newSelectedItem) {
+    return true
+  }
+  export let onChange = function (newSelectedItem) {}
+  export let onFocus = function () {}
+  export let onBlur = function () {}
+  export let onCreate = function (text) {
     if (debug) {
-      console.log("onCreate: " + text);
+      console.log("onCreate: " + text)
     }
-  };
+  }
 
   // Behaviour properties
-  export let selectFirstIfEmpty = false;
-  export let minCharactersToSearch = 1;
-  export let maxItemsToShowInList = 0;
-  export let multiple = false;
-  export let create = false;
+  export let selectFirstIfEmpty = false
+  export let minCharactersToSearch = 1
+  export let maxItemsToShowInList = 0
+  export let multiple = false
+  export let create = false
 
   // ignores the accents when matching items
-  export let ignoreAccents = true;
+  export let ignoreAccents = true
 
   // all the input keywords should be matched in the item keywords
-  export let matchAllKeywords = true;
+  export let matchAllKeywords = true
 
   // sorts the items by the number of matchink keywords
-  export let sortByMatchedKeywords = false;
+  export let sortByMatchedKeywords = false
 
   // allow users to use a custom item filter function
-  export let itemFilterFunction = undefined;
+  export let itemFilterFunction = undefined
 
   // allow users to use a custom item sort function
-  export let itemSortFunction = undefined;
+  export let itemSortFunction = undefined
 
   // do not allow re-selection after initial selection
-  export let lock = false;
+  export let lock = false
 
   // delay to wait after a keypress to search for new items
-  export let delay = 0;
+  export let delay = 0
 
   // true to perform local filtering of items, even if searchFunction is provided
-  export let localFiltering = true;
+  export let localFiltering = true
 
   // UI properties
 
   // option to hide the dropdown arrow
-  export let hideArrow = false;
+  export let hideArrow = false
 
   // option to show clear selection button
-  export let showClear = false;
+  export let showClear = false
 
   // option to show loading indicator when the async function is executed
-  export let showLoadingIndicator = false;
+  export let showLoadingIndicator = false
 
   // text displayed when no items match the input text
-  export let noResultsText = "No results found";
+  export let noResultsText = "No results found"
 
   // text displayed when async data is being loaded
-  export let loadingText = "Loading results...";
+  export let loadingText = "Loading results..."
 
   // text displayed when async data is being loaded
-  export let createText = "Not found, add anyway?";
+  export let createText = "Not found, add anyway?"
 
   // the text displayed when no option is selected
-  export let placeholder = undefined;
+  export let placeholder = undefined
 
   // apply a className to the control
-  export let className = undefined;
+  export let className = undefined
 
   // HTML input UI properties
   // apply a className to the input control
-  export let inputClassName = undefined;
+  export let inputClassName = undefined
   // apply a id to the input control
-  export let inputId = undefined;
+  export let inputId = undefined
   // generate an HTML input with this name
-  export let name = undefined;
+  export let name = undefined
   // generate a <select> tag that holds the value
-  export let selectName = undefined;
+  export let selectName = undefined
   // apply a id to the <select>
-  export let selectId = undefined;
+  export let selectId = undefined
   // add the title to the HTML input
-  export let title = undefined;
+  export let title = undefined
   // enable the html5 autocompletion to the HTML input
-  export let html5autocomplete = undefined;
+  export let html5autocomplete = undefined
   // make the input readonly
-  export let readonly = undefined;
+  export let readonly = undefined
   // apply a className to the dropdown div
-  export let dropdownClassName = undefined;
+  export let dropdownClassName = undefined
   // adds the disabled tag to the HTML input
-  export let disabled = false;
+  export let disabled = false
 
-  export let debug = false;
+  export let debug = false
 
   // --- Public State ----
 
   // selected item state
-  export let selectedItem = multiple ? [] : undefined;
-  export let value = undefined;
-  export let highlightedItem = undefined;
+  export let selectedItem = multiple ? [] : undefined
+  export let value = undefined
+  export let highlightedItem = undefined
 
   // --- Internal State ----
-  const uniqueId = "sautocomplete-" + Math.floor(Math.random() * 1000);
+  const uniqueId = "sautocomplete-" + Math.floor(Math.random() * 1000)
 
   // HTML elements
-  let input;
-  let list;
+  let input
+  let list
 
   // UI state
-  let opened = false;
-  let loading = false;
-  let highlightIndex = -1;
-  export let text;
-  let filteredTextLength = 0;
+  let opened = false
+  let loading = false
+  let highlightIndex = -1
+  export let text
+  let filteredTextLength = 0
 
   // view model
-  let filteredListItems;
-  let listItems = [];
+  let filteredListItems
+  let listItems = []
 
   // requests/responses counters
-  let lastRequestId = 0;
-  let lastResponseId = 0;
+  let lastRequestId = 0
+  let lastResponseId = 0
 
   // other state
-  let inputDelayTimeout;
+  let inputDelayTimeout
 
   // --- Functions ---
   function safeStringFunction(theFunction, argument) {
     if (typeof theFunction !== "function") {
-      console.error(
-        "Not a function: " + theFunction + ", argument: " + argument
-      );
+      console.error("Not a function: " + theFunction + ", argument: " + argument)
     }
-    let originalResult;
+    let originalResult
     try {
-      originalResult = theFunction(argument);
+      originalResult = theFunction(argument)
     } catch (error) {
       console.warn(
-        "Error executing Autocomplete function on value: " +
-          argument +
-          " function: " +
-          theFunction
-      );
+        "Error executing Autocomplete function on value: " + argument + " function: " + theFunction
+      )
     }
-    let result = originalResult;
+    let result = originalResult
     if (result === undefined || result === null) {
-      result = "";
+      result = ""
     }
     if (typeof result !== "string") {
-      result = result.toString();
+      result = result.toString()
     }
-    return result;
+    return result
   }
 
   function safeLabelFunction(item) {
     // console.log("labelFunction: " + labelFunction);
     // console.log("safeLabelFunction, item: " + item);
-    return safeStringFunction(labelFunction, item);
+    return safeStringFunction(labelFunction, item)
   }
 
   function safeKeywordsFunction(item) {
     // console.log("safeKeywordsFunction");
-    const keywords = safeStringFunction(keywordsFunction, item);
-    let result = safeStringFunction(keywordsCleanFunction, keywords);
-    result = result.toLowerCase().trim();
+    const keywords = safeStringFunction(keywordsFunction, item)
+    let result = safeStringFunction(keywordsCleanFunction, keywords)
+    result = result.toLowerCase().trim()
     if (ignoreAccents) {
-      result = removeAccents(result);
+      result = removeAccents(result)
     }
 
     if (debug) {
-      console.log(
-        "Extracted keywords: '" +
-          result +
-          "' from item: " +
-          JSON.stringify(item)
-      );
+      console.log("Extracted keywords: '" + result + "' from item: " + JSON.stringify(item))
     }
-    return result;
+    return result
   }
 
   function prepareListItems() {
-    let timerId;
+    let timerId
     if (debug) {
-      timerId = `Autocomplete prepare list ${
-        inputId ? `(id: ${inputId})` : ""
-      }`;
-      console.time(timerId);
-      console.log("Prepare items to search");
-      console.log("items: " + JSON.stringify(items));
+      timerId = `Autocomplete prepare list ${inputId ? `(id: ${inputId})` : ""}`
+      console.time(timerId)
+      console.log("Prepare items to search")
+      console.log("items: " + JSON.stringify(items))
     }
 
     if (!Array.isArray(items)) {
-      console.warn(
-        "Autocomplete items / search function did not return array but",
-        items
-      );
-      items = [];
+      console.warn("Autocomplete items / search function did not return array but", items)
+      items = []
     }
 
-    const length = items ? items.length : 0;
-    listItems = new Array(length);
+    const length = items ? items.length : 0
+    listItems = new Array(length)
 
     if (length > 0) {
       items.forEach((item, i) => {
-        const listItem = getListItem(item);
+        const listItem = getListItem(item)
         if (listItem == undefined) {
-          console.log("Undefined item for: ", item);
+          console.log("Undefined item for: ", item)
         }
-        listItems[i] = listItem;
-      });
+        listItems[i] = listItem
+      })
     }
 
     if (debug) {
-      console.log(listItems.length + " items to search");
-      console.timeEnd(timerId);
+      console.log(listItems.length + " items to search")
+      console.timeEnd(timerId)
     }
   }
 
@@ -268,22 +253,22 @@
       // item label
       label: safeLabelFunction(item),
       // store reference to the origial item
-      item: item
-    };
+      item: item,
+    }
   }
 
   // -- Reactivity --
-  $: items, prepareListItems();
+  $: items, prepareListItems()
 
   function onSelectedItemChanged() {
-    value = valueFunction(selectedItem);
-    text = !multiple ? safeLabelFunction(selectedItem) : "";
+    value = valueFunction(selectedItem)
+    text = !multiple ? safeLabelFunction(selectedItem) : ""
 
-    filteredListItems = listItems;
-    onChange(selectedItem);
+    filteredListItems = listItems
+    onChange(selectedItem)
   }
 
-  $: selectedItem, onSelectedItemChanged();
+  $: selectedItem, onSelectedItemChanged()
 
   $: highlightedItem =
     filteredListItems &&
@@ -291,376 +276,359 @@
     highlightIndex >= 0 &&
     highlightIndex < filteredListItems.length
       ? filteredListItems[highlightIndex].item
-      : null;
+      : null
 
-  $: showList =
-    opened && ((items && items.length > 0) || filteredTextLength > 0);
+  $: showList = opened && ((items && items.length > 0) || filteredTextLength > 0)
 
-  $: clearable = showClear || ((lock || multiple) && selectedItem);
+  $: clearable = showClear || ((lock || multiple) && selectedItem)
 
   function prepareUserEnteredText(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {
-      return "";
+      return ""
     }
 
-    const textFiltered = userEnteredText
-      .replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " ")
-      .trim();
+    const textFiltered = userEnteredText.replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " ").trim()
 
-    filteredTextLength = textFiltered.length;
+    filteredTextLength = textFiltered.length
 
     if (minCharactersToSearch > 1) {
       if (filteredTextLength < minCharactersToSearch) {
-        return "";
+        return ""
       }
     }
 
-    const cleanUserEnteredText = textCleanFunction(textFiltered);
-    const textFilteredLowerCase = cleanUserEnteredText.toLowerCase().trim();
+    const cleanUserEnteredText = textCleanFunction(textFiltered)
+    const textFilteredLowerCase = cleanUserEnteredText.toLowerCase().trim()
 
     if (debug) {
       console.log(
-        "Change user entered text '" +
-          userEnteredText +
-          "' into '" +
-          textFilteredLowerCase +
-          "'"
-      );
+        "Change user entered text '" + userEnteredText + "' into '" + textFilteredLowerCase + "'"
+      )
     }
-    return textFilteredLowerCase;
+    return textFilteredLowerCase
   }
 
   function numberOfMatches(listItem, searchWords) {
     if (!listItem) {
-      return 0;
+      return 0
     }
 
-    const itemKeywords = listItem.keywords;
+    const itemKeywords = listItem.keywords
 
-    let matches = 0;
-    searchWords.forEach(searchWord => {
+    let matches = 0
+    searchWords.forEach((searchWord) => {
       if (itemKeywords.includes(searchWord)) {
-        matches++;
+        matches++
       }
-    });
+    })
 
-    return matches;
+    return matches
   }
 
   async function search() {
-    let timerId;
+    let timerId
     if (debug) {
-      timerId = `Autocomplete search ${inputId ? `(id: ${inputId})` : ""})`;
-      console.time(timerId);
-      console.log("Searching user entered text: '" + text + "'");
+      timerId = `Autocomplete search ${inputId ? `(id: ${inputId})` : ""})`
+      console.time(timerId)
+      console.log("Searching user entered text: '" + text + "'")
     }
 
-    const textFiltered = prepareUserEnteredText(text);
+    const textFiltered = prepareUserEnteredText(text)
 
     if (textFiltered === "") {
       if (searchFunction) {
         // we will need to rerun the search
-        items = [];
+        items = []
         if (debug) {
-          console.log("User entered text is empty clear list of items");
+          console.log("User entered text is empty clear list of items")
         }
       } else {
-        filteredListItems = listItems;
+        filteredListItems = listItems
         if (debug) {
-          console.log(
-            "User entered text is empty set the list of items to all items"
-          );
+          console.log("User entered text is empty set the list of items to all items")
         }
       }
-      closeIfMinCharsToSearchReached();
+      closeIfMinCharsToSearchReached()
       if (debug) {
-        console.timeEnd(timerId);
+        console.timeEnd(timerId)
       }
-      return;
+      return
     }
 
     if (!searchFunction) {
-      processListItems(textFiltered);
+      processListItems(textFiltered)
     }
 
     // external search which provides items
     else {
-      lastRequestId = lastRequestId + 1;
-      const currentRequestId = lastRequestId;
-      loading = true;
+      lastRequestId = lastRequestId + 1
+      const currentRequestId = lastRequestId
+      loading = true
 
       // searchFunction is a generator
       if (searchFunction.constructor.name === "AsyncGeneratorFunction") {
         for await (const chunk of searchFunction(textFiltered)) {
           // a chunk of an old response: throw it away
           if (currentRequestId < lastResponseId) {
-            return false;
+            return false
           }
 
           // a chunk for a new response: reset the item list
           if (currentRequestId > lastResponseId) {
-            items = [];
+            items = []
           }
 
-          lastResponseId = currentRequestId;
-          items = [...items, ...chunk];
-          processListItems(textFiltered);
+          lastResponseId = currentRequestId
+          items = [...items, ...chunk]
+          processListItems(textFiltered)
         }
 
         // there was nothing in the chunk
         if (lastResponseId < currentRequestId) {
-          lastResponseId = currentRequestId;
-          items = [];
-          processListItems(textFiltered);
+          lastResponseId = currentRequestId
+          items = []
+          processListItems(textFiltered)
         }
       }
 
       // searchFunction is a regular function
       else {
-        let result = await searchFunction(textFiltered);
+        let result = await searchFunction(textFiltered)
 
         // If a response to a newer request has been received
         // while responses to this request were being loaded,
         // then we can just throw away this outdated results.
         if (currentRequestId < lastResponseId) {
-          return false;
+          return false
         }
 
-        lastResponseId = currentRequestId;
-        items = result;
-        processListItems(textFiltered);
+        lastResponseId = currentRequestId
+        items = result
+        processListItems(textFiltered)
       }
 
-      loading = false;
+      loading = false
     }
 
     if (debug) {
-      console.timeEnd(timerId);
-      console.log("Search found " + filteredListItems.length + " items");
+      console.timeEnd(timerId)
+      console.log("Search found " + filteredListItems.length + " items")
     }
   }
 
   function defaultItemFilterFunction(listItem, searchWords) {
-    var matches = numberOfMatches(listItem, searchWords);
+    var matches = numberOfMatches(listItem, searchWords)
     if (matchAllKeywords) {
-      return matches >= searchWords.length;
+      return matches >= searchWords.length
     } else {
-      return matches > 0;
+      return matches > 0
     }
   }
 
   function defaultItemSortFunction(obj1, obj2, searchWords) {
-    return (
-      numberOfMatches(obj2, searchWords) - numberOfMatches(obj1, searchWords)
-    );
+    return numberOfMatches(obj2, searchWords) - numberOfMatches(obj1, searchWords)
   }
 
   function processListItems(textFiltered) {
     // cleans, filters, orders, and highlights the list items
-    prepareListItems();
+    prepareListItems()
 
-    const textFilteredWithoutAccents = ignoreAccents
-      ? removeAccents(textFiltered)
-      : textFiltered;
-    const searchWords = textFilteredWithoutAccents.split(/\s+/g);
+    const textFilteredWithoutAccents = ignoreAccents ? removeAccents(textFiltered) : textFiltered
+    const searchWords = textFilteredWithoutAccents.split(/\s+/g)
 
     // local search
-    let tempfilteredListItems;
+    let tempfilteredListItems
     if (localFiltering) {
       if (itemFilterFunction) {
-        tempfilteredListItems = listItems.filter(item =>
+        tempfilteredListItems = listItems.filter((item) =>
           itemFilterFunction(item.item, searchWords)
-        );
+        )
       } else {
-        tempfilteredListItems = listItems.filter(item =>
+        tempfilteredListItems = listItems.filter((item) =>
           defaultItemFilterFunction(item, searchWords)
-        );
+        )
       }
 
       if (itemSortFunction) {
         tempfilteredListItems = tempfilteredListItems.sort((item1, item2) =>
           itemSortFunction(item1.item, item2.item, searchWords)
-        );
+        )
       } else {
         if (sortByMatchedKeywords) {
           tempfilteredListItems = tempfilteredListItems.sort((item1, item2) =>
             defaultItemSortFunction(item1, item2, searchWords)
-          );
+          )
         }
       }
     } else {
-      tempfilteredListItems = listItems;
+      tempfilteredListItems = listItems
     }
 
-    const hlfilter = highlightFilter(searchWords, "label");
-    const filteredListItemsHighlighted = tempfilteredListItems.map(hlfilter);
+    const hlfilter = highlightFilter(searchWords, "label")
+    const filteredListItemsHighlighted = tempfilteredListItems.map(hlfilter)
 
-    filteredListItems = filteredListItemsHighlighted;
-    closeIfMinCharsToSearchReached();
-    return true;
+    filteredListItems = filteredListItemsHighlighted
+    closeIfMinCharsToSearchReached()
+    return true
   }
 
   // $: text, search();
 
   function selectListItem(listItem) {
     if (debug) {
-      console.log("selectListItem", listItem);
+      console.log("selectListItem", listItem)
     }
     if ("undefined" === typeof listItem && create) {
       // allow undefined items if create is enabled
-      const createdItem = onCreate(text);
+      const createdItem = onCreate(text)
       if ("undefined" !== typeof createdItem) {
-        prepareListItems();
-        filteredListItems = listItems;
-        const index = findItemIndex(createdItem, filteredListItems);
+        prepareListItems()
+        filteredListItems = listItems
+        const index = findItemIndex(createdItem, filteredListItems)
         if (index >= 0) {
-          highlightIndex = index;
-          listItem = filteredListItems[highlightIndex];
+          highlightIndex = index
+          listItem = filteredListItems[highlightIndex]
         }
       }
     }
 
     if ("undefined" === typeof listItem) {
       if (debug) {
-        console.log(`listItem is undefined. Can not select.`);
+        console.log(`listItem is undefined. Can not select.`)
       }
-      return false;
+      return false
     }
 
-    const newSelectedItem = listItem.item;
+    const newSelectedItem = listItem.item
     if (beforeChange(selectedItem, newSelectedItem)) {
       // simple selection
       if (!multiple) {
-        selectedItem = undefined; // triggers change even if the the same item is selected
-        selectedItem = newSelectedItem;
+        selectedItem = undefined // triggers change even if the the same item is selected
+        selectedItem = newSelectedItem
       }
       // first selection of multiple ones
       else if (!selectedItem) {
-        selectedItem = [newSelectedItem];
+        selectedItem = [newSelectedItem]
       }
       // selecting something already selected => unselect it
       else if (selectedItem.includes(newSelectedItem)) {
-        selectedItem = selectedItem.filter(i => i !== newSelectedItem);
+        selectedItem = selectedItem.filter((i) => i !== newSelectedItem)
       }
       // adds the element to the selection
       else {
-        selectedItem = [...selectedItem, newSelectedItem];
+        selectedItem = [...selectedItem, newSelectedItem]
       }
     }
-    return true;
+    return true
   }
 
   function selectItem() {
     if (debug) {
-      console.log("selectItem", highlightIndex);
+      console.log("selectItem", highlightIndex)
     }
-    const listItem = filteredListItems[highlightIndex];
+    const listItem = filteredListItems[highlightIndex]
     if (selectListItem(listItem)) {
-      close();
+      close()
       if (multiple) {
-        input.focus();
+        input.focus()
       }
     }
   }
 
   function up() {
     if (debug) {
-      console.log("up");
+      console.log("up")
     }
 
-    open();
+    open()
     if (highlightIndex > 0) {
-      highlightIndex--;
+      highlightIndex--
     }
 
-    highlight();
+    highlight()
   }
 
   function down() {
     if (debug) {
-      console.log("down");
+      console.log("down")
     }
 
-    open();
+    open()
     if (highlightIndex < filteredListItems.length - 1) {
-      highlightIndex++;
+      highlightIndex++
     }
 
-    highlight();
+    highlight()
   }
 
   function highlight() {
     if (debug) {
-      console.log("highlight");
+      console.log("highlight")
     }
 
-    const query = ".selected";
+    const query = ".selected"
     if (debug) {
-      console.log("Seaching DOM element: " + query + " in " + list);
+      console.log("Seaching DOM element: " + query + " in " + list)
     }
-    const el = list && list.querySelector(query);
+    const el = list && list.querySelector(query)
     if (el) {
       if (typeof el.scrollIntoViewIfNeeded === "function") {
         if (debug) {
-          console.log("Scrolling selected item into view");
+          console.log("Scrolling selected item into view")
         }
-        el.scrollIntoViewIfNeeded();
+        el.scrollIntoViewIfNeeded()
       } else {
         if (debug) {
           console.warn(
             "Could not scroll selected item into view, scrollIntoViewIfNeeded not supported"
-          );
+          )
         }
       }
     } else {
       if (debug) {
-        console.warn("Selected item not found to scroll into view");
+        console.warn("Selected item not found to scroll into view")
       }
     }
   }
 
   function onListItemClick(listItem) {
     if (debug) {
-      console.log("onListItemClick");
+      console.log("onListItemClick")
     }
 
     if (selectListItem(listItem)) {
-      close();
+      close()
       if (multiple) {
-        input.focus();
+        input.focus()
       }
     }
   }
 
   function onDocumentClick(e) {
     if (debug) {
-      console.log("onDocumentClick: " + JSON.stringify(e.composedPath()));
+      console.log("onDocumentClick: " + JSON.stringify(e.composedPath()))
     }
-    if (
-      e
-        .composedPath()
-        .some(path => path.classList && path.classList.contains(uniqueId))
-    ) {
+    if (e.composedPath().some((path) => path.classList && path.classList.contains(uniqueId))) {
       if (debug) {
-        console.log("onDocumentClick inside");
+        console.log("onDocumentClick inside")
       }
       // resetListToAllItemsAndOpen();
-      highlight();
+      highlight()
     } else {
       if (debug) {
-        console.log("onDocumentClick outside");
+        console.log("onDocumentClick outside")
       }
-      close();
+      close()
     }
   }
 
   function onKeyDown(e) {
     if (debug) {
-      console.log("onKeyDown");
+      console.log("onKeyDown")
     }
 
-    let key = e.key;
-    if (key === "Tab" && e.shiftKey) key = "ShiftTab";
+    let key = e.key
+    if (key === "Tab" && e.shiftKey) key = "ShiftTab"
     const fnmap = {
       Tab: opened ? down.bind(this) : null,
       ShiftTab: opened ? up.bind(this) : null,
@@ -668,304 +636,401 @@
       ArrowUp: up.bind(this),
       Escape: onEsc.bind(this),
       Backspace:
-        multiple && selectedItem && selectedItem.length && !text
-          ? onBackspace.bind(this)
-          : null
-    };
-    const fn = fnmap[key];
+        multiple && selectedItem && selectedItem.length && !text ? onBackspace.bind(this) : null,
+    }
+    const fn = fnmap[key]
     if (typeof fn === "function") {
-      fn(e);
+      fn(e)
     }
   }
 
   function onKeyPress(e) {
     if (debug) {
-      console.log("onKeyPress");
+      console.log("onKeyPress")
     }
 
     if (e.key === "Enter" && opened) {
-      e.preventDefault();
-      onEnter();
+      e.preventDefault()
+      onEnter()
     }
   }
 
   function onEnter() {
-    selectItem();
+    selectItem()
   }
 
   function onInput(e) {
     if (debug) {
-      console.log("onInput");
+      console.log("onInput")
     }
 
-    text = e.target.value;
+    text = e.target.value
     if (inputDelayTimeout) {
-      clearTimeout(inputDelayTimeout);
+      clearTimeout(inputDelayTimeout)
     }
 
     if (delay) {
-      inputDelayTimeout = setTimeout(processInput, delay);
+      inputDelayTimeout = setTimeout(processInput, delay)
     } else {
-      processInput();
+      processInput()
     }
   }
 
   function unselectItem(tag) {
     if (debug) {
-      console.log("unselectItem", tag);
+      console.log("unselectItem", tag)
     }
-    selectedItem = selectedItem.filter(i => i !== tag);
-    input.focus();
+    selectedItem = selectedItem.filter((i) => i !== tag)
+    input.focus()
   }
 
   function processInput() {
     if (search()) {
-      highlightIndex = 0;
-      open();
+      highlightIndex = 0
+      open()
     }
   }
 
   function onInputClick() {
     if (debug) {
-      console.log("onInputClick");
+      console.log("onInputClick")
     }
-    resetListToAllItemsAndOpen();
+    resetListToAllItemsAndOpen()
   }
 
   function onEsc(e) {
     if (debug) {
-      console.log("onEsc");
+      console.log("onEsc")
     }
 
     //if (text) return clear();
-    e.stopPropagation();
+    e.stopPropagation()
     if (opened) {
-      input.focus();
-      close();
+      input.focus()
+      close()
     }
   }
 
   function onBackspace(e) {
     if (debug) {
-      console.log("onBackspace");
+      console.log("onBackspace")
     }
 
-    unselectItem(selectedItem[selectedItem.length - 1]);
+    unselectItem(selectedItem[selectedItem.length - 1])
   }
 
   function onFocusInternal() {
     if (debug) {
-      console.log("onFocus");
+      console.log("onFocus")
     }
 
-    onFocus();
+    onFocus()
 
-    resetListToAllItemsAndOpen();
+    resetListToAllItemsAndOpen()
   }
 
   function onBlurInternal() {
     if (debug) {
-      console.log("onBlur");
+      console.log("onBlur")
     }
 
-    onBlur();
+    onBlur()
   }
 
   function resetListToAllItemsAndOpen() {
     if (debug) {
-      console.log("resetListToAllItemsAndOpen");
+      console.log("resetListToAllItemsAndOpen")
     }
 
     if (!text) {
-      filteredListItems = listItems;
+      filteredListItems = listItems
     }
 
     // When an async component is initialized, the item list
     // must be loaded when the input is focused.
     else if (!listItems.length && selectedItem && searchFunction) {
-      search();
+      search()
     }
 
-    open();
+    open()
 
     // find selected item
     if (selectedItem) {
       if (debug) {
-        console.log(
-          "Searching currently selected item: " + JSON.stringify(selectedItem)
-        );
+        console.log("Searching currently selected item: " + JSON.stringify(selectedItem))
       }
 
-      const index = findItemIndex(selectedItem, filteredListItems);
+      const index = findItemIndex(selectedItem, filteredListItems)
       if (index >= 0) {
-        highlightIndex = index;
-        highlight();
+        highlightIndex = index
+        highlight()
       }
     }
   }
 
   function findItemIndex(item, items) {
     if (debug) {
-      console.log("Finding index for item", item);
+      console.log("Finding index for item", item)
     }
-    let index = -1;
+    let index = -1
     for (let i = 0; i < items.length; i++) {
-      const listItem = items[i];
+      const listItem = items[i]
       if ("undefined" === typeof listItem) {
         if (debug) {
-          console.log(`listItem ${i} is undefined. Skipping.`);
+          console.log(`listItem ${i} is undefined. Skipping.`)
         }
-        continue;
+        continue
       }
       if (debug) {
-        console.log("Item " + i + ": " + JSON.stringify(listItem));
+        console.log("Item " + i + ": " + JSON.stringify(listItem))
       }
       if (item == listItem.item) {
-        index = i;
-        break;
+        index = i
+        break
       }
     }
 
     if (debug) {
       if (index >= 0) {
-        console.log("Found index for item: " + index);
+        console.log("Found index for item: " + index)
       } else {
-        console.warn("Not found index for item: " + item);
+        console.warn("Not found index for item: " + item)
       }
     }
-    return index;
+    return index
   }
 
   function open() {
     if (debug) {
-      console.log("open");
+      console.log("open")
     }
 
     // check if the search text has more than the min chars required
     if (isMinCharsToSearchReached()) {
-      return;
+      return
     }
 
-    opened = true;
+    opened = true
   }
 
   function close() {
     if (debug) {
-      console.log("close");
+      console.log("close")
     }
-    opened = false;
-    loading = false;
+    opened = false
+    loading = false
 
     if (!text && selectFirstIfEmpty) {
-      highlightIndex = 0;
-      selectItem();
+      highlightIndex = 0
+      selectItem()
     }
   }
 
   function isMinCharsToSearchReached() {
-    return (
-      minCharactersToSearch > 1 && filteredTextLength < minCharactersToSearch
-    );
+    return minCharactersToSearch > 1 && filteredTextLength < minCharactersToSearch
   }
 
   function closeIfMinCharsToSearchReached() {
     if (isMinCharsToSearchReached()) {
-      close();
+      close()
     }
   }
 
   function clear() {
     if (debug) {
-      console.log("clear");
+      console.log("clear")
     }
 
-    text = "";
-    selectedItem = multiple ? [] : undefined;
+    text = ""
+    selectedItem = multiple ? [] : undefined
 
     setTimeout(() => {
-      input.focus();
-      close();
-    });
+      input.focus()
+      close()
+    })
   }
 
   export function highlightFilter(keywords, field) {
-    return item => {
-      let label = item[field];
+    return (item) => {
+      let label = item[field]
 
-      const newItem = Object.assign({ highlighted: undefined }, item);
-      newItem.highlighted = label;
+      const newItem = Object.assign({ highlighted: undefined }, item)
+      newItem.highlighted = label
 
-      const labelLowercase = label.toLowerCase();
-      const labelLowercaseNoAc = ignoreAccents
-        ? removeAccents(labelLowercase)
-        : labelLowercase;
+      const labelLowercase = label.toLowerCase()
+      const labelLowercaseNoAc = ignoreAccents ? removeAccents(labelLowercase) : labelLowercase
 
       if (keywords && keywords.length) {
-        const positions = [];
+        const positions = []
 
         for (let i = 0; i < keywords.length; i++) {
-          let keyword = keywords[i];
+          let keyword = keywords[i]
           if (ignoreAccents) {
-            keyword = removeAccents(keyword);
+            keyword = removeAccents(keyword)
           }
-          const keywordLen = keyword.length;
+          const keywordLen = keyword.length
 
-          let pos1 = 0;
+          let pos1 = 0
           do {
-            pos1 = labelLowercaseNoAc.indexOf(keyword, pos1);
+            pos1 = labelLowercaseNoAc.indexOf(keyword, pos1)
             if (pos1 >= 0) {
-              let pos2 = pos1 + keywordLen;
-              positions.push([pos1, pos2]);
-              pos1 = pos2;
+              let pos2 = pos1 + keywordLen
+              positions.push([pos1, pos2])
+              pos1 = pos2
             }
-          } while (pos1 !== -1);
+          } while (pos1 !== -1)
         }
 
         if (positions.length > 0) {
-          const keywordPatterns = new Set();
+          const keywordPatterns = new Set()
           for (let i = 0; i < positions.length; i++) {
-            const pair = positions[i];
-            const pos1 = pair[0];
-            const pos2 = pair[1];
+            const pair = positions[i]
+            const pos1 = pair[0]
+            const pos2 = pair[1]
 
-            const keywordPattern = labelLowercase.substring(pos1, pos2);
-            keywordPatterns.add(keywordPattern);
+            const keywordPattern = labelLowercase.substring(pos1, pos2)
+            keywordPatterns.add(keywordPattern)
           }
           for (let keywordPattern of keywordPatterns) {
             // FIXME pst: workarond for wrong replacement <b> tags
             if (keywordPattern === "b") {
-              continue;
+              continue
             }
-            const reg = new RegExp("(" + keywordPattern + ")", "ig");
+            const reg = new RegExp("(" + keywordPattern + ")", "ig")
 
-            const newHighlighted = newItem.highlighted.replace(
-              reg,
-              "<b>$1</b>"
-            );
-            newItem.highlighted = newHighlighted;
+            const newHighlighted = newItem.highlighted.replace(reg, "<b>$1</b>")
+            newItem.highlighted = newHighlighted
           }
         }
       }
 
-      return newItem;
-    };
+      return newItem
+    }
   }
 
   function removeAccents(str) {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
   }
 
   function isConfirmed(listItem) {
     if (!selectedItem) {
-      return false;
+      return false
     }
     if (multiple) {
-      return selectedItem.includes(listItem);
+      return selectedItem.includes(listItem)
     } else {
-      return listItem == selectedItem;
+      return listItem == selectedItem
     }
   }
 </script>
+
+<div
+  class="{className ? className : ''}
+  {hideArrow || !items.length ? 'hide-arrow' : ''}
+  {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
+  class:show-clear={clearable}
+  class:is-loading={showLoadingIndicator && loading}
+>
+  <select name={selectName} id={selectId} {multiple}>
+    {#if !multiple && value}
+      <option {value} selected>{text}</option>
+    {:else if multiple && selectedItem}
+      {#each selectedItem as i}
+        <option value={valueFunction(i, true)} selected>
+          {safeLabelFunction(i)}
+        </option>
+      {/each}
+    {/if}
+  </select>
+  <div class="input-container">
+    {#if multiple && selectedItem}
+      {#each selectedItem as tagItem}
+        <slot name="tag" label={safeLabelFunction(tagItem)} item={tagItem} {unselectItem}>
+          <div class="tags has-addons">
+            <span class="tag">{safeLabelFunction(tagItem)}</span>
+            <span class="tag is-delete" on:click|preventDefault={unselectItem(tagItem)} />
+          </div>
+        </slot>
+      {/each}
+    {/if}
+    <input
+      type="text"
+      class="{inputClassName ? inputClassName : ''} input autocomplete-input"
+      id={inputId ? inputId : ""}
+      autocomplete={html5autocomplete ? "on" : "off"}
+      {placeholder}
+      {name}
+      {disabled}
+      {title}
+      readonly={readonly || (lock && selectedItem)}
+      bind:this={input}
+      bind:value={text}
+      on:input={onInput}
+      on:focus={onFocusInternal}
+      on:blur={onBlurInternal}
+      on:keydown={onKeyDown}
+      on:click={onInputClick}
+      on:keypress={onKeyPress}
+    />
+    {#if clearable}
+      <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
+    {/if}
+  </div>
+  <div
+    class="{dropdownClassName ? dropdownClassName : ''} autocomplete-list {showList ? '' : 'hidden'}
+    is-fullwidth"
+    bind:this={list}
+  >
+    {#if filteredListItems && filteredListItems.length > 0}
+      {#each filteredListItems as listItem, i}
+        {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
+          {#if listItem}
+            <div
+              class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
+              class:confirmed={isConfirmed(listItem.item)}
+              on:click={() => onListItemClick(listItem)}
+              on:pointerenter={() => {
+                highlightIndex = i
+              }}
+            >
+              <slot
+                name="item"
+                item={listItem.item}
+                label={listItem.highlighted ? listItem.highlighted : listItem.label}
+              >
+                {#if listItem.highlighted}
+                  {@html listItem.highlighted}
+                {:else}
+                  {@html listItem.label}
+                {/if}
+              </slot>
+            </div>
+          {/if}
+        {/if}
+      {/each}
+
+      {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
+        <div class="autocomplete-list-item-no-results">
+          ...{filteredListItems.length - maxItemsToShowInList} results not shown
+        </div>
+      {/if}
+    {:else if loading && loadingText}
+      <div class="autocomplete-list-item-loading">
+        <slot name="loading" {loadingText}>{loadingText}</slot>
+      </div>
+    {:else if create}
+      <div class="autocomplete-list-item-create" on:click={selectItem}>
+        <slot name="create" {createText}>{createText}</slot>
+      </div>
+    {:else if noResultsText}
+      <div class="autocomplete-list-item-no-results">
+        <slot name="no-results" {noResultsText}>{noResultsText}</slot>
+      </div>
+    {/if}
+  </div>
+</div>
+
+<svelte:window on:click={onDocumentClick} />
 
 <style>
   .autocomplete {
@@ -1131,112 +1196,3 @@
     background: none;
   }
 </style>
-
-<div
-  class="{className ? className : ''}
-  {hideArrow || !items.length ? 'hide-arrow' : ''}
-  {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
-  class:show-clear={clearable}
-  class:is-loading={showLoadingIndicator && loading}>
-  <select name={selectName} id={selectId} {multiple}>
-    {#if !multiple && value}
-      <option {value} selected>{text}</option>
-    {:else if multiple && selectedItem}
-      {#each selectedItem as i}
-        <option value={valueFunction(i, true)} selected>
-          {safeLabelFunction(i)}
-        </option>
-      {/each}
-    {/if}
-  </select>
-  <div class="input-container">
-    {#if multiple && selectedItem}
-      {#each selectedItem as tagItem}
-        <slot
-          name="tag"
-          label={safeLabelFunction(tagItem)}
-          item={tagItem}
-          {unselectItem}>
-          <div class="tags has-addons">
-            <span class="tag">{safeLabelFunction(tagItem)}</span>
-            <span
-              class="tag is-delete"
-              on:click|preventDefault={unselectItem(tagItem)} />
-          </div>
-        </slot>
-      {/each}
-    {/if}
-    <input
-      type="text"
-      class="{inputClassName ? inputClassName : ''} input autocomplete-input"
-      id={inputId ? inputId : ''}
-      autocomplete={html5autocomplete ? 'on' : 'off'}
-      {placeholder}
-      {name}
-      {disabled}
-      {title}
-      readonly={readonly || (lock && selectedItem)}
-      bind:this={input}
-      bind:value={text}
-      on:input={onInput}
-      on:focus={onFocusInternal}
-      on:blur={onBlurInternal}
-      on:keydown={onKeyDown}
-      on:click={onInputClick}
-      on:keypress={onKeyPress} />
-    {#if clearable}
-      <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
-    {/if}
-  </div>
-  <div
-    class="{dropdownClassName ? dropdownClassName : ''} autocomplete-list {showList ? '' : 'hidden'}
-    is-fullwidth"
-    bind:this={list}>
-    {#if filteredListItems && filteredListItems.length > 0}
-      {#each filteredListItems as listItem, i}
-        {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
-          {#if listItem}
-            <div
-              class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
-              class:confirmed={isConfirmed(listItem.item)}
-              on:click={() => onListItemClick(listItem)}
-              on:pointerenter={() => {
-                highlightIndex = i;
-              }}>
-              <slot
-                name="item"
-                item={listItem.item}
-                label={listItem.highlighted ? listItem.highlighted : listItem.label}>
-                {#if listItem.highlighted}
-                  {@html listItem.highlighted}
-                {:else}
-                  {@html listItem.label}
-                {/if}
-              </slot>
-            </div>
-          {/if}
-        {/if}
-      {/each}
-
-      {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
-        <div class="autocomplete-list-item-no-results">
-          ...{filteredListItems.length - maxItemsToShowInList} results not shown
-        </div>
-      {/if}
-    {:else if loading && loadingText}
-      <div class="autocomplete-list-item-loading">
-        <slot name="loading" {loadingText}>{loadingText}</slot>
-      </div>
-    {:else if create}
-      <div class="autocomplete-list-item-create" on:click={selectItem}>
-        <slot name="create" {createText}>{createText}</slot>
-      </div>
-    {:else if noResultsText}
-      <div class="autocomplete-list-item-no-results">
-        <slot name="no-results" {noResultsText}>{noResultsText}</slot>
-      </div>
-    {/if}
-  </div>
-</div>
-
-<svelte:window on:click={onDocumentClick} />

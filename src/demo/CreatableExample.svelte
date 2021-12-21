@@ -1,12 +1,12 @@
 <script>
-  import AutoComplete from "../SimpleAutocomplete.svelte";
-  import Highlight from "svelte-highlight";
-  import xml from "svelte-highlight/src/languages/xml";
+  import AutoComplete from "../SimpleAutocomplete.svelte"
+  import Highlight from "svelte-highlight"
+  import xml from "svelte-highlight/src/languages/xml"
 
-  const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
-  let selectedColor;
-  let text = "Non existing color";
-  let toCreate = "";
+  const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"]
+  let selectedColor
+  let text = "Non existing color"
+  let toCreate = ""
   const code = `<script>
 const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
 let selectedColor;
@@ -15,7 +15,7 @@ let toCreate = "";
 <\/script>
 
 function handleCreate(newColor) {
-  toCreate = 'Creating ' + newColor; 
+  toCreate = 'Creating ' + newColor;
   colors.unshift(newColor);
   colors = colors;
   return newColor
@@ -29,27 +29,24 @@ function handleCreate(newColor) {
   createText={"Item doesn't exist, create one?"} .
   onCreate={handleCreate} />
 Current user entered text: {text}<br />
-Selected color: {selectedColor}`;
+Selected color: {selectedColor}`
 
- function handleCreate(newColor) {
-    toCreate = 'Creating ' + newColor; 
-    colors.unshift(newColor);
-    colors = colors;
+  function handleCreate(newColor) {
+    toCreate = "Creating " + newColor
+    colors.unshift(newColor)
+    colors = colors
     return newColor
   }
-
-  
 </script>
 
 <div>
   <h3 class="mt-3">Allow unlisted, create new item:</h3>
 
   <p>
-    You can bind to the `text` property to get the current text that is typed by
-    the user. The `create` property will enable the controll to show
+    You can bind to the `text` property to get the current text that is typed by the user. The
+    `create` property will enable the controll to show
     <br />
-    After, with the event on `onCreate` you can get the entered text and create
-    the item.
+    After, with the event on `onCreate` you can get the entered text and create the item.
     <br />
     A slot called `create` and `createText` is available for customizing the UI.
   </p>
@@ -63,11 +60,11 @@ Selected color: {selectedColor}`;
         bind:text
         create={true}
         createText={"Item doesn't exist, create one?"}
-        onCreate={handleCreate} />
+        onCreate={handleCreate}
+      />
       <p>Current user entered text: {text}</p>
       <p>Selected color: {selectedColor}</p>
       <p>To create: {toCreate}</p>
-
     </div>
 
     <div class="column">

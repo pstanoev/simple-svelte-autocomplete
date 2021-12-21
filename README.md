@@ -4,13 +4,12 @@ Autocomplete / Select / Typeahead component made with [Svelte](https://svelte.de
 
 ### Live demo http://simple-svelte-autocomplete.surge.sh/
 
-* no dependencies
-* use plain lists or array of objects
-* option to define a label field or function
-* option to define more fields used for search
-* support for async load of items
-* can hold one or several values
-
+- no dependencies
+- use plain lists or array of objects
+- option to define a label field or function
+- option to define more fields used for search
+- support for async load of items
+- can hold one or several values
 
 ## Install
 
@@ -19,57 +18,56 @@ npm i -D simple-svelte-autocomplete
 ```
 
 ## Usage
+
 Import the component and define items:
 
-````javascript
-import AutoComplete from "simple-svelte-autocomplete";
+```javascript
+import AutoComplete from "simple-svelte-autocomplete"
 
-const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
-let selectedColor;
-````
+const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"]
+let selectedColor
+```
 
 And use it like this:
-````html
-<AutoComplete items={colors} bind:selectedItem={selectedColor} />
-````
+
+```html
+<AutoComplete items="{colors}" bind:selectedItem="{selectedColor}" />
+```
 
 You can also use it with array of objects:
-````javascript
+
+```javascript
 const colorList = [
   { id: 1, name: "White", code: "#FFFFFF" },
   { id: 2, name: "Red", code: "#FF0000" },
   { id: 3, name: "Yellow", code: "#FF00FF" },
   { id: 4, name: "Green", code: "#00FF00" },
   { id: 5, name: "Blue", code: "#0000FF" },
-  { id: 6, name: "Black", code: "#000000" }
-];
+  { id: 6, name: "Black", code: "#000000" },
+]
 
-let selectedColorObject;
-````
+let selectedColorObject
+```
+
 Just define which field should be used as label:
-````html
-<AutoComplete
-  items={colorList}
-  bind:selectedItem={selectedColorObject}
-  labelFieldName="name" />
-````
+
+```html
+<AutoComplete items="{colorList}" bind:selectedItem="{selectedColorObject}" labelFieldName="name" />
+```
 
 Specifying function for label instead of field name is also supported:
-````html
-<AutoComplete
-  items={colorList}
-  bind:selectedItem={selectedColorObject}
-  labelFunction={color => color.id + '. ' + color.name} />
-````
+
+```html
+<AutoComplete items={colorList} bind:selectedItem={selectedColorObject} labelFunction={color =>
+color.id + '. ' + color.name} />
+```
 
 By default the component searches by the item label, but it can also search by custom fields by specifying `keywords` function. For example to enable searching by color name and color HEX code:
-````html
-<AutoComplete
-  items={colorList}
-  bind:selectedItem={selectedColorObject}
-  labelFieldName="name"
-  keywordsFunction={color => color.name + ' ' + color.code} />
-````
+
+```html
+<AutoComplete items={colorList} bind:selectedItem={selectedColorObject} labelFieldName="name"
+keywordsFunction={color => color.name + ' ' + color.code} />
+```
 
 ## Asynchronous loading of items
 
@@ -78,18 +76,26 @@ If you have `searchFunction` defined you don't need to specify `items` since the
 The `delay` parameter specifies the time to wait between user input and calling the `searchFunction`.
 It is recommend that delay > 200ms is set when using a remote search function to avoid sending too many requests.
 The `localFiltering` parameter can be set to false if the search function already returns filtered items accordind to the user input.
+
 ```html
-<AutoComplete searchFunction={getItems} delay=200 localFiltering=false labelFieldName="name" valueFieldName="id" bind:selectedItem={myValue} />
+<AutoComplete
+  searchFunction="{getItems}"
+  delay="200"
+  localFiltering="false"
+  labelFieldName="name"
+  valueFieldName="id"
+  bind:selectedItem="{myValue}"
+/>
 ```
 
 ```js
 async function getItems(keyword) {
-  const url = '/api/my-items/?format=json&name=' + encodeURIComponent(keyword);
+  const url = "/api/my-items/?format=json&name=" + encodeURIComponent(keyword)
 
-  const response = await fetch(url);
-  const json = await response.json();
+  const response = await fetch(url)
+  const json = await response.json()
 
-  return json.results;
+  return json.results
 }
 ```
 
@@ -99,12 +105,12 @@ async function getItems(keyword) {
     {
       "id": 1,
       "name": "Sample One",
-      "date": "2020-09-25",
+      "date": "2020-09-25"
     },
     {
       "id": 2,
       "name": "Sample Two",
-      "date": "2020-09-26",
+      "date": "2020-09-26"
     }
   ]
 }
@@ -117,7 +123,7 @@ async function getItems(keyword) {
 - `items` - array of items the user can select from (optional, use `searchFunction` for async loading of items)
 - `searchFunction` - optional function to load items asynchronously from HTTP call for example, the searchFunction can also return all items and additional local search will still be performed
 - `delay` - delay in milliseconds to wait after user input to do the local searching or call `searchFunction` if provided, defaults to 0
-- `localFiltering` - boolean specifying if `searchFunction` is used, to still perform local filtering of the items to only ones that match the  user input, defaults to true
+- `localFiltering` - boolean specifying if `searchFunction` is used, to still perform local filtering of the items to only ones that match the user input, defaults to true
 - `multiple` - enable multiple selection (false by default)
 - `selectedItem` - the current item that is selected (object if the array of items contains objects)
 - `highlightedItem` - the current item that is highlighted in the dropdown menu
@@ -154,6 +160,7 @@ async function getItems(keyword) {
 - `onCreate` - function called when `create` is true and the user presses enter, the function must return add the created item to the `items` array and return it
 
 ### UI options
+
 - `placeholder` - change the text displayed when no option is selected
 - `noResultsText` - text to show in the dropdown when the search text does not match any item. Defaults to "No results found". Can be set to "" to not show anything.
 - `createText` - text to show when `create` is true, and the user text doesn't match any of the items
@@ -162,6 +169,7 @@ async function getItems(keyword) {
 - `showLoadingIndicator` - defaults to false, set to true to show loading spinner when the async `searchFunction` is executed, bulma class 'is-loading' is added to the input control
 
 ### CSS classes and IDs
+
 - `className` - apply a className to the control
 - `inputClassName` - apply a className to the input control
 - `inputId` - apply an id attribute to the the input control
@@ -172,22 +180,30 @@ async function getItems(keyword) {
 - `selectId` - apply an id attribute to the <select> tag that holds the selected value
 
 ### UI Slots
+
 - `item` - change the apearance of items in the dropdown list:
+
 ```html
-<div slot="item" let:item={item} let:label={label}>
-  {@html label} <!-- to render the default higliglighted item label -->
+<div slot="item" let:item="{item}" let:label="{label}">
+  {@html label}
+  <!-- to render the default higliglighted item label -->
   <!-- render anything else -->
   <span style="color:{item.propertyX}">{item.propertyY}</span>
 </div>
 ```
+
 - `no-results` - customize the div that shows the "no results" text:
+
 ```html
 <div slot="no-results" let:noResultsText={noResultsText}>
     <span>{noResultsText}</strong>
 </pre>
 ```
+
 The noResultsText variable is optional and can be ommited.
+
 - `loading` - customize the div that shows the "loading" text:
+
 ```html
 <pre>
 <div slot="loading" let:loadingText={loadingText}>
@@ -195,15 +211,18 @@ The noResultsText variable is optional and can be ommited.
 </div>
 </pre>
 ```
+
 - `tag` - customize the tag blocks displayed when multiple selection is enabled:
+
 ```html
-<slot name="tag" let:label={label} let:item={item} let:unselectItem={unselectItem}>
+<slot name="tag" let:label="{label}" let:item="{item}" let:unselectItem="{unselectItem}">
   <span class="tag">{label}</span>
-  <span class="delete-tag" on:click|preventDefault={unselectItem(item)}></span>
+  <span class="delete-tag" on:click|preventDefault="{unselectItem(item)}"></span>
 </slot>
 ```
 
 #### CSS properties
+
 - `autocomplete` the class applied to the main control
 - `autocomplete-input` the class applied to the input list
 - `autocomplete-list` the class applied to the dropdown list

@@ -1,16 +1,16 @@
 <script>
-  import AutoComplete from "../SimpleAutocomplete.svelte";
-  import Highlight from "svelte-highlight";
-  import xml from "svelte-highlight/src/languages/xml";
+  import AutoComplete from "../SimpleAutocomplete.svelte"
+  import Highlight from "svelte-highlight"
+  import xml from "svelte-highlight/src/languages/xml"
 
   const animals = [
     "White Rabbit",
     "White Horse",
     "Black Rabbit",
     "Black Horse",
-    "Black Black Rabbit"
-  ];
-  let selectedAnimal;
+    "Black Black Rabbit",
+  ]
+  let selectedAnimal
 
   const code = `<script>
 const animals = ["White Rabbit", "White Horse", "Black Rabbit", "Black Horse", "Black Black Rabbit"];
@@ -22,15 +22,15 @@ let selectedAnimal;
     bind:selectedItem={selectedAnimal}
     matchAllKeywords={false}
     sortByMatchedKeywords={true}
-    />`;
+    />`
 </script>
 
 <div>
   <h3 class="mt-3">Matching keyword strategy:</h3>
   <p>
-    When `matchAllKeywords` is set to false, the component will show all items
-    that match at least one keyword. The sorting of the items can also be
-    changed to show the ones with most matches first.
+    When `matchAllKeywords` is set to false, the component will show all items that match at least
+    one keyword. The sorting of the items can also be changed to show the ones with most matches
+    first.
   </p>
   <div class="columns">
     <div class="column is-one-third">
@@ -40,7 +40,8 @@ let selectedAnimal;
         items={animals}
         bind:selectedItem={selectedAnimal}
         matchAllKeywords={false}
-        sortByMatchedKeywords={true} />
+        sortByMatchedKeywords={true}
+      />
       <p>Selected animal: {selectedAnimal}</p>
     </div>
 

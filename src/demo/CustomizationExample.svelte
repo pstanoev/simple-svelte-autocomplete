@@ -1,7 +1,7 @@
 <script>
-  import AutoComplete from "../SimpleAutocomplete.svelte";
-  import Highlight from "svelte-highlight";
-  import xml from "svelte-highlight/src/languages/xml";
+  import AutoComplete from "../SimpleAutocomplete.svelte"
+  import Highlight from "svelte-highlight"
+  import xml from "svelte-highlight/src/languages/xml"
 
   const colorList = [
     { id: 1, name: "White", code: "#FFFFFF" },
@@ -9,11 +9,11 @@
     { id: 3, name: "Yellow", code: "#FF00FF" },
     { id: 4, name: "Green", code: "#00FF00" },
     { id: 5, name: "Blue", code: "#0000FF" },
-    { id: 6, name: "Black", code: "#000000" }
-  ];
+    { id: 6, name: "Black", code: "#000000" },
+  ]
 
-  let selectedColorObjectCustom;
-  let selectedColorValueCustom;
+  let selectedColorObjectCustom
+  let selectedColorValueCustom
 
   const code = `<AutoComplete ...>
 
@@ -30,7 +30,7 @@
        <strong>Item doesn't exist, create? - {createText}</strong>
     </div>
 
-</AutoComplete>`;
+</AutoComplete>`
 </script>
 
 <div>
@@ -46,9 +46,9 @@
         labelFieldName="name"
         valueFieldName="id"
         create={true}
-        keywordsFunction={color => color.name + ' ' + color.code}
-        placeholder="Please select color">
-
+        keywordsFunction={(color) => color.name + " " + color.code}
+        placeholder="Please select color"
+      >
         <div slot="item" let:item let:label>
           {@html label}
           <span style="color:{item.code}">{item.code}</span>
@@ -57,7 +57,6 @@
         <div slot="no-results" let:noResultsText>
           <strong>NO RESULTS - {noResultsText}</strong>
         </div>
-
       </AutoComplete>
     </div>
 
