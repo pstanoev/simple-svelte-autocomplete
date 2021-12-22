@@ -1,54 +1,54 @@
 <script>
-  import solarized from "svelte-highlight/src/styles/solarized-light";
+  import solarized from "svelte-highlight/src/styles/solarized-light"
 
-  import { onMount } from "svelte";
+  import { onMount } from "svelte"
 
-  import AutoComplete from "./SimpleAutocomplete.svelte";
+  import AutoComplete from "./SimpleAutocomplete.svelte"
 
-  import SimpleExample from "./demo/SimpleExample.svelte";
-  import AdvancedExample from "./demo/AdvancedExample.svelte";
-  import LockedExample from "./demo/LockedExample.svelte";
-  import MultipleExample from "./demo/MultipleExample.svelte";
-  import CustomizationExample from "./demo/CustomizationExample.svelte";
-  import ActivityIndicatorExample from "./demo/ActivityIndicatorExample.svelte";
-  import AsyncExample from "./demo/AsyncExample.svelte";
-  import MatchingStrategyExample from "./demo/MatchingStrategyExample.svelte";
-  import AsyncGeneratorExample from "./demo/AsyncGeneratorExample.svelte";
-  import AsyncPreloadedExample from "./demo/AsyncPreloadedExample.svelte";
-  import CreatableExample from "./demo/CreatableExample.svelte";
-  import CustomFunctionsExample from "./demo/CustomFunctionsExample.svelte";
+  import SimpleExample from "./demo/SimpleExample.svelte"
+  import AdvancedExample from "./demo/AdvancedExample.svelte"
+  import LockedExample from "./demo/LockedExample.svelte"
+  import MultipleExample from "./demo/MultipleExample.svelte"
+  import CustomizationExample from "./demo/CustomizationExample.svelte"
+  import ActivityIndicatorExample from "./demo/ActivityIndicatorExample.svelte"
+  import AsyncExample from "./demo/AsyncExample.svelte"
+  import MatchingStrategyExample from "./demo/MatchingStrategyExample.svelte"
+  import AsyncGeneratorExample from "./demo/AsyncGeneratorExample.svelte"
+  import AsyncPreloadedExample from "./demo/AsyncPreloadedExample.svelte"
+  import CreatableExample from "./demo/CreatableExample.svelte"
+  import CustomFunctionsExample from "./demo/CustomFunctionsExample.svelte"
 
-  let bulma = true;
+  let bulma = true
 
   function showTab(e, tab) {
-    console.log("Show tab", e, tab);
+    console.log("Show tab", e, tab)
     for (let el of document.getElementsByClassName("tab")) {
-      el.classList.remove("is-active");
+      el.classList.remove("is-active")
     }
     if (e) {
-      e.classList.add("is-active");
+      e.classList.add("is-active")
     }
 
     for (let el of document.getElementsByClassName("tab-content")) {
-      el.classList.add("is-hidden");
+      el.classList.add("is-hidden")
     }
     for (let el of document.getElementsByClassName(tab)) {
-      el.classList.remove("is-hidden");
+      el.classList.remove("is-hidden")
     }
   }
   onMount(() => {
-    console.log("on mount");
-    const simpleTab = document.getElementById("simpleTab");
-    showTab(simpleTab, "simple");
-  });
+    console.log("on mount")
+    const simpleTab = document.getElementById("simpleTab")
+    showTab(simpleTab, "simple")
+  })
 </script>
 
 <svelte:head>
   {@html solarized}
   {#if bulma}
-    <link rel="stylesheet" href="bulma.css">
+    <link rel="stylesheet" href="bulma.css" />
   {:else}
-    <link rel="stylesheet" href="default.css">
+    <link rel="stylesheet" href="default.css" />
   {/if}
 </svelte:head>
 
@@ -62,30 +62,25 @@
       </a>
     </p>
     <div class="field">
-      <input class=is-checkradio id=bulma type=checkbox bind:checked={bulma}>
+      <input class="is-checkradio" id="bulma" type="checkbox" bind:checked={bulma} />
       <label for="bulma">Bulma</label>
     </div>
     <div class="tabs is-centered">
       <ul class="ml-0">
         <li
           id="simpleTab"
-          on:click={e => showTab(e.target.parentElement, 'simple')}
-          class="tab is-active">
+          on:click={(e) => showTab(e.target.parentElement, "simple")}
+          class="tab is-active"
+        >
           <a>Basic usage</a>
         </li>
-        <li
-          on:click={e => showTab(e.target.parentElement, 'customization')}
-          class="tab">
+        <li on:click={(e) => showTab(e.target.parentElement, "customization")} class="tab">
           <a>Customization</a>
         </li>
-        <li
-          on:click={e => showTab(e.target.parentElement, 'async')}
-          class="tab">
+        <li on:click={(e) => showTab(e.target.parentElement, "async")} class="tab">
           <a>Async</a>
         </li>
-        <li
-          on:click={e => showTab(e.target.parentElement, 'advanced')}
-          class="tab">
+        <li on:click={(e) => showTab(e.target.parentElement, "advanced")} class="tab">
           <a>Advanced usage</a>
         </li>
       </ul>
