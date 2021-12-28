@@ -205,11 +205,9 @@ The noResultsText variable is optional and can be ommited.
 - `loading` - customize the div that shows the "loading" text:
 
 ```html
-<pre>
 <div slot="loading" let:loadingText={loadingText}>
     <span>{loadingText}</strong>
 </div>
-</pre>
 ```
 
 - `tag` - customize the tag blocks displayed when multiple selection is enabled:
