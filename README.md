@@ -196,8 +196,8 @@ async function getItems(keyword) {
 
 ```html
 <div slot="no-results" let:noResultsText={noResultsText}>
-    <span>{noResultsText}</strong>
-</pre>
+    <span>{noResultsText}</span>
+</div>
 ```
 
 The noResultsText variable is optional and can be ommited.
