@@ -282,21 +282,12 @@
 
   $: clearable = showClear || ((lock || multiple) && selectedItem)
 
-  function prepareUserEnteredText(userEnteredText) {
+  function cleanSearchQuery(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {
       return ""
     }
 
     const textFiltered = userEnteredText.replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " ").trim()
-
-    filteredTextLength = textFiltered.length
-
-    if (minCharactersToSearch > 1) {
-      if (filteredTextLength < minCharactersToSearch) {
-        return ""
-      }
-    }
-
     const cleanUserEnteredText = textCleanFunction(textFiltered)
     const textFilteredLowerCase = cleanUserEnteredText.toLowerCase().trim()
 
@@ -333,7 +324,13 @@
       console.log("Searching user entered text: '" + text + "'")
     }
 
-    const textFiltered = prepareUserEnteredText(text)
+    const textFiltered = searchFunction ? text : cleanSearchQuery(text)
+
+    if (minCharactersToSearch > 1) {
+      if (textFiltered.length < minCharactersToSearch) {
+        return
+      }
+    }
 
     if (textFiltered === "") {
       if (searchFunction) {
