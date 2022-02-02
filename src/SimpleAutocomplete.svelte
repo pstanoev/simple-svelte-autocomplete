@@ -134,6 +134,8 @@
   export let dropdownClassName = undefined
   // adds the disabled tag to the HTML input
   export let disabled = false
+  // remove the autocomplete-input class of the input
+  export let noInputStyles = false
 
   export let debug = false
 
@@ -955,7 +957,7 @@
     {/if}
     <input
       type="text"
-      class="{inputClassName ? inputClassName : ''} input autocomplete-input"
+      class="{inputClassName ? inputClassName : ''}  {noInputStyles ? '' : 'input autocomplete-input'}"
       id={inputId ? inputId : ""}
       autocomplete={html5autocomplete ? "on" : "off"}
       {placeholder}
