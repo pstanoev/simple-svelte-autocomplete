@@ -679,6 +679,8 @@
       clearTimeout(inputDelayTimeout)
     }
 
+    onInput(e);
+
     if (delay) {
       inputDelayTimeout = setTimeout(processInput, delay)
     } else {
