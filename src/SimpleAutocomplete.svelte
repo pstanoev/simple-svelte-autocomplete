@@ -2,7 +2,10 @@
   // the list of items  the user can select from
   export let items = []
 
-  // function to use to get all items (alternative to providing items)
+   /**
+   * function to use to get all items (alternative to providing items)
+   * @type {boolean|function}
+   */
   export let searchFunction = false
 
   // field of each item that's used for the labels in the list
@@ -233,7 +236,7 @@
     if (length > 0) {
       items.forEach((item, i) => {
         const listItem = getListItem(item)
-        if (listItem == undefined) {
+        if (listItem === undefined) {
           console.log("Undefined item for: ", item)
         }
         listItems[i] = listItem
@@ -417,7 +420,7 @@
   }
 
   function defaultItemFilterFunction(listItem, searchWords) {
-    var matches = numberOfMatches(listItem, searchWords)
+    const matches = numberOfMatches(listItem, searchWords)
     if (matchAllKeywords) {
       return matches >= searchWords.length
     } else {
@@ -465,9 +468,7 @@
     }
 
     const hlfilter = highlightFilter(searchWords, "label")
-    const filteredListItemsHighlighted = tempfilteredListItems.map(hlfilter)
-
-    filteredListItems = filteredListItemsHighlighted
+    filteredListItems = tempfilteredListItems.map(hlfilter)
     closeIfMinCharsToSearchReached()
     return true
   }
@@ -570,6 +571,10 @@
     if (debug) {
       console.log("Seaching DOM element: " + query + " in " + list)
     }
+
+    /**
+     * @param {Element} el
+     */
     const el = list && list.querySelector(query)
     if (el) {
       if (typeof el.scrollIntoViewIfNeeded === "function") {
@@ -789,7 +794,7 @@
       if (debug) {
         console.log("Item " + i + ": " + JSON.stringify(listItem))
       }
-      if (item == listItem.item) {
+      if (item === listItem.item) {
         index = i
         break
       }
@@ -924,7 +929,7 @@
     if (multiple) {
       return selectedItem.includes(listItem)
     } else {
-      return listItem == selectedItem
+      return listItem === selectedItem
     }
   }
 </script>
@@ -1048,7 +1053,7 @@
   }
 
   .autocomplete:not(.hide-arrow):not(.is-loading)::after {
-    border: 3px solid transparent;
+    border: 3px solid;
     border-radius: 2px;
     border-right: 0;
     border-top: 0;
