@@ -60,6 +60,7 @@
   export let onKeyDown = function(event, functionMap) {}
   export let onInput = function(event) {}
   export let onEnter = function(event) {}
+  export let onBackspace = function(event) {}
 
   // Behaviour properties
   export let selectFirstIfEmpty = false
@@ -641,7 +642,7 @@
       ArrowUp: up.bind(this),
       Escape: onEsc.bind(this),
       Backspace:
-        multiple && selectedItem && selectedItem.length && !text ? onBackspace.bind(this) : null,
+          multiple && selectedItem && selectedItem.length && !text ? onBackspaceInternal.bind(this) : null,
     }
     onKeyDown(e, fnmap);
 
@@ -724,10 +725,11 @@
     }
   }
 
-  function onBackspace(e) {
+  function onBackspaceInternal(e) {
     if (debug) {
       console.log("onBackspace")
     }
+    onBackspace(e);
 
     unselectItem(selectedItem[selectedItem.length - 1])
   }
