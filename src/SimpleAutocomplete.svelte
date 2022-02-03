@@ -577,6 +577,11 @@
           console.log("Scrolling selected item into view")
         }
         el.scrollIntoViewIfNeeded()
+      } else if(el.scrollIntoView === 'function') {
+        if (debug) {
+          console.log("Scrolling selected item into view")
+        }
+        el.scrollIntoView()
       } else {
         if (debug) {
           console.warn(
