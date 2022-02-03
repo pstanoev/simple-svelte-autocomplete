@@ -72,16 +72,16 @@
           on:click={(e) => showTab(e.target.parentElement, "simple")}
           class="tab is-active"
         >
-          <a>Basic usage</a>
+          <a href={'#'}>Basic usage</a>
         </li>
         <li on:click={(e) => showTab(e.target.parentElement, "customization")} class="tab">
-          <a>Customization</a>
+          <a href={'#'}>Customization</a>
         </li>
         <li on:click={(e) => showTab(e.target.parentElement, "async")} class="tab">
-          <a>Async</a>
+          <a href={'#'}>Async</a>
         </li>
         <li on:click={(e) => showTab(e.target.parentElement, "advanced")} class="tab">
-          <a>Advanced usage</a>
+          <a href={'#'}>Advanced usage</a>
         </li>
       </ul>
     </div>
