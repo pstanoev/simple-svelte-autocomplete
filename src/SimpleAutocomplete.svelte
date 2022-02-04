@@ -51,13 +51,19 @@
     return true
   }
   export let onChange = function (newSelectedItem) {}
-  export let onFocus = function () {}
-  export let onBlur = function () {}
+  export let onFocus = function (event) {}
+  export let onBlur = function (event) {}
   export let onCreate = function (text) {
     if (debug) {
       console.log("onCreate: " + text)
     }
   }
+  export let onKeyPress = function(event) {}
+  export let onInputClick = function(event) {}
+  export let onKeyDown = function(event, functionMap) {}
+  export let onInput = function(event) {}
+  export let onEnter = function(event) {}
+  export let onBackspace = function(event) {}
 
   // Behaviour properties
   export let selectFirstIfEmpty = false
@@ -634,9 +640,9 @@
     }
   }
 
-  function onKeyDown(e) {
+  function onKeyDownInternal(e) {
     if (debug) {
-      console.log("onKeyDown")
+      console.log("onKeyDownInternal")
     }
 
     let key = e.key
@@ -648,38 +654,45 @@
       ArrowUp: up.bind(this),
       Escape: onEsc.bind(this),
       Backspace:
-        multiple && selectedItem && selectedItem.length && !text ? onBackspace.bind(this) : null,
+          multiple && selectedItem && selectedItem.length && !text ? onBackspaceInternal.bind(this) : null,
     }
+    onKeyDown(e, fnmap);
+
     const fn = fnmap[key]
     if (typeof fn === "function") {
       fn(e)
     }
   }
 
-  function onKeyPress(e) {
+  function onKeyPressInternal(e) {
     if (debug) {
-      console.log("onKeyPress")
+      console.log("onKeyPressInternal")
     }
+
+    onKeyPress(e);
 
     if (e.key === "Enter" && opened) {
       e.preventDefault()
-      onEnter()
+      onEnterInternal();
+      onEnter(e);
     }
   }
 
-  function onEnter() {
+  function onEnterInternal() {
     selectItem()
   }
 
-  function onInput(e) {
+  function onInputInternal(e) {
     if (debug) {
-      console.log("onInput")
+      console.log("onInputInternal")
     }
 
     text = e.target.value
     if (inputDelayTimeout) {
       clearTimeout(inputDelayTimeout)
     }
+
+    onInput(e);
 
     if (delay) {
       inputDelayTimeout = setTimeout(processInput, delay)
@@ -703,10 +716,11 @@
     }
   }
 
-  function onInputClick() {
+  function onInputClickInternal(e) {
     if (debug) {
-      console.log("onInputClick")
+      console.log("onInputClickInternal")
     }
+    onInputClick(e);
     resetListToAllItemsAndOpen()
   }
 
@@ -723,30 +737,31 @@
     }
   }
 
-  function onBackspace(e) {
+  function onBackspaceInternal(e) {
     if (debug) {
       console.log("onBackspace")
     }
+    onBackspace(e);
 
     unselectItem(selectedItem[selectedItem.length - 1])
   }
 
-  function onFocusInternal() {
+  function onFocusInternal(e) {
     if (debug) {
       console.log("onFocus")
     }
 
-    onFocus()
+    onFocus(e)
 
     resetListToAllItemsAndOpen()
   }
 
-  function onBlurInternal() {
+  function onBlurInternal(e) {
     if (debug) {
       console.log("onBlur")
     }
 
-    onBlur()
+    onBlur(e)
   }
 
   function resetListToAllItemsAndOpen() {
@@ -977,12 +992,12 @@
       readonly={readonly || (lock && selectedItem)}
       bind:this={input}
       bind:value={text}
-      on:input={onInput}
+      on:input={onInputInternal}
       on:focus={onFocusInternal}
       on:blur={onBlurInternal}
-      on:keydown={onKeyDown}
-      on:click={onInputClick}
-      on:keypress={onKeyPress}
+      on:keydown={onKeyDownInternal}
+      on:click={onInputClickInternal}
+      on:keypress={onKeyPressInternal}
     />
     {#if clearable}
       <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
