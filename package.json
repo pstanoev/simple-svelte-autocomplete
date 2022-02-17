@@ -3,8 +3,8 @@
   "version": "2.2.4",
   "description": "Autocomplete / Select / Typeahead component made with Svelte 3",
   "svelte": "src/SimpleAutocomplete.svelte",
-  "module": "index.mjs",
-  "main": "index.js",
+  "module": "dist/index.mjs",
+  "main": "dist/index.js",
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
@@ -39,7 +39,8 @@
     "start": "sirv public --single",
     "start:dev": "sirv public --single --dev",
     "test": "jest",
-    "prettier": "prettier --write public src"
+    "prettier": "prettier --write public src",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
