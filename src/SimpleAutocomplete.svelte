@@ -139,6 +139,8 @@
   export let disabled = false
   // remove the autocomplete-input class of the input
   export let noInputStyles = false
+  // adds the required attribute to the HTML input
+  export let required = null
 
   export let debug = false
 
@@ -973,6 +975,7 @@
       {placeholder}
       {name}
       {disabled}
+      required={required}
       {title}
       readonly={readonly || (lock && selectedItem)}
       bind:this={input}
