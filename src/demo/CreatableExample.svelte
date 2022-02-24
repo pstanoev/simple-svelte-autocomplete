@@ -12,7 +12,6 @@ const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"];
 let selectedColor;
 let text = 'Non existing color'
 let toCreate = "";
-<\/script>
 
 function handleCreate(newColor) {
   toCreate = 'Creating ' + newColor;
@@ -20,6 +19,7 @@ function handleCreate(newColor) {
   colors = colors;
   return newColor
 }
+<\/script>
 
 <AutoComplete
   items={colors}

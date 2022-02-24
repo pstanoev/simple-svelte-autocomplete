@@ -28,9 +28,9 @@ async function searchCountry(keyword) {
     searchFunction={searchCountry}
     bind:selectedItem={selectedCountry}
     labelFieldName="name"
-    maxItemsToShowInList="10"
-    delay=200
-    localFiltering=false />`
+    maxItemsToShowInList={10}
+    delay={200}
+    localFiltering={false} />`
 </script>
 
 <div>
@@ -49,9 +49,9 @@ async function searchCountry(keyword) {
         searchFunction={searchCountry}
         bind:selectedItem={selectedCountry}
         labelFieldName="name"
-        maxItemsToShowInList="10"
-        delay="200"
-        localFiltering="false"
+        maxItemsToShowInList={10}
+        delay={200}
+        localFiltering={false}
       />
 
       <div style="margin-bottom: 10rem;">
