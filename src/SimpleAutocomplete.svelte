@@ -266,7 +266,7 @@
   function getListItem(item) {
     return {
       // keywords representation of the item
-      keywords: safeKeywordsFunction(item),
+      keywords: localFiltering ? safeKeywordsFunction(item) : [],
       // item label
       label: safeLabelFunction(item),
       // store reference to the origial item
@@ -304,27 +304,15 @@
       return ""
     }
 
+    if (!cleanUserText) {
+      return userEnteredText
+    }
+
     const textFiltered = userEnteredText.replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " ").trim()
 
-    filteredTextLength = textFiltered.length
+    const cleanUserEnteredText = safeStringFunction(textCleanFunction, textFiltered)
+    const textFilteredLowerCase = cleanUserEnteredText.toLowerCase().trim()
 
-    if (minCharactersToSearch > 1) {
-      if (filteredTextLength < minCharactersToSearch) {
-        return ""
-      }
-    }
-
-    const cleanUserEnteredText = textCleanFunction(textFiltered)
-    const textFilteredLowerCase =
-      cleanUserEnteredText !== undefined && cleanUserEnteredText !== null
-        ? cleanUserEnteredText.toLowerCase().trim()
-        : ""
-
-    if (debug) {
-      console.log(
-        "Change user entered text '" + userEnteredText + "' into '" + textFilteredLowerCase + "'"
-      )
-    }
     return textFilteredLowerCase
   }
 
@@ -348,12 +336,22 @@
   async function search() {
     let timerId
     if (debug) {
-      timerId = `Autocomplete search ${inputId ? `(id: ${inputId})` : ""})`
+      timerId = `Autocomplete search ${inputId ? `(id: ${inputId})` : ""}`
       console.time(timerId)
       console.log("Searching user entered text: '" + text + "'")
     }
 
-    const textFiltered = cleanUserText ? prepareUserEnteredText(text) : text
+    let textFiltered = prepareUserEnteredText(text)
+    if (minCharactersToSearch > 1) {
+      if (filteredTextLength < minCharactersToSearch) {
+        textFiltered = ""
+      }
+    }
+    filteredTextLength = textFiltered.length
+
+    if (debug) {
+      console.log("Changed user entered text '" + text + "' into '" + textFiltered + "'")
+    }
 
     if (textFiltered === "") {
       if (searchFunction) {
