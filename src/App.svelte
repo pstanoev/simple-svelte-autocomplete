@@ -17,6 +17,7 @@
   import AsyncPreloadedExample from "./demo/AsyncPreloadedExample.svelte"
   import CreatableExample from "./demo/CreatableExample.svelte"
   import CustomFunctionsExample from "./demo/CustomFunctionsExample.svelte"
+  import RequiredExample from "./demo/RequiredExample.svelte";
 
   let bulma = true
 
@@ -90,6 +91,7 @@
       <SimpleExample />
       <AdvancedExample />
       <MultipleExample />
+      <RequiredExample />
 
       <LockedExample />
     </div>

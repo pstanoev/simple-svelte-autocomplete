@@ -139,8 +139,14 @@
   export let disabled = false
   // remove the autocomplete-input class of the input
   export let noInputStyles = false
+  // adds the required attribute to the HTML input
+  export let required = null
 
   export let debug = false
+
+  // add tabindex support for the input
+  // set standard to 0: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex
+  export let tabindex = 0;
 
   // --- Public State ----
 
@@ -973,8 +979,10 @@
       {placeholder}
       {name}
       {disabled}
+      required={required}
       {title}
       readonly={readonly || (lock && selectedItem)}
+      tabindex={tabindex}
       bind:this={input}
       bind:value={text}
       on:input={onInput}
