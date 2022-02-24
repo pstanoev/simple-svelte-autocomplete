@@ -144,6 +144,10 @@
 
   export let debug = false
 
+  // add tabindex support for the input
+  // set standard to 0: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex
+  export let tabindex = 0;
+
   // --- Public State ----
 
   // selected item state
@@ -978,6 +982,7 @@
       required={required}
       {title}
       readonly={readonly || (lock && selectedItem)}
+      tabindex={tabindex}
       bind:this={input}
       bind:value={text}
       on:input={onInput}
