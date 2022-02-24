@@ -5,7 +5,7 @@
 
   async function searchCountry(keyword) {
     const url =
-      "https://restcountries.eu/rest/v2/name/" +
+      "https://restcountries.com/v2/name/" +
       encodeURIComponent(keyword) +
       "?fields=name;alpha2Code"
 
@@ -18,7 +18,7 @@
   const code = `<script>
 let selectedCountry;
 async function searchCountry(keyword) {
-    const url = "https://restcountries.eu/rest/v2/name/"
+    const url = "https://restcountries.com/v2/name/"
     + encodeURIComponent(keyword) + "?fields=name;alpha2Code";
 
     const response = await fetch(url);

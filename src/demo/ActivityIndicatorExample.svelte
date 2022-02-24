@@ -5,7 +5,7 @@
 
   async function searchCountry(keyword) {
     const url =
-      "https://restcountries.eu/rest/v2/name/" +
+      "https://restcountries.com/v2/name/" +
       encodeURIComponent(keyword) +
       "?fields=name;alpha2Code"
 
