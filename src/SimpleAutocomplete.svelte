@@ -502,7 +502,16 @@
       if ("undefined" !== typeof createdItem) {
         prepareListItems()
         filteredListItems = listItems
-        const index = findItemIndex(createdItem, filteredListItems)
+        let index = findItemIndex(createdItem, filteredListItems)
+
+        // if the items array was not updated, add the created item manually
+        if (index <= 0) {
+          items = [createdItem]
+          prepareListItems()
+          filteredListItems = listItems
+          index = 0
+        }
+
         if (index >= 0) {
           highlightIndex = index
           listItem = filteredListItems[highlightIndex]
@@ -546,9 +555,16 @@
     }
     const listItem = filteredListItems[highlightIndex]
     if (selectListItem(listItem)) {
+      if (debug) {
+        console.log("selectListItem true, closing")
+      }
       close()
       if (multiple) {
         input.focus()
+      }
+    } else {
+      if (debug) {
+        console.log("selectListItem false, not closing")
       }
     }
   }
