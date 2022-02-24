@@ -90,6 +90,9 @@
   // true to perform local filtering of items, even if searchFunction is provided
   export let localFiltering = true
 
+  // true to clean the user entered text (removes spaces)
+  export let cleanUserText = true
+
   // UI properties
 
   // option to hide the dropdown arrow
@@ -309,7 +312,7 @@
     }
 
     const cleanUserEnteredText = textCleanFunction(textFiltered)
-    const textFilteredLowerCase = cleanUserEnteredText.toLowerCase().trim()
+    const textFilteredLowerCase = cleanUserEnteredText !== undefined && cleanUserEnteredText !== null ? cleanUserEnteredText.toLowerCase().trim() : ""
 
     if (debug) {
       console.log(
@@ -344,7 +347,7 @@
       console.log("Searching user entered text: '" + text + "'")
     }
 
-    const textFiltered = prepareUserEnteredText(text)
+    const textFiltered = cleanUserText ?  prepareUserEnteredText(text) : text
 
     if (textFiltered === "") {
       if (searchFunction) {
@@ -973,7 +976,7 @@
     {/if}
     <input
       type="text"
-      class="{inputClassName ? inputClassName : ''}  {noInputStyles ? '' : 'input autocomplete-input'}"
+      class="{inputClassName ? inputClassName : ''} {noInputStyles ? '' : 'input autocomplete-input'}"
       id={inputId ? inputId : ""}
       autocomplete={html5autocomplete ? "on" : "off"}
       {placeholder}

@@ -124,6 +124,7 @@ async function getItems(keyword) {
 - `searchFunction` - optional function to load items asynchronously from HTTP call for example, the searchFunction can also return all items and additional local search will still be performed
 - `delay` - delay in milliseconds to wait after user input to do the local searching or call `searchFunction` if provided, defaults to 0
 - `localFiltering` - boolean specifying if `searchFunction` is used, to still perform local filtering of the items to only ones that match the user input, defaults to true
+- `cleanUserText` - by default the component removes special characters and spaces from the user entered text, set `cleanUserText=false` to prevent this
 - `multiple` - enable multiple selection (false by default)
 - `selectedItem` - the current item that is selected (object if the array of items contains objects)
 - `highlightedItem` - the current item that is highlighted in the dropdown menu
@@ -135,7 +136,7 @@ async function getItems(keyword) {
 - `keywordsFunction` - optional function that creates text to search from the item. If used `keywordsFieldName` is ignored
 - `valueFunction` - optional function that derives the value from the selected item. If used `valueFieldName` is ignored
 - `keywordsCleanFunction` - optional function to additionally process the derived keywords from the item
-- `textCleanFunction` - optional function to additionally process the user entered text
+- `textCleanFunction` - optional function to additionally process the user entered text. Ignored if `cleanUserText=false`
 - `selectFirstIfEmpty` - set to true to select the first item if the user clears the text and closes the dropdown, defaults to false
 - `minCharactersToSearch` - minimum length of search text to perform search, defaults to 1
 - `maxItemsToShowInList` - maximum number of items to show in the dropdown list, defaults 0 (no limit)
@@ -172,12 +173,15 @@ async function getItems(keyword) {
 
 - `className` - apply a className to the control
 - `inputClassName` - apply a className to the input control
+- `noInputStyles` - set to true to disable the `input autocomplete-input` classes which are added to the input by default
 - `inputId` - apply an id attribute to the the input control
 - `dropdownClassName` - apply a className to the dropdown div showing the list of items
 - `name` - generate an HTML input with this name, containing the current value
 - `html5autocomplete` - flag to enable or disable the [HTML5 autocomplete](https://developer.mozilla.org/fr/docs/Web/HTML/Element/form#attr-autocomplete) attribute
 - `selectName` - apply a name attribute to the <select> tag that holds the selected value
 - `selectId` - apply an id attribute to the <select> tag that holds the selected value
+- `required` - adds the `required` attribute to the input
+- `tabIndex` - adds the `tabIndex` attribute https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex
 
 ### UI Slots
 
@@ -225,5 +229,15 @@ The noResultsText variable is optional and can be ommited.
 - `autocomplete-input` the class applied to the input list
 - `autocomplete-list` the class applied to the dropdown list
 - `autocomplete-list-item` the class applied to items in the dropdown list
+
+Note: Setting `noInputStyles=true` will disable the use of the `autocomplete-input` class above.
+
+Use global to apply styles, example:
+```
+  .parent :global(.childClass) {
+    color: red;
+  }
+
+```
 
 The component is inteded to use with [Bulma](https://bulma.io/) but it can be adapted to use Boostrap or anything else.
