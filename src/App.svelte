@@ -17,7 +17,7 @@
   import AsyncPreloadedExample from "./demo/AsyncPreloadedExample.svelte"
   import CreatableExample from "./demo/CreatableExample.svelte"
   import CustomFunctionsExample from "./demo/CustomFunctionsExample.svelte"
-  import RequiredExample from "./demo/RequiredExample.svelte";
+  import RequiredExample from "./demo/RequiredExample.svelte"
 
   let bulma = true
 
@@ -73,16 +73,16 @@
           on:click={(e) => showTab(e.target.parentElement, "simple")}
           class="tab is-active"
         >
-          <a href={'#'}>Basic usage</a>
+          <a href={"#"}>Basic usage</a>
         </li>
         <li on:click={(e) => showTab(e.target.parentElement, "customization")} class="tab">
-          <a href={'#'}>Customization</a>
+          <a href={"#"}>Customization</a>
         </li>
         <li on:click={(e) => showTab(e.target.parentElement, "async")} class="tab">
-          <a href={'#'}>Async</a>
+          <a href={"#"}>Async</a>
         </li>
         <li on:click={(e) => showTab(e.target.parentElement, "advanced")} class="tab">
-          <a href={'#'}>Advanced usage</a>
+          <a href={"#"}>Advanced usage</a>
         </li>
       </ul>
     </div>

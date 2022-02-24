@@ -7,9 +7,7 @@
 
   async function* searchCountryGenerator(keyword) {
     const url =
-      "https://restcountries.com/v2/name/" +
-      encodeURIComponent(keyword) +
-      "?fields=name;alpha2Code"
+      "https://restcountries.com/v2/name/" + encodeURIComponent(keyword) + "?fields=name;alpha2Code"
 
     const response = await fetch(url)
     const chunks = await response.json()

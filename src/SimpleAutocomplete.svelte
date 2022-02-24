@@ -2,7 +2,7 @@
   // the list of items  the user can select from
   export let items = []
 
-   /**
+  /**
    * function to use to get all items (alternative to providing items)
    * @type {boolean|function}
    */
@@ -90,6 +90,9 @@
   // true to perform local filtering of items, even if searchFunction is provided
   export let localFiltering = true
 
+  // true to perform local sortying of items
+  export let localSorting = true
+
   // true to clean the user entered text (removes spaces)
   export let cleanUserText = true
 
@@ -149,7 +152,7 @@
 
   // add tabindex support for the input
   // set standard to 0: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex
-  export let tabindex = 0;
+  export let tabindex = 0
 
   // --- Public State ----
 
@@ -312,7 +315,10 @@
     }
 
     const cleanUserEnteredText = textCleanFunction(textFiltered)
-    const textFilteredLowerCase = cleanUserEnteredText !== undefined && cleanUserEnteredText !== null ? cleanUserEnteredText.toLowerCase().trim() : ""
+    const textFilteredLowerCase =
+      cleanUserEnteredText !== undefined && cleanUserEnteredText !== null
+        ? cleanUserEnteredText.toLowerCase().trim()
+        : ""
 
     if (debug) {
       console.log(
@@ -347,7 +353,7 @@
       console.log("Searching user entered text: '" + text + "'")
     }
 
-    const textFiltered = cleanUserText ?  prepareUserEnteredText(text) : text
+    const textFiltered = cleanUserText ? prepareUserEnteredText(text) : text
 
     if (textFiltered === "") {
       if (searchFunction) {
@@ -463,15 +469,17 @@
         )
       }
 
-      if (itemSortFunction) {
-        tempfilteredListItems = tempfilteredListItems.sort((item1, item2) =>
-          itemSortFunction(item1.item, item2.item, searchWords)
-        )
-      } else {
-        if (sortByMatchedKeywords) {
+      if (localSorting) {
+        if (itemSortFunction) {
           tempfilteredListItems = tempfilteredListItems.sort((item1, item2) =>
-            defaultItemSortFunction(item1, item2, searchWords)
+            itemSortFunction(item1.item, item2.item, searchWords)
           )
+        } else {
+          if (sortByMatchedKeywords) {
+            tempfilteredListItems = tempfilteredListItems.sort((item1, item2) =>
+              defaultItemSortFunction(item1, item2, searchWords)
+            )
+          }
         }
       }
     } else {
@@ -593,7 +601,7 @@
           console.log("Scrolling selected item into view")
         }
         el.scrollIntoViewIfNeeded()
-      } else if(el.scrollIntoView === 'function') {
+      } else if (el.scrollIntoView === "function") {
         if (debug) {
           console.log("Scrolling selected item into view")
         }
@@ -976,16 +984,18 @@
     {/if}
     <input
       type="text"
-      class="{inputClassName ? inputClassName : ''} {noInputStyles ? '' : 'input autocomplete-input'}"
+      class="{inputClassName ? inputClassName : ''} {noInputStyles
+        ? ''
+        : 'input autocomplete-input'}"
       id={inputId ? inputId : ""}
       autocomplete={html5autocomplete ? "on" : "off"}
       {placeholder}
       {name}
       {disabled}
-      required={required}
+      {required}
       {title}
       readonly={readonly || (lock && selectedItem)}
-      tabindex={tabindex}
+      {tabindex}
       bind:this={input}
       bind:value={text}
       on:input={onInput}

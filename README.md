@@ -75,7 +75,7 @@ Define a `searchFunction` which will be called with `keyword` parameter.
 If you have `searchFunction` defined you don't need to specify `items` since the function will be used for loading.
 The `delay` parameter specifies the time to wait between user input and calling the `searchFunction`.
 It is recommend that delay > 200ms is set when using a remote search function to avoid sending too many requests.
-The `localFiltering` parameter can be set to false if the search function already returns filtered items accordind to the user input.
+The `localFiltering` parameter can be set to false if the search function already returns filtered items according to the user input.
 
 ```html
 <AutoComplete
@@ -124,6 +124,7 @@ async function getItems(keyword) {
 - `searchFunction` - optional function to load items asynchronously from HTTP call for example, the searchFunction can also return all items and additional local search will still be performed
 - `delay` - delay in milliseconds to wait after user input to do the local searching or call `searchFunction` if provided, defaults to 0
 - `localFiltering` - boolean specifying if `searchFunction` is used, to still perform local filtering of the items to only ones that match the user input, defaults to true
+- `localSorting`  - boolean specifying if result items should be sorted locally by `itemSortFunction` or `sortByMatchedKeywords`. If set to false, no local sorting will be done
 - `cleanUserText` - by default the component removes special characters and spaces from the user entered text, set `cleanUserText=false` to prevent this
 - `multiple` - enable multiple selection (false by default)
 - `selectedItem` - the current item that is selected (object if the array of items contains objects)

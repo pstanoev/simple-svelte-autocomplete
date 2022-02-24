@@ -24,12 +24,7 @@ let selectedColor;
 Selected color: {selectedColor}
 <AutoComplete items={colors} bind:selectedItem={selectedColor} />`
 </script>
-<style>
 
-.parent :global(.childClass) {
-    color: red;
-  }
-</style>
 <div>
   <h3 class="mt-3">Simple example:</h3>
 
@@ -47,3 +42,9 @@ Selected color: {selectedColor}
     </div>
   </div>
 </div>
+
+<style>
+  .parent :global(.childClass) {
+    color: red;
+  }
+</style>

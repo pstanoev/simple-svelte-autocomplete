@@ -34,12 +34,12 @@ Selected color: {selectedColor}
 
         <p>Selected color: {selectedColor}</p>
 
-        <AutoComplete items={colors} bind:selectedItem={selectedColor} required={true}/>
+        <AutoComplete items={colors} bind:selectedItem={selectedColor} required={true} />
         <button type="submit">Submit</button>
       </div>
 
       <div class="column">
-        <Highlight language={xml} {code}/>
+        <Highlight language={xml} {code} />
       </div>
     </div>
   </form>
