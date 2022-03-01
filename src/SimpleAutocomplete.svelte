@@ -187,19 +187,25 @@
   let inputDelayTimeout
 
   // --- Functions ---
-  function safeStringFunction(theFunction, argument) {
+
+  function safeFunction(theFunction, argument) {
     if (typeof theFunction !== "function") {
       console.error("Not a function: " + theFunction + ", argument: " + argument)
+      return undefined
     }
-    let originalResult
+    let result
     try {
-      originalResult = theFunction(argument)
+      result = theFunction(argument)
     } catch (error) {
       console.warn(
         "Error executing Autocomplete function on value: " + argument + " function: " + theFunction
       )
     }
-    let result = originalResult
+    return result
+  }
+
+  function safeStringFunction(theFunction, argument) {
+    let result = safeFunction(theFunction, argument)
     if (result === undefined || result === null) {
       result = ""
     }
@@ -342,10 +348,8 @@
     }
 
     let textFiltered = prepareUserEnteredText(text)
-    if (minCharactersToSearch > 1) {
-      if (filteredTextLength < minCharactersToSearch) {
-        textFiltered = ""
-      }
+    if (minCharactersToSearch > 1 && textFiltered.length < minCharactersToSearch) {
+      textFiltered = ""
     }
     filteredTextLength = textFiltered.length
 
@@ -353,6 +357,7 @@
       console.log("Changed user entered text '" + text + "' into '" + textFiltered + "'")
     }
 
+    // if no search text load all items
     if (textFiltered === "") {
       if (searchFunction) {
         // we will need to rerun the search
@@ -374,11 +379,10 @@
     }
 
     if (!searchFunction) {
+      // internal search
       processListItems(textFiltered)
-    }
-
-    // external search which provides items
-    else {
+    } else {
+      // external search which provides items
       lastRequestId = lastRequestId + 1
       const currentRequestId = lastRequestId
       loading = true
@@ -492,6 +496,32 @@
 
   // $: text, search();
 
+  function afterCreate(createdItem) {
+    let listItem
+    if (debug) {
+      console.log("createdItem", createdItem)
+    }
+    if ("undefined" !== typeof createdItem) {
+      prepareListItems()
+      filteredListItems = listItems
+      let index = findItemIndex(createdItem, filteredListItems)
+
+      // if the items array was not updated, add the created item manually
+      if (index <= 0) {
+        items = [createdItem]
+        prepareListItems()
+        filteredListItems = listItems
+        index = 0
+      }
+
+      if (index >= 0) {
+        highlightIndex = index
+        listItem = filteredListItems[highlightIndex]
+      }
+    }
+    return listItem
+  }
+
   function selectListItem(listItem) {
     if (debug) {
       console.log("selectListItem", listItem)
@@ -500,21 +530,14 @@
       // allow undefined items if create is enabled
       const createdItem = onCreate(text)
       if ("undefined" !== typeof createdItem) {
-        prepareListItems()
-        filteredListItems = listItems
-        let index = findItemIndex(createdItem, filteredListItems)
-
-        // if the items array was not updated, add the created item manually
-        if (index <= 0) {
-          items = [createdItem]
-          prepareListItems()
-          filteredListItems = listItems
-          index = 0
-        }
-
-        if (index >= 0) {
-          highlightIndex = index
-          listItem = filteredListItems[highlightIndex]
+        if (typeof createdItem?.then === "function") {
+          createdItem.then((newItem) => {
+            const newListItem = afterCreate(newItem)
+            selectListItem(newListItem)
+          })
+          return true
+        } else {
+          listItem = afterCreate(createdItem)
         }
       }
     }
@@ -649,7 +672,7 @@
 
   function onDocumentClick(e) {
     if (debug) {
-      console.log("onDocumentClick: " + JSON.stringify(e.composedPath()))
+      console.log("onDocumentClick")
     }
     if (e.composedPath().some((path) => path.classList && path.classList.contains(uniqueId))) {
       if (debug) {
@@ -673,8 +696,8 @@
     let key = e.key
     if (key === "Tab" && e.shiftKey) key = "ShiftTab"
     const fnmap = {
-      Tab: opened ? down.bind(this) : null,
-      ShiftTab: opened ? up.bind(this) : null,
+      Tab: opened ? close() : null,
+      ShiftTab: opened ? close() : null,
       ArrowDown: down.bind(this),
       ArrowUp: up.bind(this),
       Escape: onEsc.bind(this),
@@ -777,6 +800,8 @@
       console.log("onBlur")
     }
 
+    // close();
+
     onBlur()
   }
 
@@ -849,7 +874,7 @@
     }
 
     // check if the search text has more than the min chars required
-    if (isMinCharsToSearchReached()) {
+    if (notEnoughSearchText()) {
       return
     }
 
@@ -869,12 +894,12 @@
     }
   }
 
-  function isMinCharsToSearchReached() {
+  function notEnoughSearchText() {
     return minCharactersToSearch > 1 && filteredTextLength < minCharactersToSearch
   }
 
   function closeIfMinCharsToSearchReached() {
-    if (isMinCharsToSearchReached()) {
+    if (notEnoughSearchText()) {
       close()
     }
   }
