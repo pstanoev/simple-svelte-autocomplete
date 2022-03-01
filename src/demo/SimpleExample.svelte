@@ -44,7 +44,4 @@ Selected color: {selectedColor}
 </div>
 
 <style>
-  .parent :global(.childClass) {
-    color: red;
-  }
 </style>
