@@ -151,6 +151,7 @@ async function getItems(keyword) {
 - `readonly` - make the input readonly, no user entered text (simulates combobox), item from the list can still be selected
 - `lock` - defaults to false, locks the input for user entered text when an item has been selected
 - `create` - true to enable accepting of unlisted values
+- `closeOnBlur` - true to close the dropdown when the component loses focus
 - `debug` - flag to enable detailed log statements from the component
 
 ### Events

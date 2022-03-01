@@ -96,6 +96,9 @@
   // true to clean the user entered text (removes spaces)
   export let cleanUserText = true
 
+  // true to close the dropdown when the component loses focus
+  export let closeOnBlur = false
+
   // UI properties
 
   // option to hide the dropdown arrow
@@ -800,7 +803,9 @@
       console.log("onBlur")
     }
 
-    // close();
+    if (closeOnBlur) {
+      close()
+    }
 
     onBlur()
   }
