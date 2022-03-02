@@ -718,7 +718,7 @@
       console.log("onKeyPress")
     }
 
-    if (e.key === "Enter" && opened) {
+    if (e.key === "Enter") {
       e.preventDefault()
       onEnter()
     }
