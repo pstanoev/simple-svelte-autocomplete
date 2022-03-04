@@ -306,7 +306,7 @@
 
   $: showList = opened && ((items && items.length > 0) || filteredTextLength > 0)
 
-  $: clearable = showClear || ((lock || multiple) && selectedItem)
+  $: clearable = !readonly && !disabled && (showClear || ((lock || multiple) && selectedItem))
 
   function prepareUserEnteredText(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {
