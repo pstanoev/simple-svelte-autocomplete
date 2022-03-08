@@ -4,16 +4,7 @@
   import xml from "svelte-highlight/src/languages/xml"
 
   let selectedColor
-  const colors = [
-    "White",
-    "Red",
-    "Yellow",
-    "Green",
-    "Blue",
-    "Black",
-    "Mät bläck",
-    "<i>Jét Black</i>",
-  ]
+  let colors = ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck", "<i>Jét Black</i>"]
   const code = `<script>
 import AutoComplete from 'simple-svelte-autocomplete';
 
@@ -41,6 +32,20 @@ Selected color: {selectedColor}
       <Highlight language={xml} {code} />
     </div>
   </div>
+</div>
+
+<div>
+  <p>
+    REPL:<br />
+    <a href="https://svelte.dev/repl/3e21f8eaeab1413d8ac173520c10cde1" target="_blank">
+      svelte.dev/repl/3e21f8eaeab1413d8ac173520c10cde1
+    </a>
+  </p>
+</div>
+
+<div>
+  <br />
+  <button class="button" on:click={() => (colors = ["One", "Two", "Three"])}> Change items </button>
 </div>
 
 <style>

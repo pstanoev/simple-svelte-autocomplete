@@ -266,6 +266,8 @@
       })
     }
 
+    filteredListItems = listItems
+
     if (debug) {
       console.log(listItems.length + " items to search")
       console.timeEnd(timerId)
@@ -533,7 +535,7 @@
       // allow undefined items if create is enabled
       const createdItem = onCreate(text)
       if ("undefined" !== typeof createdItem) {
-        if (typeof createdItem === "function") {
+        if (typeof createdItem?.then === "function") {
           createdItem.then((newItem) => {
             const newListItem = afterCreate(newItem)
             selectListItem(newListItem)
@@ -550,6 +552,10 @@
         console.log(`listItem is undefined. Can not select.`)
       }
       return false
+    }
+
+    if (lock && selectedItem) {
+      return true
     }
 
     const newSelectedItem = listItem.item

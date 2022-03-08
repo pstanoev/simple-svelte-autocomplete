@@ -64,4 +64,13 @@ async function searchCountry(keyword) {
       <Highlight language={xml} {code} />
     </div>
   </div>
+
+  <div>
+    <p>
+      REPL:<br />
+      <a href="https://svelte.dev/repl/9b0f5c2ac2e34a0ca4c7d7b71f109a7d" target="_blank">
+        svelte.dev/repl/9b0f5c2ac2e34a0ca4c7d7b71f109a7d
+      </a>
+    </p>
+  </div>
 </div>
