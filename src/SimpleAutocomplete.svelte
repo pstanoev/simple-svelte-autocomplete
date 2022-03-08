@@ -535,7 +535,7 @@
       // allow undefined items if create is enabled
       const createdItem = onCreate(text)
       if ("undefined" !== typeof createdItem) {
-        if (typeof createdItem?.then === "function") {
+        if (typeof createdItem.then === "function") {
           createdItem.then((newItem) => {
             const newListItem = afterCreate(newItem)
             selectListItem(newListItem)
