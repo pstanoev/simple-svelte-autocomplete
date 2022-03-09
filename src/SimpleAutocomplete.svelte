@@ -539,7 +539,9 @@
           createdItem.then((newItem) => {
             if ("undefined" !== typeof newItem) {
               const newListItem = afterCreate(newItem)
-              selectListItem(newListItem)
+              if ("undefined" !== typeof newListItem) {
+                selectListItem(newListItem)
+              }
             }
           })
           return true
