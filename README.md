@@ -71,7 +71,7 @@ keywordsFunction={color => color.name + ' ' + color.code} />
 
 ## Asynchronous loading of items
 
-Define a `searchFunction` which will be called with `keyword` parameter.
+Define a `searchFunction` which will be called with `keyword` and `maxItemsToShowInList` parameters.
 If you have `searchFunction` defined you don't need to specify `items` since the function will be used for loading.
 The `delay` parameter specifies the time to wait between user input and calling the `searchFunction`.
 It is recommend that delay > 200ms is set when using a remote search function to avoid sending too many requests.

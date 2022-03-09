@@ -394,7 +394,7 @@
 
       // searchFunction is a generator
       if (searchFunction.constructor.name === "AsyncGeneratorFunction") {
-        for await (const chunk of searchFunction(textFiltered)) {
+        for await (const chunk of searchFunction(textFiltered, maxItemsToShowInList)) {
           // a chunk of an old response: throw it away
           if (currentRequestId < lastResponseId) {
             return false
@@ -420,7 +420,7 @@
 
       // searchFunction is a regular function
       else {
-        let result = await searchFunction(textFiltered)
+        let result = await searchFunction(textFiltered, maxItemsToShowInList)
 
         // If a response to a newer request has been received
         // while responses to this request were being loaded,
