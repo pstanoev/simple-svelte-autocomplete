@@ -537,7 +537,7 @@
       if ("undefined" !== typeof createdItem) {
         if (typeof createdItem.then === "function") {
           createdItem.then((newItem) => {
-            if ("undefined" !== typeof createdItem) {
+            if ("undefined" !== typeof newItem) {
               const newListItem = afterCreate(newItem)
               selectListItem(newListItem)
             }
