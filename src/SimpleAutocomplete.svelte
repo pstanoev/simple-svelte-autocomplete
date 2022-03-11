@@ -116,6 +116,9 @@
   // text displayed when async data is being loaded
   export let loadingText = "Loading results..."
 
+  // text displayed when the user text matches a lot of items and we can not display them all in the dropdown
+  export let moreItemsText = "items not shown"
+
   // text displayed when async data is being loaded
   export let createText = "Not found, add anyway?"
 
@@ -1097,9 +1100,12 @@
       {/each}
 
       {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
-        <div class="autocomplete-list-item-no-results">
-          ...{filteredListItems.length - maxItemsToShowInList} results not shown
-        </div>
+        {#if moreItemsText}
+          <div class="autocomplete-list-item-no-results">
+            ...{filteredListItems.length - maxItemsToShowInList}
+            {moreItemsText}
+          </div>
+        {/if}
       {/if}
     {:else if loading && loadingText}
       <div class="autocomplete-list-item-loading">

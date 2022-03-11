@@ -166,6 +166,7 @@ async function getItems(keyword) {
 
 - `placeholder` - change the text displayed when no option is selected
 - `noResultsText` - text to show in the dropdown when the search text does not match any item. Defaults to "No results found". Can be set to "" to not show anything.
+- `moreItemsText` - text displayed when the user text matches a lot of items and we can display only up to `maxItemsToShowInList` items
 - `createText` - text to show when `create` is true, and the user text doesn't match any of the items
 - `hideArrow` - set to true to not show the blue dropdown arrow
 - `showClear` - set to true to show X button that can be used to deselect the selected item
