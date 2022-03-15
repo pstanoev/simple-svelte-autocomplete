@@ -896,7 +896,21 @@
       return
     }
 
+    setScrollAwareListPosition()
+
     opened = true
+  }
+
+  function setScrollAwareListPosition(){
+    const { height: viewPortHeight } = window.visualViewport
+    const { bottom: inputButtom, height: inputHeight} = input.getBoundingClientRect()
+    const { height: listHeight } = list.getBoundingClientRect()
+
+    if(inputButtom + listHeight > viewPortHeight) {
+      list.style.top = `-${inputHeight + listHeight}px`
+    } else {
+      list.style.top = "0px"
+    }
   }
 
   function close() {
@@ -1226,7 +1240,7 @@
   }
 
   .autocomplete-list.hidden {
-    display: none;
+    visibility: hidden;
   }
 
   .autocomplete.show-clear .autocomplete-clear-button {
