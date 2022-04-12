@@ -1074,28 +1074,26 @@
     {#if filteredListItems && filteredListItems.length > 0}
       {#each filteredListItems as listItem, i}
         {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
-          {#if listItem}
-            <div
-              class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
-              class:confirmed={isConfirmed(listItem.item)}
-              on:click={() => onListItemClick(listItem)}
-              on:pointerenter={() => {
-                highlightIndex = i
-              }}
+          <div
+            class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
+            class:confirmed={isConfirmed(listItem.item)}
+            on:click={() => onListItemClick(listItem)}
+            on:pointerenter={() => {
+              highlightIndex = i
+            }}
+          >
+            <slot
+              name="item"
+              item={listItem.item}
+              label={listItem.highlighted ? listItem.highlighted : listItem.label}
             >
-              <slot
-                name="item"
-                item={listItem.item}
-                label={listItem.highlighted ? listItem.highlighted : listItem.label}
-              >
-                {#if listItem.highlighted}
-                  {@html listItem.highlighted}
-                {:else}
-                  {@html listItem.label}
-                {/if}
-              </slot>
-            </div>
-          {/if}
+              {#if listItem.highlighted}
+                {@html listItem.highlighted}
+              {:else}
+                {@html listItem.label}
+              {/if}
+            </slot>
+          </div>
         {/if}
       {/each}
 
