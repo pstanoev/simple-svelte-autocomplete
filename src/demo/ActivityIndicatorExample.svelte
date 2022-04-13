@@ -26,8 +26,8 @@
 <div>
   <h3 class="mt-3">Loading indicator:</h3>
   <p>
-    When `showLoadingIndicator` is set to true, loading spinner is shown when the async
-    `searchFunction` is executed.
+    When <code>showLoadingIndicator</code> is set to true, loading spinner is shown when the async
+    <code>searchFunction</code> is executed.
     <br />
     Bulma class 'is-loading' is added to the input control. If you do not use Bulma you need to add style
     for the 'is-loading' class.

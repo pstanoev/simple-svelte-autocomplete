@@ -43,12 +43,12 @@ Selected color: {selectedColor}`
   <h3 class="mt-3">Allow unlisted, create new item:</h3>
 
   <p>
-    You can bind to the `text` property to get the current text that is typed by the user. The
-    `create` property will enable the controll to show
+    You can bind to the <code>text</code> property to get the current text that is typed by the user. The
+    <code>create</code> property will enable the controll to show
     <br />
-    After, with the event on `onCreate` you can get the entered text and create the item.
+    After, with the event on <code>onCreate</code> you can get the entered text and create the item.
     <br />
-    A slot called `create` and `createText` is available for customizing the UI.
+    A slot called <code>create</code> and <code>createText</code> is available for customizing the UI.
   </p>
   <div class="columns">
     <div class="column is-one-third">

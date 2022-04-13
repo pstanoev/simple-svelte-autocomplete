@@ -28,7 +28,7 @@ let selectedAnimal;
 <div>
   <h3 class="mt-3">Matching keyword strategy:</h3>
   <p>
-    When `matchAllKeywords` is set to false, the component will show all items that match at least
+    When <code>matchAllKeywords</code> is set to false, the component will show all items that match at least
     one keyword. The sorting of the items can also be changed to show the ones with most matches
     first.
   </p>
