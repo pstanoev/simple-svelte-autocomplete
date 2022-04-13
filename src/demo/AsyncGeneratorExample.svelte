@@ -1,7 +1,7 @@
 <script>
   import AutoComplete from "../SimpleAutocomplete.svelte"
   import Highlight from "svelte-highlight"
-  import xml from "svelte-highlight/src/languages/xml"
+  import xml from "svelte-highlight/languages/xml"
 
   let selectedCountry
 

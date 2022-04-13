@@ -5,4 +5,5 @@ module.exports = {
     "^.+\\.js$": "babel-jest",
   },
   moduleFileExtensions: ["js", "svelte", "ts"],
+  testEnvironment: "jsdom",
 }

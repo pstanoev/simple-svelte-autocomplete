@@ -1,6 +1,6 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "types": ["node", "svelte", "jest"]
+    "types": ["node", "svelte", "jest", "@types/testing-library__jest-dom"]
   }
 }

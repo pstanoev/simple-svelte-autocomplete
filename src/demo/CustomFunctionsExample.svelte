@@ -1,7 +1,7 @@
 <script>
   import AutoComplete from "../SimpleAutocomplete.svelte"
   import Highlight from "svelte-highlight"
-  import xml from "svelte-highlight/src/languages/xml"
+  import xml from "svelte-highlight/languages/xml"
   const colors = [
     { id: 1, name: "White", code: "#FFFFFF", nice: false, order: 4 },
     { id: 2, name: "Red", code: "#FF0000", nice: true, order: 3 },
