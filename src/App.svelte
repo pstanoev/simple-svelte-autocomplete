@@ -1,5 +1,5 @@
 <script>
-  import solarized from "svelte-highlight/src/styles/solarized-light"
+  import solarized from "svelte-highlight/styles/solarized-light"
 
   import { onMount } from "svelte"
 

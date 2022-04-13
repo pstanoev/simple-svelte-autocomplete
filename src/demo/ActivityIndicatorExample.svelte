@@ -1,7 +1,7 @@
 <script>
   import Highlight from "svelte-highlight"
   import AutoComplete from "../SimpleAutocomplete.svelte"
-  import xml from "svelte-highlight/src/languages/xml"
+  import xml from "svelte-highlight/languages/xml"
 
   async function searchCountry(keyword) {
     const url =
