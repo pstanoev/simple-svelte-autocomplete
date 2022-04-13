@@ -3,6 +3,10 @@
   import Highlight from "svelte-highlight"
   import xml from "svelte-highlight/languages/xml"
 
+  async function searchColor(keyword, nb_items_max) {
+    return ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck", "<i>Jét Black</i>"]
+  }
+
   async function searchCountry(keyword) {
     const url =
       "https://restcountries.com/v2/name/" + encodeURIComponent(keyword) + "?fields=name;alpha2Code"
@@ -11,9 +15,22 @@
     return await response.json()
   }
 
+  let selectedColor
   let selectedCountry
 
-  const code = `<script>
+  const colorCode = `<script>
+let selectedColor;
+async function searchColor(keyword) {
+    return ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck", "<i>Jét Black</i>"]
+}
+<\/script>
+
+<AutoComplete
+    searchFunction={searchColor}
+    bind:selectedItem={selectedColor}
+/>`
+
+  const countryCode = `<script>
 let selectedCountry;
 async function searchCountry(keyword) {
     const url = "https://restcountries.com/v2/name/"
@@ -37,9 +54,32 @@ async function searchCountry(keyword) {
   <h3 class="mt-3">Async example:</h3>
 
   <p>
-    The delay parameter makes the component wait for 200ms after you typed something before
-    generating a request. Set <strong>localFiltering</strong> to false if your search function already
-    returnes filtered results.
+    <code>searchFunction</code> can be used to dynamically generate items.
+  </p>
+
+  <div class="columns">
+    <div class="column is-one-third">
+      <h5>Pick a color:</h5>
+
+      <AutoComplete
+        searchFunction={searchColor}
+        bind:selectedItem={selectedColor}
+      />
+
+      <div style="margin-bottom: 10rem;">
+        <p>Selected color: {JSON.stringify(selectedColor)}</p>
+      </div>
+    </div>
+
+    <div class="column">
+      <Highlight language={xml} code={colorCode} />
+    </div>
+  </div>
+
+  <p>
+    The <code>delay</code> parameter makes the component wait for 200ms after you typed something before
+    generating a request. Set <code>localFiltering</code> to <code>false</code> if your search function already
+    returnes filtered results, so results won't be filtered a second time client-side.
   </p>
 
   <div class="columns">
@@ -61,7 +101,7 @@ async function searchCountry(keyword) {
     </div>
 
     <div class="column">
-      <Highlight language={xml} {code} />
+      <Highlight language={xml} code={countryCode} />
     </div>
   </div>
 
