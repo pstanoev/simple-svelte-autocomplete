@@ -3,23 +3,22 @@
   import AutoComplete from "../SimpleAutocomplete.svelte"
   import xml from "svelte-highlight/languages/xml"
 
-  async function searchCountry(keyword) {
-    const url =
-      "https://restcountries.com/v2/name/" + encodeURIComponent(keyword) + "?fields=name;alpha2Code"
-
-    const response = await fetch(url)
-    return await response.json()
-  }
-
-  async function searchCountrySlow(keyword) {
+  async function searchColor(keyword) {
     await new Promise((r) => setTimeout(r, 3000))
-    return searchCountry(keyword)
+    return ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck", "<i>Jét Black</i>"]
   }
 
-  const code = `
+  const code = `<script>
+async function searchColor(keyword, nb_items_max) {
+    await new Promise((r) => setTimeout(r, 3000))
+    return ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck", "<i>Jét Black</i>"]
+}
+<\/script>
+
 <AutoComplete
-  searchFunction={searchCountrySlow}
-  showLoadingIndicator={true} />
+    searchFunction={searchColor}
+    showLoadingIndicator={true}
+/>
 `
 </script>
 
@@ -34,12 +33,10 @@
   </p>
   <div class="columns">
     <div class="column is-one-third">
-      <h5>Pick a country:</h5>
+      <h5>Pick a color:</h5>
 
       <AutoComplete
-        searchFunction={searchCountrySlow}
-        labelFieldName="name"
-        maxItemsToShowInList="10"
+        searchFunction={searchColor}
         showLoadingIndicator={true}
       />
     </div>

@@ -39,10 +39,8 @@ async function* searchCountryGenerator(keyword) {
     searchFunction={searchCountry}
     bind:selectedItem={selectedCountry}
     labelFieldName="name"
-    maxItemsToShowInList={10}
-    delay={200}
     localFiltering={false}
-    />`
+/>`
 </script>
 
 <div>
@@ -54,7 +52,7 @@ async function* searchCountryGenerator(keyword) {
     >
     the response so the end user can have the first suggestions displayed while the latter are being
     computed.<br />
-    <strong>searchFunction</strong> can be a generator that yields chunks of items.
+    <code>searchFunction</code> can be a generator that yields chunks of items.
   </p>
   <p>
     Here we artificially simulate delay between chunks but you can see a real-life snippet <a
@@ -71,8 +69,6 @@ async function* searchCountryGenerator(keyword) {
         searchFunction={searchCountryGenerator}
         bind:selectedItem={selectedCountry}
         labelFieldName="name"
-        maxItemsToShowInList="10"
-        delay="200"
         localFiltering={false}
       />
 
