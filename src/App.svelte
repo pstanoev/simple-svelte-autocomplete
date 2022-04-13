@@ -39,8 +39,9 @@
   }
   onMount(() => {
     console.log("on mount")
-    const simpleTab = document.getElementById("simpleTab")
-    showTab(simpleTab, "simple")
+    const startTabName = window.location.hash ? window.location.hash.substring(1) : "simple"
+    const startTab = document.getElementById(startTabName + "Tab")
+    showTab(startTab, startTabName)
   })
 </script>
 
@@ -71,18 +72,30 @@
         <li
           id="simpleTab"
           on:click={(e) => showTab(e.target.parentElement, "simple")}
-          class="tab is-active"
+          class="tab"
         >
-          <a href={"#"}>Basic usage</a>
+          <a href={"#simple"}>Basic usage</a>
         </li>
-        <li on:click={(e) => showTab(e.target.parentElement, "customization")} class="tab">
-          <a href={"#"}>Customization</a>
+        <li
+          id="customizationTab"
+          on:click={(e) => showTab(e.target.parentElement, "customization")}
+          class="tab"
+        >
+          <a href={"#customization"}>Customization</a>
         </li>
-        <li on:click={(e) => showTab(e.target.parentElement, "async")} class="tab">
-          <a href={"#"}>Async</a>
+        <li
+          id="asyncTab"
+          on:click={(e) => showTab(e.target.parentElement, "async")}
+          class="tab"
+        >
+          <a href={"#async"}>Async</a>
         </li>
-        <li on:click={(e) => showTab(e.target.parentElement, "advanced")} class="tab">
-          <a href={"#"}>Advanced usage</a>
+        <li
+          id="advancedTab"
+          on:click={(e) => showTab(e.target.parentElement, "advanced")}
+          class="tab"
+        >
+          <a href={"#advanced"}>Advanced usage</a>
         </li>
       </ul>
     </div>
