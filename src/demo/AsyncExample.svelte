@@ -21,7 +21,9 @@
   const colorCode = `<script>
 let selectedColor;
 async function searchColor(keyword) {
-    return ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck", "<i>Jét Black</i>"]
+  return [
+    "White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck", "<i>Jét Black</i>"
+  ]
 }
 <\/script>
 
@@ -51,57 +53,82 @@ async function searchCountry(keyword) {
 </script>
 
 <div>
-  <h3 class="mt-3">Async example:</h3>
+  <h3 class="mt-3">Items asynchronous loading</h3>
 
-  <p>
-    <code>searchFunction</code> can be used to dynamically generate items.
-  </p>
+  <article class="message is-info">
+    <div class="message-body">
+      <code>searchFunction</code> can be used to dynamically generate items.
+    </div>
+  </article>
 
   <div class="columns">
     <div class="column is-one-third">
-      <h5>Pick a color:</h5>
+      <article class="message">
+        <div class="message-header">
+          <p>Pick a color</p>
+        </div>
+        <div class="message-body">
+          <AutoComplete searchFunction={searchColor} bind:selectedItem={selectedColor} />
 
-      <AutoComplete
-        searchFunction={searchColor}
-        bind:selectedItem={selectedColor}
-      />
-
-      <div style="margin-bottom: 10rem;">
-        <p>Selected color: {JSON.stringify(selectedColor)}</p>
-      </div>
+          <div style="margin-bottom: 10rem;">
+            <p>Selected color: <code>{JSON.stringify(selectedColor)}</code></p>
+          </div>
+        </div>
+      </article>
     </div>
 
     <div class="column">
-      <Highlight language={xml} code={colorCode} />
+      <article class="message">
+        <div class="message-header">
+          <p>Code</p>
+        </div>
+        <div class="message-body">
+          <Highlight language={xml} code={colorCode} />
+        </div>
+      </article>
     </div>
   </div>
 
-  <p>
-    The <code>delay</code> parameter makes the component wait for 200ms after you typed something before
-    generating a request. Set <code>localFiltering</code> to <code>false</code> if your search function already
-    returnes filtered results, so results won't be filtered a second time client-side.
-  </p>
+  <article class="message is-info">
+    <div class="message-body">
+      The <code>delay</code> parameter makes the component wait for 200ms after you typed something
+      before generating a request. Set <code>localFiltering</code> to <code>false</code> if your search
+      function already returnes filtered results, so results won't be filtered a second time client-side.
+    </div>
+  </article>
 
   <div class="columns">
     <div class="column is-one-third">
-      <h5>Pick a country:</h5>
+      <article class="message">
+        <div class="message-header">
+          <p>Pick a country</p>
+        </div>
+        <div class="message-body">
+          <AutoComplete
+            searchFunction={searchCountry}
+            bind:selectedItem={selectedCountry}
+            labelFieldName="name"
+            maxItemsToShowInList={10}
+            delay={200}
+            localFiltering={false}
+          />
 
-      <AutoComplete
-        searchFunction={searchCountry}
-        bind:selectedItem={selectedCountry}
-        labelFieldName="name"
-        maxItemsToShowInList={10}
-        delay={200}
-        localFiltering={false}
-      />
-
-      <div style="margin-bottom: 10rem;">
-        <p>Selected country: {JSON.stringify(selectedCountry)}</p>
-      </div>
+          <div style="margin-bottom: 10rem;">
+            <p>Selected country: <code>{JSON.stringify(selectedCountry)}</code></p>
+          </div>
+        </div>
+      </article>
     </div>
 
     <div class="column">
-      <Highlight language={xml} code={countryCode} />
+      <article class="message">
+        <div class="message-header">
+          <p>Code</p>
+        </div>
+        <div class="message-body">
+          <Highlight language={xml} code={countryCode} />
+        </div>
+      </article>
     </div>
   </div>
 

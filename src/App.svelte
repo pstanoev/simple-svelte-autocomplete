@@ -105,12 +105,11 @@
       <AdvancedExample />
       <MultipleExample />
       <RequiredExample />
-
-      <LockedExample />
     </div>
 
     <div class="tab-content customization">
       <CustomizationExample />
+      <LockedExample />
     </div>
 
     <div class="tab-content async">

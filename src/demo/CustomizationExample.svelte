@@ -34,34 +34,52 @@
 </script>
 
 <div>
-  <h3 class="mt-3">Custom items using &lt;slot&gt;:</h3>
+  <h3 class="mt-3">Slots</h3>
+  <article class="message is-info">
+    <div class="message-body">
+      You can use the svelte slots mechanism to customize the copmonent.
+    </div>
+  </article>
 
   <div class="columns">
     <div class="column is-one-third">
-      <h5>Pick a color:</h5>
-      <AutoComplete
-        items={colorList}
-        bind:selectedItem={selectedColorObjectCustom}
-        bind:value={selectedColorValueCustom}
-        labelFieldName="name"
-        valueFieldName="id"
-        create={true}
-        keywordsFunction={(color) => color.name + " " + color.code}
-        placeholder="Please select color"
-      >
-        <div slot="item" let:item let:label>
-          {@html label}
-          <span style="color:{item.code}">{item.code}</span>
+      <article class="message">
+        <div class="message-header">
+          <p>Pick a color</p>
         </div>
+        <div class="message-body">
+          <AutoComplete
+            items={colorList}
+            bind:selectedItem={selectedColorObjectCustom}
+            bind:value={selectedColorValueCustom}
+            labelFieldName="name"
+            valueFieldName="id"
+            create={true}
+            keywordsFunction={(color) => color.name + " " + color.code}
+            placeholder="Please select color"
+          >
+            <div slot="item" let:item let:label>
+              {@html label}
+              <span style="color:{item.code}">{item.code}</span>
+            </div>
 
-        <div slot="no-results" let:noResultsText>
-          <strong>NO RESULTS - {noResultsText}</strong>
+            <div slot="no-results" let:noResultsText>
+              <strong>NO RESULTS - {noResultsText}</strong>
+            </div>
+          </AutoComplete>
         </div>
-      </AutoComplete>
+      </article>
     </div>
 
     <div class="column">
-      <Highlight language={xml} {code} />
+      <article class="message">
+        <div class="message-header">
+          <p>Code</p>
+        </div>
+        <div class="message-body">
+          <Highlight language={xml} {code} />
+        </div>
+      </article>
     </div>
   </div>
 </div>

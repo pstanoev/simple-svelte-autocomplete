@@ -34,33 +34,47 @@ async function searchCountry(keyword) {
 </script>
 
 <div>
-  <h3 class="mt-3">Preloaded async example:</h3>
+  <h3 class="mt-3">Preloaded item</h3>
 
-  <p>
-    When an async autocomplete compenent is initialized with a value, the suggestion list will be
-    loaded when the user focuses the input field.
-  </p>
+  <article class="message is-info">
+    <div class="message-body">
+      When an async autocomplete compenent is initialized with a value, the suggestion list will be
+      loaded when the user focuses the input field.
+    </div>
+  </article>
 
   <div class="columns">
     <div class="column is-one-third">
-      <h5>Pick a country:</h5>
+      <article class="message">
+        <div class="message-header">
+          <p>Pick a country</p>
+        </div>
+        <div class="message-body">
+          <AutoComplete
+            searchFunction={searchCountry}
+            bind:selectedItem={selectedCountry}
+            labelFieldName="name"
+            maxItemsToShowInList={10}
+            delay={200}
+            localFiltering={false}
+          />
 
-      <AutoComplete
-        searchFunction={searchCountry}
-        bind:selectedItem={selectedCountry}
-        labelFieldName="name"
-        maxItemsToShowInList={10}
-        delay={200}
-        localFiltering={false}
-      />
-
-      <div style="margin-bottom: 10rem;">
-        <p>Selected country: {JSON.stringify(selectedCountry)}</p>
-      </div>
+          <div style="margin-bottom: 10rem;">
+            <p>Selected country: <code>{JSON.stringify(selectedCountry)}</code></p>
+          </div>
+        </div>
+      </article>
     </div>
 
     <div class="column">
-      <Highlight language={xml} {code} />
+      <article class="message">
+        <div class="message-header">
+          <p>Code</p>
+        </div>
+        <div class="message-body">
+          <Highlight language={xml} {code} />
+        </div>
+      </article>
     </div>
   </div>
 </div>
