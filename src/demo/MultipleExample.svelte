@@ -31,32 +31,48 @@ let selectedColorsValues;
 </script>
 
 <div>
-  <h3>Multiple example:</h3>
-  <p>
-    The <strong>multiple</strong> attribute allows you to select several items.
-  </p>
+  <h3>Multiple selection</h3>
+  <article class="message is-info">
+    <div class="message-body">
+      The <code>multiple</code> attribute allows you to select several items.
+    </div>
+  </article>
 
   <div class="columns">
     <div class="column is-one-third">
-      <h5>Pick a color:</h5>
-      <AutoComplete
-        multiple="true"
-        items={colorList}
-        labelFieldName="name"
-        valueFieldName="id"
-        showClear={true}
-        bind:selectedItem={selectedColorsItems}
-        bind:value={selectedColorsValues}
-      />
-      <p>
-        Selected color items: {JSON.stringify(selectedColorsItems)}
-        <br />
-        Selected color values: {JSON.stringify(selectedColorsValues)}
-      </p>
+      <article class="message">
+        <div class="message-header">
+          <p>Pick a color</p>
+        </div>
+        <div class="message-body">
+          <AutoComplete
+            multiple="true"
+            items={colorList}
+            labelFieldName="name"
+            valueFieldName="id"
+            showClear={true}
+            bind:selectedItem={selectedColorsItems}
+            bind:value={selectedColorsValues}
+          />
+
+          <p>
+            Selected color items: <code>{JSON.stringify(selectedColorsItems)}</code>
+            <br />
+            Selected color values: <code>{JSON.stringify(selectedColorsValues)}</code>
+          </p>
+        </div>
+      </article>
     </div>
 
     <div class="column">
-      <Highlight language={xml} {code} />
+      <article class="message">
+        <div class="message-header">
+          <p>Code</p>
+        </div>
+        <div class="message-body">
+          <Highlight language={xml} {code} />
+        </div>
+      </article>
     </div>
   </div>
 </div>

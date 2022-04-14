@@ -16,21 +16,35 @@ Selected color: {selectedColor}`
 
 <div>
   <h3 class="mt-3">Locked example:</h3>
-  <p>
-    The <strong>lock</strong> attribute dissalows free text re-selection after the first selection untill
-    the controll is cleared with the x button.
-  </p>
+  <article class="message is-info">
+    <div class="message-body">
+      The <code>lock</code> attribute dissalows free text re-selection after the first selection until
+      the control is cleared with the x button.
+    </div>
+  </article>
 
   <div class="columns">
     <div class="column is-one-third">
-      <h5>Pick a color:</h5>
-
-      <AutoComplete items={colors} bind:selectedItem={selectedColor} lock={true} />
-      <p>Selected color: {selectedColor}</p>
+      <article class="message">
+        <div class="message-header">
+          <p>Pick a color</p>
+        </div>
+        <div class="message-body">
+          <AutoComplete items={colors} bind:selectedItem={selectedColor} lock={true} />
+          <p>Selected color: <code>{selectedColor}</code></p>
+        </div>
+      </article>
     </div>
 
     <div class="column">
-      <Highlight language={xml} {code} />
+      <article class="message">
+        <div class="message-header">
+          <p>Code</p>
+        </div>
+        <div class="message-body">
+          <Highlight language={xml} {code} />
+        </div>
+      </article>
     </div>
   </div>
 </div>

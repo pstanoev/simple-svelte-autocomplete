@@ -67,45 +67,61 @@ let selectedColorValue;
 </script>
 
 <div>
-  <h3 class="mt-3">Custom filtering and sorting examples:</h3>
-  <p>
-    <code>itemFilterFunction</code>
-    Optional function to override the default local filtering that the component does based on keyword
-    matching.
-    <br />
-    The function arguments are individual item from the item list, and the cleaned up words from the
-    input field. It should return a boolean indicating wether to keep the item.
-    <br />
-    <br />
-    <code>itemSortFunction</code>
-    Optional function to defined the sort order of the list.
-    <br />
-    The function arguments are two distincts items from the item list, and the cleaned up words from
-    the input field. It should return an integer. If greater than 0 the first item comes first, if lesser
-    than 0 the second item comes first.
-  </p>
+  <h3 class="mt-3">Custom filtering and sorting</h3>
+
+  <article class="message is-info">
+    <div class="message-body">
+      <code>itemFilterFunction</code>
+      Optional function to override the default local filtering that the component does based on keyword
+      matching.
+      <br />
+      The function arguments are individual item from the item list, and the cleaned up words from the
+      input field. It should return a boolean indicating wether to keep the item.
+      <br />
+      <br />
+      <code>itemSortFunction</code>
+      Optional function to defined the sort order of the list.
+      <br />
+      The function arguments are two distincts items from the item list, and the cleaned up words from
+      the input field. It should return an integer. If greater than 0 the first item comes first, if
+      lesser than 0 the second item comes first.
+    </div>
+  </article>
 
   <div class="columns">
     <div class="column is-one-third">
-      <h5>Pick a color:</h5>
-      <AutoComplete
-        searchFunction={loadColors}
-        bind:selectedItem={selectedColorObject}
-        bind:value={selectedColorValue}
-        labelFieldName="name"
-        valueFieldName="id"
-        placeholder="Please select color"
-        itemFilterFunction={itemFilter}
-        itemSortFunction={itemSort}
-      />
-      <p>
-        Selected color item: {JSON.stringify(selectedColorObject)}
-        <br />
-        Selected value: {selectedColorValue}
-      </p>
+      <article class="message">
+        <div class="message-header">
+          <p>Pick a color</p>
+        </div>
+        <div class="message-body">
+          <AutoComplete
+            searchFunction={loadColors}
+            bind:selectedItem={selectedColorObject}
+            bind:value={selectedColorValue}
+            labelFieldName="name"
+            valueFieldName="id"
+            placeholder="Please select color"
+            itemFilterFunction={itemFilter}
+            itemSortFunction={itemSort}
+          />
+          <p>
+            Selected color item: <code>{JSON.stringify(selectedColorObject)}</code>
+            <br />
+            Selected value: <code>{selectedColorValue}</code>
+          </p>
+        </div>
+      </article>
     </div>
     <div class="column">
-      <Highlight language={xml} {code} />
+      <article class="message">
+        <div class="message-header">
+          <p>Code</p>
+        </div>
+        <div class="message-body">
+          <Highlight language={xml} {code} />
+        </div>
+      </article>
     </div>
   </div>
 </div>

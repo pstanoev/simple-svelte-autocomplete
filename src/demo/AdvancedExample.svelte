@@ -42,53 +42,67 @@ let selectedColorValue;
 </script>
 
 <div>
-  <h3 class="mt-3">Advanced example:</h3>
-  <p>
-    If you have an array of objects as items, they can be feed directly into the AutoComplete
-    component and you can specify which field to use as label.
-    <br />
-    You can also specifiy function to combine multiple fields to search by. Try searching by HEX code
-    of a color.
-  </p>
+  <h3 class="mt-3">Objects selection</h3>
+  <article class="message is-info">
+    <div class="message-body">
+      If you have an array of objects as items, they can be feed directly into the AutoComplete
+      component and you can specify which field to use as label.
+      <br />
+      You can also specifiy a function to combine multiple fields to search by. Try searching by HEX
+      code of a color.
+    </div>
+  </article>
 
   <div class="columns">
     <div class="column is-one-third">
-      <h5>Pick a color:</h5>
-      <p>
-        Selected color item: {JSON.stringify(selectedColorObject)}
-        <br />
-        Highlighted color item: {highlightedColorObject
-          ? highlightedColorObject.name
-          : highlightedColorObject}
-        <br />
-        Selected value: {selectedColorValue}
-      </p>
+      <article class="message">
+        <div class="message-header">
+          <p>Pick a color</p>
+        </div>
+        <div class="message-body">
+          Selected color item: <code>{JSON.stringify(selectedColorObject)}</code>
+          <br />
+          Highlighted color item:
+          <code
+            >{highlightedColorObject ? highlightedColorObject.name : highlightedColorObject}</code
+          >
+          <br />
+          Selected value: <code>{selectedColorValue}</code>
 
-      <AutoComplete
-        items={colorList}
-        bind:selectedItem={selectedColorObject}
-        bind:highlightedItem={highlightedColorObject}
-        bind:value={selectedColorValue}
-        labelFieldName="name"
-        valueFieldName="id"
-        keywordsFunction={(color) => color.name + " " + color.code}
-        showClear={true}
-        hideArrow={false}
-        placeholder="Please select color"
-      />
+          <AutoComplete
+            items={colorList}
+            bind:selectedItem={selectedColorObject}
+            bind:highlightedItem={highlightedColorObject}
+            bind:value={selectedColorValue}
+            labelFieldName="name"
+            valueFieldName="id"
+            keywordsFunction={(color) => color.name + " " + color.code}
+            showClear={true}
+            hideArrow={false}
+            placeholder="Please select color"
+          />
 
-      <div>
-        <p>Change selected item from outside:</p>
-        <button
-          class="button"
-          on:click={() => (selectedColorObject = colorList[colorList.length - 1])}
-        >
-          Set color to Black
-        </button>
-      </div>
+          <div>
+            <p>Change selected item from outside:</p>
+            <button
+              class="button"
+              on:click={() => (selectedColorObject = colorList[colorList.length - 1])}
+            >
+              Set color to Black
+            </button>
+          </div>
+        </div>
+      </article>
     </div>
     <div class="column">
-      <Highlight language={xml} {code} />
+      <article class="message">
+        <div class="message-header">
+          <p>Code</p>
+        </div>
+        <div class="message-body">
+          <Highlight language={xml} {code} />
+        </div>
+      </article>
     </div>
   </div>
 </div>
