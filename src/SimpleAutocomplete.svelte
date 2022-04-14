@@ -289,7 +289,7 @@
   }
 
   // -- Reactivity --
-  $: items, prepareListItems()
+  $: items, searchFunction || prepareListItems()
 
   function onSelectedItemChanged() {
     value = valueFunction(selectedItem)
