@@ -464,7 +464,7 @@
     prepareListItems()
 
     const textFilteredWithoutAccents = ignoreAccents ? removeAccents(textFiltered) : textFiltered
-    const searchWords = textFilteredWithoutAccents.split(/\s+/g)
+    const searchWords = textFilteredWithoutAccents.split(/\s+/g).filter(word => word !== "");
 
     // local search
     let tempfilteredListItems
