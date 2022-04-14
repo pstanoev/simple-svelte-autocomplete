@@ -191,7 +191,7 @@ async function getItems(keyword) {
 - `item` - change the apearance of items in the dropdown list:
 
 ```html
-<div slot="item" let:item="{item}" let:label="{label}">
+<div slot="item" let:item let:label>
   {@html label}
   <!-- to render the default higliglighted item label -->
   <!-- render anything else -->
@@ -202,7 +202,7 @@ async function getItems(keyword) {
 - `no-results` - customize the div that shows the "no results" text:
 
 ```html
-<div slot="no-results" let:noResultsText={noResultsText}>
+<div slot="no-results" let:noResultsText>
     <span>{noResultsText}</span>
 </div>
 ```
@@ -212,7 +212,7 @@ The noResultsText variable is optional and can be ommited.
 - `loading` - customize the div that shows the "loading" text:
 
 ```html
-<div slot="loading" let:loadingText={loadingText}>
+<div slot="loading" let:loadingText>
     <span>{loadingText}</strong>
 </div>
 ```
@@ -220,10 +220,27 @@ The noResultsText variable is optional and can be ommited.
 - `tag` - customize the tag blocks displayed when multiple selection is enabled:
 
 ```html
-<slot name="tag" let:label="{label}" let:item="{item}" let:unselectItem="{unselectItem}">
+<slot name="tag" let:label let:item let:unselectItem>
   <span class="tag">{label}</span>
   <span class="delete-tag" on:click|preventDefault="{unselectItem(item)}"></span>
 </slot>
+```
+
+- `dropdown-header` - customize what is displayed before the item list in the dropdown. By default there is nothing displayed.
+
+```html
+<div slot="menu-header" let:nbItems let:maxItemsToShowInList>
+  <div class="dropdown-item">Choose between those {nbItems} items</div>
+  <hr class="dropdown-divider">
+</div>
+```
+
+- `dropdown-footer` - customize what is displayed before the item list in the dropdown. By default this is where the `moreItemsText` is displayed if there is too much items to be displayed.
+
+```html
+<div slot="dropdown-footer" let:nbItems  let:maxItemsToShowInList>
+    ...
+</div>
 ```
 
 #### CSS properties
