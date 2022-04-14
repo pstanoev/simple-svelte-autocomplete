@@ -379,11 +379,12 @@
           console.log("User entered text is empty set the list of items to all items")
         }
       }
-      closeIfMinCharsToSearchReached()
-      if (debug) {
-        console.timeEnd(timerId)
+      if(closeIfMinCharsToSearchReached()) {
+        if (debug) {
+          console.timeEnd(timerId)
+        }
+        return
       }
-      return
     }
 
     if (!searchFunction) {
@@ -828,14 +829,12 @@
       console.log("resetListToAllItemsAndOpen")
     }
 
-    if (!text) {
-      filteredListItems = listItems
+    if (searchFunction && !listItems.length) {
+      search()
     }
 
-    // When an async component is initialized, the item list
-    // must be loaded when the input is focused.
-    else if (!listItems.length && selectedItem && searchFunction) {
-      search()
+    else if (!text) {
+      filteredListItems = listItems
     }
 
     open()
@@ -913,13 +912,20 @@
   }
 
   function notEnoughSearchText() {
-    return minCharactersToSearch > 1 && filteredTextLength < minCharactersToSearch
+    return (
+      minCharactersToSearch > 0 &&
+      filteredTextLength < minCharactersToSearch &&
+      // When no searchFunction is defined, the menu should always open when the input is focused
+      (searchFunction || filteredTextLength > 0)
+    )
   }
 
   function closeIfMinCharsToSearchReached() {
     if (notEnoughSearchText()) {
       close()
+      return true
     }
+    return false
   }
 
   function clear() {

@@ -28,6 +28,7 @@ async function searchColor(keyword) {
 <AutoComplete
     searchFunction={searchColor}
     bind:selectedItem={selectedColor}
+    minCharactersToSearch=0
 />`
 
   const countryCode = `<script>
@@ -54,7 +55,9 @@ async function searchCountry(keyword) {
   <h3 class="mt-3">Async example:</h3>
 
   <p>
-    <code>searchFunction</code> can be used to dynamically generate items.
+    <code>searchFunction</code> can be used to dynamically generate items.<br>
+    The function will be called when the input length is at least <code>minCharactersToSearch</code> characters long.
+    If set to 0 the function will be triggered when the input field is focused.
   </p>
 
   <div class="columns">
@@ -64,6 +67,7 @@ async function searchCountry(keyword) {
       <AutoComplete
         searchFunction={searchColor}
         bind:selectedItem={selectedColor}
+        minCharactersToSearch=0
       />
 
       <div style="margin-bottom: 10rem;">
