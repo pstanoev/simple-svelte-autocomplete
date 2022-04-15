@@ -57,3 +57,25 @@ test("when something is queried, the query is highlighted", async () => {
   const white_item = (await screen.queryByText('Whi')).closest(".autocomplete-list-item")
   expect(white_item).toContainHTML('<b>Whi</b>te')
 })
+
+test("widget initialization with selectedItem", async () => {
+  const { component, container } = render(SimpleAutocomplete, {
+      items: colors,
+      selectedItem:"White",
+  })
+  const queryInput = container.querySelector("input[type='text']");
+
+  expect(component.selectedItem).toStrictEqual("White")
+  expect(component.text).toStrictEqual("White")
+})
+
+test("widget initialization with text", async () => {
+  const { component, container } = render(SimpleAutocomplete, {
+      items: colors,
+      text:"White",
+  })
+  const queryInput = container.querySelector("input[type='text']");
+
+  expect(component.selectedItem).toBeUndefined()
+  expect(component.text).toStrictEqual("White")
+})
