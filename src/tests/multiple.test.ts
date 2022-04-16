@@ -1,5 +1,5 @@
 import { render, fireEvent, screen } from "@testing-library/svelte"
-import SimpleAutocomplete from "./SimpleAutocomplete.svelte"
+import SimpleAutocomplete from "../SimpleAutocomplete.svelte"
 import '@testing-library/jest-dom/extend-expect'
 import '@testing-library/jest-dom'
 
