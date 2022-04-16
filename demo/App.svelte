@@ -3,21 +3,21 @@
 
   import { onMount } from "svelte"
 
-  import AutoComplete from "./SimpleAutocomplete.svelte"
+  import AutoComplete from "../src/SimpleAutocomplete.svelte"
 
-  import SimpleExample from "./demo/SimpleExample.svelte"
-  import AdvancedExample from "./demo/AdvancedExample.svelte"
-  import LockedExample from "./demo/LockedExample.svelte"
-  import MultipleExample from "./demo/MultipleExample.svelte"
-  import CustomizationExample from "./demo/CustomizationExample.svelte"
-  import ActivityIndicatorExample from "./demo/ActivityIndicatorExample.svelte"
-  import AsyncExample from "./demo/AsyncExample.svelte"
-  import MatchingStrategyExample from "./demo/MatchingStrategyExample.svelte"
-  import AsyncGeneratorExample from "./demo/AsyncGeneratorExample.svelte"
-  import AsyncPreloadedExample from "./demo/AsyncPreloadedExample.svelte"
-  import CreatableExample from "./demo/CreatableExample.svelte"
-  import CustomFunctionsExample from "./demo/CustomFunctionsExample.svelte"
-  import RequiredExample from "./demo/RequiredExample.svelte"
+  import SimpleExample from "./SimpleExample.svelte"
+  import AdvancedExample from "./AdvancedExample.svelte"
+  import LockedExample from "./LockedExample.svelte"
+  import MultipleExample from "./MultipleExample.svelte"
+  import CustomizationExample from "./CustomizationExample.svelte"
+  import ActivityIndicatorExample from "./ActivityIndicatorExample.svelte"
+  import AsyncExample from "./AsyncExample.svelte"
+  import MatchingStrategyExample from "./MatchingStrategyExample.svelte"
+  import AsyncGeneratorExample from "./AsyncGeneratorExample.svelte"
+  import AsyncPreloadedExample from "./AsyncPreloadedExample.svelte"
+  import CreatableExample from "./CreatableExample.svelte"
+  import CustomFunctionsExample from "./CustomFunctionsExample.svelte"
+  import RequiredExample from "./RequiredExample.svelte"
 
   let bulma = true
 

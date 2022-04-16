@@ -1,5 +1,5 @@
 import { render } from "@testing-library/svelte"
-import SimpleAutocomplete from "./SimpleAutocomplete.svelte"
+import SimpleAutocomplete from "../SimpleAutocomplete.svelte"
 
 test("test simple hightlights", async () => {
   const { component } = render(SimpleAutocomplete)
