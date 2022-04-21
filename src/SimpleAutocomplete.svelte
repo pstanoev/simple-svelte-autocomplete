@@ -311,7 +311,9 @@
 
   $: showList = opened && ((items && items.length > 0) || filteredTextLength > 0)
 
-  $: clearable = showClear || ((lock || multiple) && selectedItem)
+  $: hasSelection = (multiple && selectedItem && selectedItem.length > 0) || (!multiple && selectedItem)
+
+  $: clearable = showClear || ((lock || multiple) && hasSelection)
 
   function prepareUserEnteredText(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {
@@ -719,7 +721,7 @@
       ArrowUp: up.bind(this),
       Escape: onEsc.bind(this),
       Backspace:
-        multiple && selectedItem && selectedItem.length && !text ? onBackspace.bind(this) : null,
+        multiple && hasSelection && !text ? onBackspace.bind(this) : null,
     }
     const fn = fnmap[key]
     if (typeof fn === "function") {
@@ -1024,7 +1026,7 @@
   <select name={selectName} id={selectId} {multiple}>
     {#if !multiple && value}
       <option {value} selected>{text}</option>
-    {:else if multiple && selectedItem}
+    {:else if multiple && hasSelection}
       {#each selectedItem as i}
         <option value={valueFunction(i, true)} selected>
           {safeLabelFunction(i)}
@@ -1033,7 +1035,7 @@
     {/if}
   </select>
   <div class="input-container">
-    {#if multiple && selectedItem}
+    {#if multiple && hasSelection}
       {#each selectedItem as tagItem}
         <slot name="tag" label={safeLabelFunction(tagItem)} item={tagItem} {unselectItem}>
           <div class="tags has-addons">

@@ -50,7 +50,6 @@ let selectedColorsValues;
             items={colorList}
             labelFieldName="name"
             valueFieldName="id"
-            showClear={true}
             bind:selectedItem={selectedColorsItems}
             bind:value={selectedColorsValues}
           />
