@@ -1072,6 +1072,8 @@
     bind:this={list}
   >
     {#if filteredListItems && filteredListItems.length > 0}
+      <slot name="dropdown-header" nbItems={filteredListItems.length} maxItemsToShowInList={maxItemsToShowInList} />
+
       {#each filteredListItems as listItem, i}
         {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
           <div
@@ -1097,6 +1099,7 @@
         {/if}
       {/each}
 
+      <slot name="dropdown-footer" nbItems={filteredListItems.length} maxItemsToShowInList={maxItemsToShowInList}>
       {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
         {#if moreItemsText}
           <div class="autocomplete-list-item-no-results">
@@ -1105,6 +1108,7 @@
           </div>
         {/if}
       {/if}
+      </slot>
     {:else if loading && loadingText}
       <div class="autocomplete-list-item-loading">
         <slot name="loading" {loadingText}>{loadingText}</slot>
