@@ -379,11 +379,12 @@
           console.log("User entered text is empty set the list of items to all items")
         }
       }
-      closeIfMinCharsToSearchReached()
-      if (debug) {
-        console.timeEnd(timerId)
+      if (closeIfMinCharsToSearchReached()) {
+        if (debug) {
+          console.timeEnd(timerId)
+        }
+        return
       }
-      return
     }
 
     if (!searchFunction) {
@@ -464,7 +465,7 @@
     prepareListItems()
 
     const textFilteredWithoutAccents = ignoreAccents ? removeAccents(textFiltered) : textFiltered
-    const searchWords = textFilteredWithoutAccents.split(/\s+/g).filter(word => word !== "");
+    const searchWords = textFilteredWithoutAccents.split(/\s+/g).filter((word) => word !== "")
 
     // local search
     let tempfilteredListItems
@@ -828,14 +829,10 @@
       console.log("resetListToAllItemsAndOpen")
     }
 
-    if (!text) {
-      filteredListItems = listItems
-    }
-
-    // When an async component is initialized, the item list
-    // must be loaded when the input is focused.
-    else if (!listItems.length && selectedItem && searchFunction) {
+    if (searchFunction && !listItems.length) {
       search()
+    } else if (!text) {
+      filteredListItems = listItems
     }
 
     open()
@@ -913,13 +910,20 @@
   }
 
   function notEnoughSearchText() {
-    return minCharactersToSearch > 1 && filteredTextLength < minCharactersToSearch
+    return (
+      minCharactersToSearch > 0 &&
+      filteredTextLength < minCharactersToSearch &&
+      // When no searchFunction is defined, the menu should always open when the input is focused
+      (searchFunction || filteredTextLength > 0)
+    )
   }
 
   function closeIfMinCharsToSearchReached() {
     if (notEnoughSearchText()) {
       close()
+      return true
     }
+    return false
   }
 
   function clear() {
@@ -1072,7 +1076,7 @@
     bind:this={list}
   >
     {#if filteredListItems && filteredListItems.length > 0}
-      <slot name="dropdown-header" nbItems={filteredListItems.length} maxItemsToShowInList={maxItemsToShowInList} />
+      <slot name="dropdown-header" nbItems={filteredListItems.length} {maxItemsToShowInList} />
 
       {#each filteredListItems as listItem, i}
         {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
@@ -1099,15 +1103,15 @@
         {/if}
       {/each}
 
-      <slot name="dropdown-footer" nbItems={filteredListItems.length} maxItemsToShowInList={maxItemsToShowInList}>
-      {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
-        {#if moreItemsText}
-          <div class="autocomplete-list-item-no-results">
-            ...{filteredListItems.length - maxItemsToShowInList}
-            {moreItemsText}
-          </div>
+      <slot name="dropdown-footer" nbItems={filteredListItems.length} {maxItemsToShowInList}>
+        {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
+          {#if moreItemsText}
+            <div class="autocomplete-list-item-no-results">
+              ...{filteredListItems.length - maxItemsToShowInList}
+              {moreItemsText}
+            </div>
+          {/if}
         {/if}
-      {/if}
       </slot>
     {:else if loading && loadingText}
       <div class="autocomplete-list-item-loading">
