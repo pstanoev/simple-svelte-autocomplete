@@ -1,4 +1,6 @@
 <script>
+  import { slide } from "svelte/transition"
+
   // the list of items  the user can select from
   export let items = []
 
@@ -182,7 +184,7 @@
   let filteredTextLength = 0
 
   // view model
-  let filteredListItems
+  let filteredListItems = []
   let listItems = []
 
   // requests/responses counters
@@ -1072,16 +1074,17 @@
       <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
     {/if}
   </div>
-  <div
-    class="{dropdownClassName ? dropdownClassName : ''} autocomplete-list {showList ? '' : 'hidden'}
-    is-fullwidth"
-    bind:this={list}
-  >
-    {#if filteredListItems && filteredListItems.length > 0}
-      <slot name="dropdown-header" nbItems={filteredListItems.length} {maxItemsToShowInList} />
+  {#if showList}
+    <div
+      class="{dropdownClassName ? dropdownClassName : ''} autocomplete-list
+      is-fullwidth"
+      bind:this={list}
+      transition:slide={{ duration: 200 }}
+    >
+      {#if filteredListItems && filteredListItems.length > 0}
+        <slot name="dropdown-header" nbItems={filteredListItems.length} {maxItemsToShowInList} />
 
-      {#each filteredListItems as listItem, i}
-        {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
+        {#each maxItemsToShowInList ? filteredListItems.slice(0, maxItemsToShowInList) : filteredListItems as listItem, i}
           <div
             class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
             class:confirmed={isConfirmed(listItem.item)}
@@ -1089,6 +1092,7 @@
             on:pointerenter={() => {
               highlightIndex = i
             }}
+            transition:slide|local={{ duration: 200 }}
           >
             <slot
               name="item"
@@ -1102,33 +1106,33 @@
               {/if}
             </slot>
           </div>
-        {/if}
-      {/each}
+        {/each}
 
-      <slot name="dropdown-footer" nbItems={filteredListItems.length} {maxItemsToShowInList}>
-        {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
-          {#if moreItemsText}
-            <div class="autocomplete-list-item-no-results">
-              ...{filteredListItems.length - maxItemsToShowInList}
-              {moreItemsText}
-            </div>
+        <slot name="dropdown-footer" nbItems={filteredListItems.length} {maxItemsToShowInList}>
+          {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
+            {#if moreItemsText}
+              <div class="autocomplete-list-item-no-results">
+                ...{filteredListItems.length - maxItemsToShowInList}
+                {moreItemsText}
+              </div>
+            {/if}
           {/if}
-        {/if}
-      </slot>
-    {:else if loading && loadingText}
-      <div class="autocomplete-list-item-loading">
-        <slot name="loading" {loadingText}>{loadingText}</slot>
-      </div>
-    {:else if create}
-      <div class="autocomplete-list-item-create" on:click={selectItem}>
-        <slot name="create" {createText}>{createText}</slot>
-      </div>
-    {:else if noResultsText}
-      <div class="autocomplete-list-item-no-results">
-        <slot name="no-results" {noResultsText}>{noResultsText}</slot>
-      </div>
-    {/if}
-  </div>
+        </slot>
+      {:else if loading && loadingText}
+        <div class="autocomplete-list-item-loading">
+          <slot name="loading" {loadingText}>{loadingText}</slot>
+        </div>
+      {:else if create}
+        <div class="autocomplete-list-item-create" on:click={selectItem}>
+          <slot name="create" {createText}>{createText}</slot>
+        </div>
+      {:else if noResultsText}
+        <div class="autocomplete-list-item-no-results">
+          <slot name="no-results" {noResultsText}>{noResultsText}</slot>
+        </div>
+      {/if}
+    </div>
+  {/if}
 </div>
 
 <svelte:window on:click={onDocumentClick} />
@@ -1231,10 +1235,6 @@
   .autocomplete-list-item-loading {
     padding: 5px 15px;
     line-height: 1;
-  }
-
-  .autocomplete-list.hidden {
-    display: none;
   }
 
   .autocomplete.show-clear .autocomplete-clear-button {

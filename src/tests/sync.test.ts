@@ -5,13 +5,11 @@ import '@testing-library/jest-dom'
 
 const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck", "<i>Jét Black</i>"]
 
-test("items are generated but hidden", async () => {
+test("items are generated but not shown", async () => {
   const { component, container } = render(SimpleAutocomplete, {items: colors})
 
-  expect(await screen.queryByText('White')).toBeInTheDocument()
-  expect(await screen.queryByText('White')).not.toBeVisible()
-  expect(await screen.queryByText('Red')).toBeInTheDocument()
-  expect(await screen.queryByText('Red')).not.toBeVisible()
+  expect(await screen.queryByText('White')).not.toBeInTheDocument()
+  expect(await screen.queryByText('Red')).not.toBeInTheDocument()
 })
 
 test("on focus, menu is shown with all the elements", async () => {

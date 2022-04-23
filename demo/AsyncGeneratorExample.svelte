@@ -40,6 +40,7 @@ async function* searchCountryGenerator(keyword) {
     bind:selectedItem={selectedCountry}
     labelFieldName="name"
     localFiltering={false}
+    showLoadingIndicator={true}
 />`
 </script>
 
@@ -78,6 +79,7 @@ async function* searchCountryGenerator(keyword) {
             bind:selectedItem={selectedCountry}
             labelFieldName="name"
             localFiltering={false}
+            showLoadingIndicator={true}
           />
 
           <div style="margin-bottom: 10rem;">
