@@ -1017,9 +1017,9 @@
 </script>
 
 <div
-  class="{className ? className : ''}
-  {hideArrow || !items.length ? 'hide-arrow' : ''}
-  {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
+  class="{className ? className : ''} autocomplete select is-fullwidth {uniqueId}"
+  class:hide-arrow={hideArrow || !items.length}
+  class:is-multiple={multiple}
   class:show-clear={clearable}
   class:is-loading={showLoadingIndicator && loading}
 >
@@ -1083,7 +1083,8 @@
       {#each filteredListItems as listItem, i}
         {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
           <div
-            class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
+            class="autocomplete-list-item"
+            class:selected={i === highlightIndex}
             class:confirmed={isConfirmed(listItem.item)}
             on:click={() => onListItemClick(listItem)}
             on:pointerenter={() => {
