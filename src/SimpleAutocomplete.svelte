@@ -311,7 +311,8 @@
 
   $: showList = opened && ((items && items.length > 0) || filteredTextLength > 0)
 
-  $: hasSelection = (multiple && selectedItem && selectedItem.length > 0) || (!multiple && selectedItem)
+  $: hasSelection =
+    (multiple && selectedItem && selectedItem.length > 0) || (!multiple && selectedItem)
 
   $: clearable = showClear || ((lock || multiple) && hasSelection)
 
@@ -720,8 +721,7 @@
       ArrowDown: down.bind(this),
       ArrowUp: up.bind(this),
       Escape: onEsc.bind(this),
-      Backspace:
-        multiple && hasSelection && !text ? onBackspace.bind(this) : null,
+      Backspace: multiple && hasSelection && !text ? onBackspace.bind(this) : null,
     }
     const fn = fnmap[key]
     if (typeof fn === "function") {
