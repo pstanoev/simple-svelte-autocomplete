@@ -3,3 +3,4 @@ node_modules
 public/bundle.*
 index.js
 index.mjs
+coverage

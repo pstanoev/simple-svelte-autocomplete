@@ -40,7 +40,7 @@
     "dev": "run-p start:dev autobuild",
     "start": "sirv public --single",
     "start:dev": "sirv public --single --dev",
-    "test": "jest",
+    "test": "jest --coverage",
     "prettier": "prettier --write public src",
     "prepare": "npm run build"
   },
