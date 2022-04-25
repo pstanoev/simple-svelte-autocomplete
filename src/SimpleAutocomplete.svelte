@@ -735,13 +735,15 @@
     }
 
     if (e.key === "Enter") {
-      e.preventDefault()
-      onEnter()
+      onEnter(e)
     }
   }
 
-  function onEnter() {
-    selectItem()
+  function onEnter(e) {
+    if (opened) {
+      e.preventDefault()
+      selectItem()
+    }
   }
 
   function onInput(e) {
