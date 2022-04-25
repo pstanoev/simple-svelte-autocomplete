@@ -716,8 +716,8 @@
     let key = e.key
     if (key === "Tab" && e.shiftKey) key = "ShiftTab"
     const fnmap = {
-      Tab: opened ? close() : null,
-      ShiftTab: opened ? close() : null,
+      Tab: opened ? close : null,
+      ShiftTab: opened ? close : null,
       ArrowDown: down.bind(this),
       ArrowUp: up.bind(this),
       Escape: onEsc.bind(this),
