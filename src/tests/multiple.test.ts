@@ -21,3 +21,16 @@ test("when selection is multiple, selectedItem is a list", async () => {
 
   expect(component.selectedItem).toStrictEqual(["White", "Red"])
 })
+
+test("multiple widget initialization", async () => {
+  const { component, container } = render(SimpleAutocomplete, {
+      items: colors,
+      multiple: true,
+      selectedItem:["White", "Red"],
+      text: "foobar"
+  })
+  const queryInput = container.querySelector("input[type='text']");
+
+  expect(component.selectedItem).toStrictEqual(["White", "Red"])
+  expect(component.text).toStrictEqual("foobar")
+})

@@ -178,7 +178,7 @@
   let opened = false
   let loading = false
   let highlightIndex = -1
-  export let text
+  export let text = undefined
   let filteredTextLength = 0
 
   // view model
@@ -293,7 +293,9 @@
 
   function onSelectedItemChanged() {
     value = valueFunction(selectedItem)
-    text = !multiple ? safeLabelFunction(selectedItem) : ""
+    if (selectedItem && !multiple) {
+        text = safeLabelFunction(selectedItem)
+    }
 
     filteredListItems = listItems
     onChange(selectedItem)
@@ -603,6 +605,7 @@
       }
       close()
       if (multiple) {
+        text = ""
         input.focus()
       }
     } else {
@@ -685,6 +688,7 @@
     if (selectListItem(listItem)) {
       close()
       if (multiple) {
+        text = ""
         input.focus()
       }
     }
