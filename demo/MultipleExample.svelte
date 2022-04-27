@@ -22,6 +22,7 @@ let selectedColorsValues;
 
 <AutoComplete
     multiple=true
+    orderableSelection=true
     items={colorList}
     labelFieldName="name"
     valueFieldName="id"
@@ -34,7 +35,8 @@ let selectedColorsValues;
   <h3>Multiple selection</h3>
   <article class="message is-info">
     <div class="message-body">
-      The <code>multiple</code> attribute allows you to select several items.
+      The <code>multiple</code> attribute allows you to select several items.<br>
+      <code>orderableSelection</code> enables item reordering with drag and drop.
     </div>
   </article>
 
@@ -46,7 +48,8 @@ let selectedColorsValues;
         </div>
         <div class="message-body">
           <AutoComplete
-            multiple="true"
+            multiple=true
+            orderableSelection=true
             items={colorList}
             labelFieldName="name"
             valueFieldName="id"

@@ -1,4 +1,7 @@
 <script>
+  import { flip } from "svelte/animate"
+  import { fade } from "svelte/transition"
+
   // the list of items  the user can select from
   export let items = []
 
@@ -98,6 +101,9 @@
 
   // true to close the dropdown when the component loses focus
   export let closeOnBlur = false
+
+  // true to allow selection reordering by drag and drop, needs multiple to true
+  export let orderableSelection = false
 
   // UI properties
 
@@ -1020,6 +1026,51 @@
       return listItem === selectedItem
     }
   }
+
+  let draggingOver = false
+
+  function dragstart(event, index) {
+    if (orderableSelection) {
+      event.dataTransfer.setData("source", index)
+    }
+  }
+
+  function dragover(event, index) {
+    if (orderableSelection) {
+      event.preventDefault()
+      draggingOver = index
+    }
+  }
+
+  function dragleave(event, index) {
+    if (orderableSelection) {
+      draggingOver = false
+    }
+  }
+
+  function drop(event, index) {
+    if (orderableSelection) {
+      event.preventDefault()
+      draggingOver = false
+      let from = parseInt(event.dataTransfer.getData("source"))
+      let to = index
+      if (from != to) {
+        moveSelectedItem(from, to)
+      }
+    }
+  }
+
+  function moveSelectedItem(from, to) {
+    let newSelection = [...selectedItem]
+    if (from < to) {
+      newSelection.splice(to + 1, 0, newSelection[from])
+      newSelection.splice(from, 1)
+    } else {
+      newSelection.splice(to, 0, newSelection[from])
+      newSelection.splice(from + 1, 1)
+    }
+    selectedItem = newSelection
+  }
 </script>
 
 <div
@@ -1042,13 +1093,24 @@
   </select>
   <div class="input-container">
     {#if multiple && hasSelection}
-      {#each selectedItem as tagItem}
-        <slot name="tag" label={safeLabelFunction(tagItem)} item={tagItem} {unselectItem}>
-          <div class="tags has-addons">
-            <span class="tag">{safeLabelFunction(tagItem)}</span>
-            <span class="tag is-delete" on:click|preventDefault={unselectItem(tagItem)} />
-          </div>
-        </slot>
+      {#each selectedItem as tagItem, i (valueFunction(tagItem, true))}
+        <div
+          draggable={true}
+          animate:flip={{ duration: 200 }}
+          transition:fade={{ duration: 200 }}
+          on:dragstart={(event) => dragstart(event, i)}
+          on:dragover={(event) => dragover(event, i)}
+          on:dragleave={(event) => dragleave(event, i)}
+          on:drop={(event) => drop(event, i)}
+          class:is-active={draggingOver === i}
+        >
+          <slot name="tag" label={safeLabelFunction(tagItem)} item={tagItem} {unselectItem}>
+            <div class="tags has-addons">
+              <span class="tag">{safeLabelFunction(tagItem)}</span>
+              <span class="tag is-delete" on:click|preventDefault={unselectItem(tagItem)} />
+            </div>
+          </slot>
+        </div>
       {/each}
     {/if}
     <input
@@ -1073,6 +1135,8 @@
       on:keydown={onKeyDown}
       on:click={onInputClick}
       on:keypress={onKeyPress}
+      on:dragover={(event) => dragover(event, selectedItem.length - 1)}
+      on:drop={(event) => drop(event, selectedItem.length - 1)}
     />
     {#if clearable}
       <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>

@@ -127,6 +127,7 @@ async function getItems(keyword) {
 - `localSorting`  - boolean specifying if result items should be sorted locally by `itemSortFunction` or `sortByMatchedKeywords`. If set to false, no local sorting will be done
 - `cleanUserText` - by default the component removes special characters and spaces from the user entered text, set `cleanUserText=false` to prevent this
 - `multiple` - enable multiple selection (false by default)
+- `orderableSelection` - enable selection reordering with drag and drop. needs multiple = true
 - `selectedItem` - the current item that is selected (object if the array of items contains objects)
 - `highlightedItem` - the current item that is highlighted in the dropdown menu
 - `labelFieldName` - the name of the field to be used for showing the items as text in the dropdown
