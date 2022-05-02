@@ -1081,8 +1081,10 @@
   class:is-loading={showLoadingIndicator && loading}
 >
   <select name={selectName} id={selectId} {multiple}>
-    {#if !multiple && value}
-      <option {value} selected>{text}</option>
+    {#if !multiple && hasSelection}
+      <option value={valueFunction(selectedItem, true)} selected>
+        {safeLabelFunction(selectedItem)}
+      </option>
     {:else if multiple && hasSelection}
       {#each selectedItem as i}
         <option value={valueFunction(i, true)} selected>
