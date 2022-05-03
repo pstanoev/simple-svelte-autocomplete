@@ -1,23 +1,23 @@
 <script>
-  import solarized from "svelte-highlight/src/styles/solarized-light"
+  import solarized from "svelte-highlight/styles/solarized-light"
 
   import { onMount } from "svelte"
 
-  import AutoComplete from "./SimpleAutocomplete.svelte"
+  import AutoComplete from "../src/SimpleAutocomplete.svelte"
 
-  import SimpleExample from "./demo/SimpleExample.svelte"
-  import AdvancedExample from "./demo/AdvancedExample.svelte"
-  import LockedExample from "./demo/LockedExample.svelte"
-  import MultipleExample from "./demo/MultipleExample.svelte"
-  import CustomizationExample from "./demo/CustomizationExample.svelte"
-  import ActivityIndicatorExample from "./demo/ActivityIndicatorExample.svelte"
-  import AsyncExample from "./demo/AsyncExample.svelte"
-  import MatchingStrategyExample from "./demo/MatchingStrategyExample.svelte"
-  import AsyncGeneratorExample from "./demo/AsyncGeneratorExample.svelte"
-  import AsyncPreloadedExample from "./demo/AsyncPreloadedExample.svelte"
-  import CreatableExample from "./demo/CreatableExample.svelte"
-  import CustomFunctionsExample from "./demo/CustomFunctionsExample.svelte"
-  import RequiredExample from "./demo/RequiredExample.svelte"
+  import SimpleExample from "./SimpleExample.svelte"
+  import AdvancedExample from "./AdvancedExample.svelte"
+  import LockedExample from "./LockedExample.svelte"
+  import MultipleExample from "./MultipleExample.svelte"
+  import CustomizationExample from "./CustomizationExample.svelte"
+  import ActivityIndicatorExample from "./ActivityIndicatorExample.svelte"
+  import AsyncExample from "./AsyncExample.svelte"
+  import MatchingStrategyExample from "./MatchingStrategyExample.svelte"
+  import AsyncGeneratorExample from "./AsyncGeneratorExample.svelte"
+  import AsyncPreloadedExample from "./AsyncPreloadedExample.svelte"
+  import CreatableExample from "./CreatableExample.svelte"
+  import CustomFunctionsExample from "./CustomFunctionsExample.svelte"
+  import RequiredExample from "./RequiredExample.svelte"
 
   let bulma = true
 
@@ -39,8 +39,9 @@
   }
   onMount(() => {
     console.log("on mount")
-    const simpleTab = document.getElementById("simpleTab")
-    showTab(simpleTab, "simple")
+    const startTabName = window.location.hash ? window.location.hash.substring(1) : "simple"
+    const startTab = document.getElementById(startTabName + "Tab")
+    showTab(startTab, startTabName)
   })
 </script>
 
@@ -71,18 +72,30 @@
         <li
           id="simpleTab"
           on:click={(e) => showTab(e.target.parentElement, "simple")}
-          class="tab is-active"
+          class="tab"
         >
-          <a href={"#"}>Basic usage</a>
+          <a href={"#simple"}>Basic usage</a>
         </li>
-        <li on:click={(e) => showTab(e.target.parentElement, "customization")} class="tab">
-          <a href={"#"}>Customization</a>
+        <li
+          id="customizationTab"
+          on:click={(e) => showTab(e.target.parentElement, "customization")}
+          class="tab"
+        >
+          <a href={"#customization"}>Customization</a>
         </li>
-        <li on:click={(e) => showTab(e.target.parentElement, "async")} class="tab">
-          <a href={"#"}>Async</a>
+        <li
+          id="asyncTab"
+          on:click={(e) => showTab(e.target.parentElement, "async")}
+          class="tab"
+        >
+          <a href={"#async"}>Async</a>
         </li>
-        <li on:click={(e) => showTab(e.target.parentElement, "advanced")} class="tab">
-          <a href={"#"}>Advanced usage</a>
+        <li
+          id="advancedTab"
+          on:click={(e) => showTab(e.target.parentElement, "advanced")}
+          class="tab"
+        >
+          <a href={"#advanced"}>Advanced usage</a>
         </li>
       </ul>
     </div>
@@ -92,12 +105,11 @@
       <AdvancedExample />
       <MultipleExample />
       <RequiredExample />
-
-      <LockedExample />
     </div>
 
     <div class="tab-content customization">
       <CustomizationExample />
+      <LockedExample />
     </div>
 
     <div class="tab-content async">

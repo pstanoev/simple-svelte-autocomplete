@@ -71,7 +71,7 @@ keywordsFunction={color => color.name + ' ' + color.code} />
 
 ## Asynchronous loading of items
 
-Define a `searchFunction` which will be called with `keyword` parameter.
+Define a `searchFunction` which will be called with `keyword` and `maxItemsToShowInList` parameters.
 If you have `searchFunction` defined you don't need to specify `items` since the function will be used for loading.
 The `delay` parameter specifies the time to wait between user input and calling the `searchFunction`.
 It is recommend that delay > 200ms is set when using a remote search function to avoid sending too many requests.
@@ -127,6 +127,7 @@ async function getItems(keyword) {
 - `localSorting`  - boolean specifying if result items should be sorted locally by `itemSortFunction` or `sortByMatchedKeywords`. If set to false, no local sorting will be done
 - `cleanUserText` - by default the component removes special characters and spaces from the user entered text, set `cleanUserText=false` to prevent this
 - `multiple` - enable multiple selection (false by default)
+- `orderableSelection` - enable selection reordering with drag and drop. needs multiple = true
 - `selectedItem` - the current item that is selected (object if the array of items contains objects)
 - `highlightedItem` - the current item that is highlighted in the dropdown menu
 - `labelFieldName` - the name of the field to be used for showing the items as text in the dropdown
@@ -166,6 +167,7 @@ async function getItems(keyword) {
 
 - `placeholder` - change the text displayed when no option is selected
 - `noResultsText` - text to show in the dropdown when the search text does not match any item. Defaults to "No results found". Can be set to "" to not show anything.
+- `moreItemsText` - text displayed when the user text matches a lot of items and we can display only up to `maxItemsToShowInList` items
 - `createText` - text to show when `create` is true, and the user text doesn't match any of the items
 - `hideArrow` - set to true to not show the blue dropdown arrow
 - `showClear` - set to true to show X button that can be used to deselect the selected item
@@ -190,7 +192,7 @@ async function getItems(keyword) {
 - `item` - change the apearance of items in the dropdown list:
 
 ```html
-<div slot="item" let:item="{item}" let:label="{label}">
+<div slot="item" let:item let:label>
   {@html label}
   <!-- to render the default higliglighted item label -->
   <!-- render anything else -->
@@ -201,7 +203,7 @@ async function getItems(keyword) {
 - `no-results` - customize the div that shows the "no results" text:
 
 ```html
-<div slot="no-results" let:noResultsText={noResultsText}>
+<div slot="no-results" let:noResultsText>
     <span>{noResultsText}</span>
 </div>
 ```
@@ -211,7 +213,7 @@ The noResultsText variable is optional and can be ommited.
 - `loading` - customize the div that shows the "loading" text:
 
 ```html
-<div slot="loading" let:loadingText={loadingText}>
+<div slot="loading" let:loadingText>
     <span>{loadingText}</strong>
 </div>
 ```
@@ -219,10 +221,27 @@ The noResultsText variable is optional and can be ommited.
 - `tag` - customize the tag blocks displayed when multiple selection is enabled:
 
 ```html
-<slot name="tag" let:label="{label}" let:item="{item}" let:unselectItem="{unselectItem}">
+<slot name="tag" let:label let:item let:unselectItem>
   <span class="tag">{label}</span>
   <span class="delete-tag" on:click|preventDefault="{unselectItem(item)}"></span>
 </slot>
+```
+
+- `dropdown-header` - customize what is displayed before the item list in the dropdown. By default there is nothing displayed.
+
+```html
+<div slot="menu-header" let:nbItems let:maxItemsToShowInList>
+  <div class="dropdown-item">Choose between those {nbItems} items</div>
+  <hr class="dropdown-divider">
+</div>
+```
+
+- `dropdown-footer` - customize what is displayed before the item list in the dropdown. By default this is where the `moreItemsText` is displayed if there is too much items to be displayed.
+
+```html
+<div slot="dropdown-footer" let:nbItems  let:maxItemsToShowInList>
+    ...
+</div>
 ```
 
 #### CSS properties

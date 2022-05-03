@@ -1,4 +1,7 @@
 <script>
+  import { flip } from "svelte/animate"
+  import { fade } from "svelte/transition"
+
   // the list of items  the user can select from
   export let items = []
 
@@ -99,6 +102,9 @@
   // true to close the dropdown when the component loses focus
   export let closeOnBlur = false
 
+  // true to allow selection reordering by drag and drop, needs multiple to true
+  export let orderableSelection = false
+
   // UI properties
 
   // option to hide the dropdown arrow
@@ -115,6 +121,9 @@
 
   // text displayed when async data is being loaded
   export let loadingText = "Loading results..."
+
+  // text displayed when the user text matches a lot of items and we can not display them all in the dropdown
+  export let moreItemsText = "items not shown"
 
   // text displayed when async data is being loaded
   export let createText = "Not found, add anyway?"
@@ -175,7 +184,7 @@
   let opened = false
   let loading = false
   let highlightIndex = -1
-  export let text
+  export let text = undefined
   let filteredTextLength = 0
 
   // view model
@@ -266,6 +275,8 @@
       })
     }
 
+    filteredListItems = listItems
+
     if (debug) {
       console.log(listItems.length + " items to search")
       console.timeEnd(timerId)
@@ -284,11 +295,13 @@
   }
 
   // -- Reactivity --
-  $: items, prepareListItems()
+  $: items, searchFunction || prepareListItems()
 
   function onSelectedItemChanged() {
     value = valueFunction(selectedItem)
-    text = !multiple ? safeLabelFunction(selectedItem) : ""
+    if (selectedItem && !multiple) {
+        text = safeLabelFunction(selectedItem)
+    }
 
     filteredListItems = listItems
     onChange(selectedItem)
@@ -305,6 +318,9 @@
       : null
 
   $: showList = opened && ((items && items.length > 0) || filteredTextLength > 0)
+
+  $: hasSelection =
+    (multiple && selectedItem && selectedItem.length > 0) || (!multiple && selectedItem)
 
   $: clearable = !readonly && !disabled && (showClear || ((lock || multiple) && selectedItem))
 
@@ -374,11 +390,12 @@
           console.log("User entered text is empty set the list of items to all items")
         }
       }
-      closeIfMinCharsToSearchReached()
-      if (debug) {
-        console.timeEnd(timerId)
+      if (closeIfMinCharsToSearchReached()) {
+        if (debug) {
+          console.timeEnd(timerId)
+        }
+        return
       }
-      return
     }
 
     if (!searchFunction) {
@@ -392,7 +409,7 @@
 
       // searchFunction is a generator
       if (searchFunction.constructor.name === "AsyncGeneratorFunction") {
-        for await (const chunk of searchFunction(textFiltered)) {
+        for await (const chunk of searchFunction(textFiltered, maxItemsToShowInList)) {
           // a chunk of an old response: throw it away
           if (currentRequestId < lastResponseId) {
             return false
@@ -418,7 +435,7 @@
 
       // searchFunction is a regular function
       else {
-        let result = await searchFunction(textFiltered)
+        let result = await searchFunction(textFiltered, maxItemsToShowInList)
 
         // If a response to a newer request has been received
         // while responses to this request were being loaded,
@@ -459,7 +476,7 @@
     prepareListItems()
 
     const textFilteredWithoutAccents = ignoreAccents ? removeAccents(textFiltered) : textFiltered
-    const searchWords = textFilteredWithoutAccents.split(/\s+/g)
+    const searchWords = textFilteredWithoutAccents.split(/\s+/g).filter((word) => word !== "")
 
     // local search
     let tempfilteredListItems
@@ -533,10 +550,14 @@
       // allow undefined items if create is enabled
       const createdItem = onCreate(text)
       if ("undefined" !== typeof createdItem) {
-        if (typeof createdItem === "function") {
+        if (typeof createdItem.then === "function") {
           createdItem.then((newItem) => {
-            const newListItem = afterCreate(newItem)
-            selectListItem(newListItem)
+            if ("undefined" !== typeof newItem) {
+              const newListItem = afterCreate(newItem)
+              if ("undefined" !== typeof newListItem) {
+                selectListItem(newListItem)
+              }
+            }
           })
           return true
         } else {
@@ -550,6 +571,10 @@
         console.log(`listItem is undefined. Can not select.`)
       }
       return false
+    }
+
+    if (lock && selectedItem) {
+      return true
     }
 
     const newSelectedItem = listItem.item
@@ -586,6 +611,7 @@
       }
       close()
       if (multiple) {
+        text = ""
         input.focus()
       }
     } else {
@@ -668,6 +694,7 @@
     if (selectListItem(listItem)) {
       close()
       if (multiple) {
+        text = ""
         input.focus()
       }
     }
@@ -699,13 +726,12 @@
     let key = e.key
     if (key === "Tab" && e.shiftKey) key = "ShiftTab"
     const fnmap = {
-      Tab: opened ? close() : null,
-      ShiftTab: opened ? close() : null,
+      Tab: opened ? close : null,
+      ShiftTab: opened ? close : null,
       ArrowDown: down.bind(this),
       ArrowUp: up.bind(this),
       Escape: onEsc.bind(this),
-      Backspace:
-        multiple && selectedItem && selectedItem.length && !text ? onBackspace.bind(this) : null,
+      Backspace: multiple && hasSelection && !text ? onBackspace.bind(this) : null,
     }
     const fn = fnmap[key]
     if (typeof fn === "function") {
@@ -719,13 +745,15 @@
     }
 
     if (e.key === "Enter") {
-      e.preventDefault()
-      onEnter()
+      onEnter(e)
     }
   }
 
-  function onEnter() {
-    selectItem()
+  function onEnter(e) {
+    if (opened) {
+      e.preventDefault()
+      selectItem()
+    }
   }
 
   function onInput(e) {
@@ -815,14 +843,10 @@
       console.log("resetListToAllItemsAndOpen")
     }
 
-    if (!text) {
-      filteredListItems = listItems
-    }
-
-    // When an async component is initialized, the item list
-    // must be loaded when the input is focused.
-    else if (!listItems.length && selectedItem && searchFunction) {
+    if (searchFunction && !listItems.length) {
       search()
+    } else if (!text) {
+      filteredListItems = listItems
     }
 
     open()
@@ -900,13 +924,20 @@
   }
 
   function notEnoughSearchText() {
-    return minCharactersToSearch > 1 && filteredTextLength < minCharactersToSearch
+    return (
+      minCharactersToSearch > 0 &&
+      filteredTextLength < minCharactersToSearch &&
+      // When no searchFunction is defined, the menu should always open when the input is focused
+      (searchFunction || filteredTextLength > 0)
+    )
   }
 
   function closeIfMinCharsToSearchReached() {
     if (notEnoughSearchText()) {
       close()
+      return true
     }
+    return false
   }
 
   function clear() {
@@ -995,19 +1026,66 @@
       return listItem === selectedItem
     }
   }
+
+  let draggingOver = false
+
+  function dragstart(event, index) {
+    if (orderableSelection) {
+      event.dataTransfer.setData("source", index)
+    }
+  }
+
+  function dragover(event, index) {
+    if (orderableSelection) {
+      event.preventDefault()
+      draggingOver = index
+    }
+  }
+
+  function dragleave(event, index) {
+    if (orderableSelection) {
+      draggingOver = false
+    }
+  }
+
+  function drop(event, index) {
+    if (orderableSelection) {
+      event.preventDefault()
+      draggingOver = false
+      let from = parseInt(event.dataTransfer.getData("source"))
+      let to = index
+      if (from != to) {
+        moveSelectedItem(from, to)
+      }
+    }
+  }
+
+  function moveSelectedItem(from, to) {
+    let newSelection = [...selectedItem]
+    if (from < to) {
+      newSelection.splice(to + 1, 0, newSelection[from])
+      newSelection.splice(from, 1)
+    } else {
+      newSelection.splice(to, 0, newSelection[from])
+      newSelection.splice(from + 1, 1)
+    }
+    selectedItem = newSelection
+  }
 </script>
 
 <div
-  class="{className ? className : ''}
-  {hideArrow || !items.length ? 'hide-arrow' : ''}
-  {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
+  class="{className ? className : ''} autocomplete select is-fullwidth {uniqueId}"
+  class:hide-arrow={hideArrow || !items.length}
+  class:is-multiple={multiple}
   class:show-clear={clearable}
   class:is-loading={showLoadingIndicator && loading}
 >
   <select name={selectName} id={selectId} {multiple}>
-    {#if !multiple && value}
-      <option {value} selected>{text}</option>
-    {:else if multiple && selectedItem}
+    {#if !multiple && hasSelection}
+      <option value={valueFunction(selectedItem, true)} selected>
+        {safeLabelFunction(selectedItem)}
+      </option>
+    {:else if multiple && hasSelection}
       {#each selectedItem as i}
         <option value={valueFunction(i, true)} selected>
           {safeLabelFunction(i)}
@@ -1016,14 +1094,25 @@
     {/if}
   </select>
   <div class="input-container">
-    {#if multiple && selectedItem}
-      {#each selectedItem as tagItem}
-        <slot name="tag" label={safeLabelFunction(tagItem)} item={tagItem} {unselectItem}>
-          <div class="tags has-addons">
-            <span class="tag">{safeLabelFunction(tagItem)}</span>
-            <span class="tag is-delete" on:click|preventDefault={unselectItem(tagItem)} />
-          </div>
-        </slot>
+    {#if multiple && hasSelection}
+      {#each selectedItem as tagItem, i (valueFunction(tagItem, true))}
+        <div
+          draggable={true}
+          animate:flip={{ duration: 200 }}
+          transition:fade={{ duration: 200 }}
+          on:dragstart={(event) => dragstart(event, i)}
+          on:dragover={(event) => dragover(event, i)}
+          on:dragleave={(event) => dragleave(event, i)}
+          on:drop={(event) => drop(event, i)}
+          class:is-active={draggingOver === i}
+        >
+          <slot name="tag" label={safeLabelFunction(tagItem)} item={tagItem} {unselectItem}>
+            <div class="tags has-addons">
+              <span class="tag">{safeLabelFunction(tagItem)}</span>
+              <span class="tag is-delete" on:click|preventDefault={unselectItem(tagItem)} />
+            </div>
+          </slot>
+        </div>
       {/each}
     {/if}
     <input
@@ -1048,6 +1137,8 @@
       on:keydown={onKeyDown}
       on:click={onInputClick}
       on:keypress={onKeyPress}
+      on:dragover={(event) => dragover(event, selectedItem.length - 1)}
+      on:drop={(event) => drop(event, selectedItem.length - 1)}
     />
     {#if clearable}
       <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
@@ -1059,38 +1150,44 @@
     bind:this={list}
   >
     {#if filteredListItems && filteredListItems.length > 0}
+      <slot name="dropdown-header" nbItems={filteredListItems.length} {maxItemsToShowInList} />
+
       {#each filteredListItems as listItem, i}
         {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
-          {#if listItem}
-            <div
-              class="autocomplete-list-item {i === highlightIndex ? 'selected' : ''}"
-              class:confirmed={isConfirmed(listItem.item)}
-              on:click={() => onListItemClick(listItem)}
-              on:pointerenter={() => {
-                highlightIndex = i
-              }}
+          <div
+            class="autocomplete-list-item"
+            class:selected={i === highlightIndex}
+            class:confirmed={isConfirmed(listItem.item)}
+            on:click={() => onListItemClick(listItem)}
+            on:pointerenter={() => {
+              highlightIndex = i
+            }}
+          >
+            <slot
+              name="item"
+              item={listItem.item}
+              label={listItem.highlighted ? listItem.highlighted : listItem.label}
             >
-              <slot
-                name="item"
-                item={listItem.item}
-                label={listItem.highlighted ? listItem.highlighted : listItem.label}
-              >
-                {#if listItem.highlighted}
-                  {@html listItem.highlighted}
-                {:else}
-                  {@html listItem.label}
-                {/if}
-              </slot>
-            </div>
-          {/if}
+              {#if listItem.highlighted}
+                {@html listItem.highlighted}
+              {:else}
+                {@html listItem.label}
+              {/if}
+            </slot>
+          </div>
         {/if}
       {/each}
 
-      {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
-        <div class="autocomplete-list-item-no-results">
-          ...{filteredListItems.length - maxItemsToShowInList} results not shown
-        </div>
-      {/if}
+      <slot name="dropdown-footer" nbItems={filteredListItems.length} {maxItemsToShowInList}>
+        {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
+          {#if moreItemsText}
+            <div class="autocomplete-list-item-no-results">
+              ...{filteredListItems.length - maxItemsToShowInList}
+              {moreItemsText}
+            </div>
+          {/if}
+        {/if}
+      </slot>
     {:else if loading && loadingText}
       <div class="autocomplete-list-item-loading">
         <slot name="loading" {loadingText}>{loadingText}</slot>
