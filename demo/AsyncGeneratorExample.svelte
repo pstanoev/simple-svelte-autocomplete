@@ -88,7 +88,14 @@ async function* searchCountryGenerator(keyword) {
     </div>
 
     <div class="column">
-      <Highlight language={xml} {code} />
+      <article class="message">
+        <div class="message-header">
+          <p>Code</p>
+        </div>
+        <div class="message-body">
+          <Highlight language={xml} {code} />
+        </div>
+      </article>
     </div>
   </div>
 </div>
