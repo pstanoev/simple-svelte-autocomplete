@@ -18,6 +18,7 @@
   import CreatableExample from "./CreatableExample.svelte"
   import CustomFunctionsExample from "./CustomFunctionsExample.svelte"
   import RequiredExample from "./RequiredExample.svelte"
+  import ReadOnlyExample from "./ReadOnlyExample.svelte"
 
   let bulma = true
 
@@ -69,11 +70,7 @@
     </div>
     <div class="tabs is-centered">
       <ul class="ml-0">
-        <li
-          id="simpleTab"
-          on:click={(e) => showTab(e.target.parentElement, "simple")}
-          class="tab"
-        >
+        <li id="simpleTab" on:click={(e) => showTab(e.target.parentElement, "simple")} class="tab">
           <a href={"#simple"}>Basic usage</a>
         </li>
         <li
@@ -83,11 +80,7 @@
         >
           <a href={"#customization"}>Customization</a>
         </li>
-        <li
-          id="asyncTab"
-          on:click={(e) => showTab(e.target.parentElement, "async")}
-          class="tab"
-        >
+        <li id="asyncTab" on:click={(e) => showTab(e.target.parentElement, "async")} class="tab">
           <a href={"#async"}>Async</a>
         </li>
         <li
@@ -104,6 +97,7 @@
       <SimpleExample />
       <AdvancedExample />
       <MultipleExample />
+      <ReadOnlyExample />
       <RequiredExample />
     </div>
 
