@@ -149,6 +149,8 @@
   export let title = undefined
   // enable the html5 autocompletion to the HTML input
   export let html5autocomplete = undefined
+  // enable the html5 autocompletion value
+  export let autocompleteOffValue = "off"
   // make the input readonly
   export let readonly = undefined
   // apply a className to the dropdown div
@@ -300,7 +302,7 @@
   function onSelectedItemChanged() {
     value = valueFunction(selectedItem)
     if (selectedItem && !multiple) {
-        text = safeLabelFunction(selectedItem)
+      text = safeLabelFunction(selectedItem)
     }
 
     filteredListItems = listItems
@@ -912,12 +914,12 @@
     opened = true
   }
 
-  function setScrollAwareListPosition(){
+  function setScrollAwareListPosition() {
     const { height: viewPortHeight } = window.visualViewport
-    const { bottom: inputButtom, height: inputHeight} = input.getBoundingClientRect()
+    const { bottom: inputButtom, height: inputHeight } = input.getBoundingClientRect()
     const { height: listHeight } = list.getBoundingClientRect()
 
-    if(inputButtom + listHeight > viewPortHeight) {
+    if (inputButtom + listHeight > viewPortHeight) {
       list.style.top = `-${inputHeight + listHeight}px`
     } else {
       list.style.top = "0px"
@@ -1135,7 +1137,7 @@
         ? ''
         : 'input autocomplete-input'}"
       id={inputId ? inputId : ""}
-      autocomplete={html5autocomplete ? "on" : "off"}
+      autocomplete={html5autocomplete ? "on" : autocompleteOffValue}
       {placeholder}
       {name}
       {disabled}
@@ -1153,6 +1155,7 @@
       on:keypress={onKeyPress}
       on:dragover={(event) => dragover(event, selectedItem.length - 1)}
       on:drop={(event) => drop(event, selectedItem.length - 1)}
+      {...$$restProps}
     />
     {#if clearable}
       <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
