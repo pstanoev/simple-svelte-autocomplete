@@ -138,6 +138,7 @@ async function getItems(keyword) {
 - `keywordsFunction` - optional function that creates text to search from the item. If used `keywordsFieldName` is ignored
 - `valueFunction` - optional function that derives the value from the selected item. If used `valueFieldName` is ignored
 - `keywordsCleanFunction` - optional function to additionally process the derived keywords from the item
+- `lowercaseKeywords` - set to false to not lowercase the keywords extracted from the items
 - `textCleanFunction` - optional function to additionally process the user entered text. Ignored if `cleanUserText=false`
 - `selectFirstIfEmpty` - set to true to select the first item if the user clears the text and closes the dropdown, defaults to false
 - `minCharactersToSearch` - minimum length of search text to perform search, defaults to 1

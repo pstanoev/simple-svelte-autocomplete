@@ -99,6 +99,9 @@
   // true to clean the user entered text (removes spaces)
   export let cleanUserText = true
 
+  // true to lowercase the keywords derived from each item (lowercase)
+  export let lowercaseKeywords = true
+
   // true to close the dropdown when the component loses focus
   export let closeOnBlur = false
 
@@ -239,7 +242,7 @@
     // console.log("safeKeywordsFunction");
     const keywords = safeStringFunction(keywordsFunction, item)
     let result = safeStringFunction(keywordsCleanFunction, keywords)
-    result = result.toLowerCase().trim()
+    result = lowercaseKeywords ? result.toLowerCase().trim() : result
     if (ignoreAccents) {
       result = removeAccents(result)
     }
