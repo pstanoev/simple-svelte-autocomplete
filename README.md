@@ -81,7 +81,7 @@ The `localFiltering` parameter can be set to false if the search function alread
 <AutoComplete
   searchFunction="{getItems}"
   delay="200"
-  localFiltering="false"
+  localFiltering={false}
   labelFieldName="name"
   valueFieldName="id"
   bind:selectedItem="{myValue}"
