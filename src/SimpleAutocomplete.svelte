@@ -115,6 +115,9 @@
 
   // option to show clear selection button
   export let showClear = false
+  
+  // text to use for clear
+  export let clearText = "&#10006;"
 
   // option to show loading indicator when the async function is executed
   export let showLoadingIndicator = false
@@ -1161,7 +1164,7 @@
       {...$$restProps}
     />
     {#if clearable}
-      <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
+      <span on:click={clear} class="autocomplete-clear-button">{@html clearText}</span>
     {/if}
   </div>
   <div
