@@ -185,6 +185,7 @@
   // HTML elements
   let input
   let list
+  let inputContainer
 
   // UI state
   let opened = false
@@ -1093,7 +1094,7 @@
 
   function setScrollAwareListPosition() {
     const { height: viewPortHeight } = window.visualViewport
-    const { bottom: inputButtom, height: inputHeight } = input.getBoundingClientRect()
+    const { bottom: inputButtom, height: inputHeight } = inputContainer.getBoundingClientRect()
     const { height: listHeight } = list.getBoundingClientRect()
 
     if (inputButtom + listHeight > viewPortHeight) {
@@ -1124,7 +1125,7 @@
       {/each}
     {/if}
   </select>
-  <div class="input-container">
+  <div class="input-container" bind:this={inputContainer}>
     {#if multiple && hasSelection}
       {#each selectedItem as tagItem, i (valueFunction(tagItem, true))}
         <div
