@@ -1,6 +1,7 @@
 <script>
   import { flip } from "svelte/animate"
   import { fade } from "svelte/transition"
+  import {afterUpdate} from 'svelte'
 
   // the list of items  the user can select from
   export let items = []
@@ -202,6 +203,17 @@
 
   // other state
   let inputDelayTimeout
+
+  let setPositionOnNextUpdate = false;
+
+  // --- Lifecycle events ---
+
+  afterUpdate(() => {
+    if(setPositionOnNextUpdate) {
+      setScrollAwareListPosition()
+    }
+    setPositionOnNextUpdate = false
+  })
 
   // --- Functions ---
 
@@ -912,21 +924,9 @@
       return
     }
 
-    setScrollAwareListPosition()
+    setPositionOnNextUpdate = true
 
     opened = true
-  }
-
-  function setScrollAwareListPosition() {
-    const { height: viewPortHeight } = window.visualViewport
-    const { bottom: inputButtom, height: inputHeight } = input.getBoundingClientRect()
-    const { height: listHeight } = list.getBoundingClientRect()
-
-    if (inputButtom + listHeight > viewPortHeight) {
-      list.style.top = `-${inputHeight + listHeight}px`
-    } else {
-      list.style.top = "0px"
-    }
   }
 
   function close() {
@@ -1089,6 +1089,18 @@
       newSelection.splice(from + 1, 1)
     }
     selectedItem = newSelection
+  }
+
+  function setScrollAwareListPosition() {
+    const { height: viewPortHeight } = window.visualViewport
+    const { bottom: inputButtom, height: inputHeight } = input.getBoundingClientRect()
+    const { height: listHeight } = list.getBoundingClientRect()
+
+    if (inputButtom + listHeight > viewPortHeight) {
+      list.style.top = `-${inputHeight + listHeight}px`
+    } else {
+      list.style.top = "0px"
+    }
   }
 </script>
 
