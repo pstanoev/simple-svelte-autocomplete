@@ -1104,7 +1104,6 @@
     }
   }
 </script>
-
 <div
   class="{className ? className : ''} autocomplete select is-fullwidth {uniqueId}"
   class:hide-arrow={hideArrow || !items.length}
@@ -1237,7 +1236,7 @@
   </div>
 </div>
 
-<svelte:window on:click={onDocumentClick} />
+<svelte:window on:click={onDocumentClick} on:scroll={() => setPositionOnNextUpdate = true} />
 
 <style>
   .autocomplete {
