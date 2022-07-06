@@ -5,6 +5,8 @@ import '@testing-library/jest-dom'
 
 const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black"]
 
+window = Object.assign(window, { visualViewport: { height: 1500 } })
+
 test("when selection is multiple, selectedItem is a list", async () => {
   const { component, container } = render(SimpleAutocomplete, {items: colors, multiple: true})
   const queryInput = container.querySelector("input[type='text']");

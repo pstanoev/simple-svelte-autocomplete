@@ -3,19 +3,21 @@ import SimpleAutocomplete from "../SimpleAutocomplete.svelte"
 import '@testing-library/jest-dom/extend-expect'
 import '@testing-library/jest-dom'
 
-async function colors(keyword, nb_items_max) {
+async function colors() {
     return ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck", "<i>Jét Black</i>"]
 }
 
+window = Object.assign(window, { visualViewport: { height: 1500 } })
+
 test("at first, menu is empty", async () => {
-  const { component, container } = render(SimpleAutocomplete, {searchFunction: colors})
+  render(SimpleAutocomplete, {searchFunction: colors})
 
   expect(await screen.queryByText('White')).not.toBeInTheDocument()
   expect(await screen.queryByText('Red')).not.toBeInTheDocument()
 })
 
 test("even with the input is focused, the menu is empty", async () => {
-  const { component, container } = render(SimpleAutocomplete, {searchFunction: colors})
+  const { container } = render(SimpleAutocomplete, {searchFunction: colors})
   const queryInput = container.querySelector("input[type='text']");
 
   await fireEvent.focus(queryInput)
@@ -25,7 +27,7 @@ test("even with the input is focused, the menu is empty", async () => {
 })
 
 test("when something is queried, only the matching items are shown", async () => {
-  const { component, container } = render(SimpleAutocomplete, {searchFunction: colors})
+  const { container } = render(SimpleAutocomplete, {searchFunction: colors})
   const queryInput = container.querySelector("input[type='text']");
 
   await fireEvent.input(queryInput, { target: { value: "white" } })
@@ -36,7 +38,8 @@ test("when something is queried, only the matching items are shown", async () =>
 })
 
 test("when nothing matches the query, no item is show", async () => {
-  const { component, container } = render(SimpleAutocomplete, {searchFunction: colors})
+
+  const { container } = render(SimpleAutocomplete, {searchFunction: colors})
   const queryInput = container.querySelector("input[type='text']");
 
   await fireEvent.input(queryInput, { target: { value: "not-a-color" } })
@@ -46,9 +49,8 @@ test("when nothing matches the query, no item is show", async () => {
 })
 
 test("when something is queried, the query is highlighted", async () => {
-  const { component, container } = render(SimpleAutocomplete, {searchFunction: colors})
+  const { container } = render(SimpleAutocomplete, {searchFunction: colors})
   const queryInput = container.querySelector("input[type='text']");
-  const list = container.querySelector("autocomplete-list");
 
   await fireEvent.input(queryInput, { target: { value: "whi" } })
 

@@ -1,6 +1,8 @@
 import { render } from "@testing-library/svelte"
 import SimpleAutocomplete from "../SimpleAutocomplete.svelte"
 
+window = Object.assign(window, { visualViewport: { height: 1500 } })
+
 test("test simple hightlights", async () => {
   const { component } = render(SimpleAutocomplete)
   var item = {
