@@ -1,6 +1,7 @@
 <script>
   import { flip } from "svelte/animate"
   import { fade } from "svelte/transition"
+  import {afterUpdate} from 'svelte'
 
   // the list of items  the user can select from
   export let items = []
@@ -187,6 +188,7 @@
   // HTML elements
   let input
   let list
+  let inputContainer
 
   // UI state
   let opened = false
@@ -205,6 +207,17 @@
 
   // other state
   let inputDelayTimeout
+
+  let setPositionOnNextUpdate = false;
+
+  // --- Lifecycle events ---
+
+  afterUpdate(() => {
+    if(setPositionOnNextUpdate) {
+      setScrollAwareListPosition()
+    }
+    setPositionOnNextUpdate = false
+  })
 
   // --- Functions ---
 
@@ -915,21 +928,9 @@
       return
     }
 
-    setScrollAwareListPosition()
+    setPositionOnNextUpdate = true
 
     opened = true
-  }
-
-  function setScrollAwareListPosition() {
-    const { height: viewPortHeight } = window.visualViewport
-    const { bottom: inputButtom, height: inputHeight } = input.getBoundingClientRect()
-    const { height: listHeight } = list.getBoundingClientRect()
-
-    if (inputButtom + listHeight > viewPortHeight) {
-      list.style.top = `-${inputHeight + listHeight}px`
-    } else {
-      list.style.top = "0px"
-    }
   }
 
   function close() {
@@ -1093,8 +1094,19 @@
     }
     selectedItem = newSelection
   }
-</script>
 
+  function setScrollAwareListPosition() {
+    const { height: viewPortHeight } = window.visualViewport
+    const { bottom: inputButtom, height: inputHeight } = inputContainer.getBoundingClientRect()
+    const { height: listHeight } = list.getBoundingClientRect()
+
+    if (inputButtom + listHeight > viewPortHeight) {
+      list.style.top = `-${inputHeight + listHeight}px`
+    } else {
+      list.style.top = "0px"
+    }
+  }
+</script>
 <div
   class="{className ? className : ''} autocomplete select is-fullwidth {uniqueId}"
   class:hide-arrow={hideArrow || !items.length}
@@ -1115,7 +1127,7 @@
       {/each}
     {/if}
   </select>
-  <div class="input-container">
+  <div class="input-container" bind:this={inputContainer}>
     {#if multiple && hasSelection}
       {#each selectedItem as tagItem, i (valueFunction(tagItem, true))}
         <div
@@ -1227,7 +1239,7 @@
   </div>
 </div>
 
-<svelte:window on:click={onDocumentClick} />
+<svelte:window on:click={onDocumentClick} on:scroll={() => setPositionOnNextUpdate = true} />
 
 <style>
   .autocomplete {

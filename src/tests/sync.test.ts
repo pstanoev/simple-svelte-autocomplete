@@ -5,6 +5,8 @@ import '@testing-library/jest-dom'
 
 const colors = ["White", "Red", "Yellow", "Green", "Blue", "Black", "Mät bläck", "<i>Jét Black</i>"]
 
+window = Object.assign(window, { visualViewport: { height: 1500 } })
+
 test("items are generated but hidden", async () => {
   const { component, container } = render(SimpleAutocomplete, {items: colors})
 
