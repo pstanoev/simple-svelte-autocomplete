@@ -116,7 +116,7 @@
 
   // option to show clear selection button
   export let showClear = false
-  
+
   // text to use for clear
   export let clearText = "&#10006;"
 
@@ -357,9 +357,11 @@
     const textFiltered = userEnteredText.replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " ").trim()
 
     const cleanUserEnteredText = safeStringFunction(textCleanFunction, textFiltered)
-    const textFilteredLowerCase = cleanUserEnteredText.toLowerCase().trim()
+    const textTrimmed = lowercaseKeywords
+      ? cleanUserEnteredText.toLowerCase().trim()
+      : cleanUserEnteredText.trim()
 
-    return textFilteredLowerCase
+    return textTrimmed
   }
 
   function numberOfMatches(listItem, searchWords) {
