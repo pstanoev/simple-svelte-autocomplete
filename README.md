@@ -182,7 +182,7 @@ async function getItems(keyword) {
 - `inputId` - apply an id attribute to the the input control
 - `dropdownClassName` - apply a className to the dropdown div showing the list of items
 - `name` - generate an HTML input with this name, containing the current value
-- `html5autocomplete` - value to enable or disable the [HTML5 autocomplete](https://developer.mozilla.org/en/docs/Web/HTML/Element/form#attr-autocomplete) attribute. 
+- `html5autocomplete` - value to enable or disable the [HTML5 autocomplete](https://developer.mozilla.org/en/docs/Web/HTML/Element/form#attr-autocomplete) attribute.
 - `autocompleteOffValue` - the value when `html5autocomplete=false`, defaults to `off` but can be set to `none` for Chrome
 - `selectName` - apply a name attribute to the <select> tag that holds the selected value
 - `selectId` - apply an id attribute to the <select> tag that holds the selected value
