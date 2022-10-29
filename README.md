@@ -238,7 +238,7 @@ The noResultsText variable is optional and can be ommited.
 </div>
 ```
 
-- `dropdown-footer` - customize what is displayed before the item list in the dropdown. By default this is where the `moreItemsText` is displayed if there is too much items to be displayed.
+- `dropdown-footer` - customize what is displayed after the item list in the dropdown. By default this is where the `moreItemsText` is displayed if there are too many items to be displayed.
 
 ```html
 <div slot="dropdown-footer" let:nbItems  let:maxItemsToShowInList>
