@@ -1145,7 +1145,11 @@
           <slot name="tag" label={safeLabelFunction(tagItem)} item={tagItem} {unselectItem}>
             <div class="tags has-addons">
               <span class="tag">{safeLabelFunction(tagItem)}</span>
-              <span class="tag is-delete" on:click|preventDefault={unselectItem(tagItem)} />
+              <span
+                class="tag is-delete"
+                on:click|preventDefault={unselectItem(tagItem)}
+                on:keypress|preventDefault={(e) => {e.key == "Enter" && unselectItem(tagItem)}}
+              />
             </div>
           </slot>
         </div>
@@ -1178,7 +1182,11 @@
       {...$$restProps}
     />
     {#if clearable}
-      <span on:click={clear} class="autocomplete-clear-button">{@html clearText}</span>
+      <span
+        on:click={clear}
+        on:keypress={(e) => {e.key == "Enter" && clear()}}
+        class="autocomplete-clear-button"
+        >{@html clearText}</span>
     {/if}
   </div>
   <div
@@ -1196,6 +1204,7 @@
             class:selected={i === highlightIndex}
             class:confirmed={isConfirmed(listItem.item)}
             on:click={() => onListItemClick(listItem)}
+            on:keypress={(e) => {e.key == "Enter" && onListItemClick(listItem)}}
             on:pointerenter={() => {
               highlightIndex = i
             }}
@@ -1230,7 +1239,11 @@
         <slot name="loading" {loadingText}>{loadingText}</slot>
       </div>
     {:else if create}
-      <div class="autocomplete-list-item-create" on:click={selectItem}>
+      <div
+        class="autocomplete-list-item-create"
+        on:click={selectItem}
+        on:keypress={(e) => {e.key == "Enter" && selectItem()}}
+      >
         <slot name="create" {createText}>{createText}</slot>
       </div>
     {:else if noResultsText}
