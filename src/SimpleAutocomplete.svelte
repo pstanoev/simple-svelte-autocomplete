@@ -320,7 +320,7 @@
 
   function onSelectedItemChanged() {
     value = valueFunction(selectedItem)
-    if (selectedItem && !multiple) {
+    if (!multiple) {
       text = safeLabelFunction(selectedItem)
     }
 
