@@ -345,6 +345,8 @@
 
   $: clearable = showClear || ((lock || multiple) && hasSelection)
 
+  $: locked = lock && hasSelection
+
   function prepareUserEnteredText(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {
       return ""
@@ -596,7 +598,7 @@
       return false
     }
 
-    if (lock && selectedItem) {
+    if (locked) {
       return true
     }
 
@@ -926,7 +928,7 @@
     }
 
     // check if the search text has more than the min chars required
-    if (notEnoughSearchText()) {
+    if (locked || notEnoughSearchText()) {
       return
     }
 
@@ -975,7 +977,6 @@
 
     setTimeout(() => {
       input.focus()
-      close()
     })
   }
 
@@ -1167,7 +1168,7 @@
       {disabled}
       {required}
       {title}
-      readonly={readonly || (lock && selectedItem)}
+      readonly={readonly || locked}
       {tabindex}
       bind:this={input}
       bind:value={text}
