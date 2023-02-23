@@ -496,7 +496,7 @@
     return numberOfMatches(obj2, searchWords) - numberOfMatches(obj1, searchWords)
   }
 
-  function processListItems(textFiltered) {
+  function processListItems(textFiltered="") {
     // cleans, filters, orders, and highlights the list items
     prepareListItems()
 
@@ -871,7 +871,7 @@
     if (searchFunction && !listItems.length) {
       search()
     } else if (!text) {
-      filteredListItems = listItems
+      processListItems()
     }
 
     open()
