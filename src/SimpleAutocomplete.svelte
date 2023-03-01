@@ -50,6 +50,18 @@
     return userEnteredText
   }
 
+  export const clearSelection = () => {
+    text = ''
+    selectedItem = multiple ? [] : undefined
+    items = []
+    listItems = []
+
+    setTimeout(() => {
+      input.focus()
+      close()
+    })
+  }
+
   // events
   export let beforeChange = function (oldSelectedItem, newSelectedItem) {
     return true
