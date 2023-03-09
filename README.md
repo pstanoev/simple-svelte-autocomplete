@@ -223,7 +223,7 @@ The noResultsText variable is optional and can be ommited.
 - `tag` - customize the tag blocks displayed when multiple selection is enabled:
 
 ```html
-<slot name="tag" let:label let:item let:unselectItem>
+<div slot="tag">
   <span class="tag">{label}</span>
   <span class="delete-tag" on:click|preventDefault="{unselectItem(item)}"></span>
 </slot>
