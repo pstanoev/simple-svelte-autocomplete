@@ -48,11 +48,7 @@
 
 <svelte:head>
   {@html solarized}
-  {#if bulma}
-    <link rel="stylesheet" href="bulma.css" />
-  {:else}
-    <link rel="stylesheet" href="default.css" />
-  {/if}
+  <link rel="stylesheet" href="{bulma ? 'bulma.css': 'default.css' }" />
 </svelte:head>
 
 <section class="section">
