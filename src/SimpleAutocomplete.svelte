@@ -1,7 +1,7 @@
 <script>
   import { flip } from "svelte/animate"
   import { fade } from "svelte/transition"
-  import {afterUpdate} from 'svelte'
+  import { afterUpdate } from "svelte"
 
   // the list of items  the user can select from
   export let items = []
@@ -51,7 +51,7 @@
   }
 
   export const clearSelection = () => {
-    text = ''
+    text = ""
     selectedItem = multiple ? [] : undefined
     items = []
     listItems = []
@@ -68,7 +68,7 @@
   }
   export let onChange = function (newSelectedItem) {}
   export let onFocus = function () {}
-  export let onBlur = function () {}
+  export let onBlur = function (text) {}
   export let onCreate = function (text) {
     if (debug) {
       console.log("onCreate: " + text)
@@ -220,12 +220,12 @@
   // other state
   let inputDelayTimeout
 
-  let setPositionOnNextUpdate = false;
+  let setPositionOnNextUpdate = false
 
   // --- Lifecycle events ---
 
   afterUpdate(() => {
-    if(setPositionOnNextUpdate) {
+    if (setPositionOnNextUpdate) {
       setScrollAwareListPosition()
     }
     setPositionOnNextUpdate = false
@@ -508,7 +508,7 @@
     return numberOfMatches(obj2, searchWords) - numberOfMatches(obj1, searchWords)
   }
 
-  function processListItems(textFiltered="") {
+  function processListItems(textFiltered = "") {
     // cleans, filters, orders, and highlights the list items
     prepareListItems()
 
@@ -872,7 +872,7 @@
       close()
     }
 
-    onBlur()
+    onBlur(text)
   }
 
   function resetListToAllItemsAndOpen() {
@@ -1122,6 +1122,7 @@
     }
   }
 </script>
+
 <div
   class="{className ? className : ''} autocomplete select is-fullwidth {uniqueId}"
   class:hide-arrow={hideArrow || !items.length}
@@ -1161,7 +1162,9 @@
               <span
                 class="tag is-delete"
                 on:click|preventDefault={unselectItem(tagItem)}
-                on:keypress|preventDefault={(e) => {e.key == "Enter" && unselectItem(tagItem)}}
+                on:keypress|preventDefault={(e) => {
+                  e.key == "Enter" && unselectItem(tagItem)
+                }}
               />
             </div>
           </slot>
@@ -1197,9 +1200,11 @@
     {#if clearable}
       <span
         on:click={clear}
-        on:keypress={(e) => {e.key == "Enter" && clear()}}
-        class="autocomplete-clear-button"
-        >{@html clearText}</span>
+        on:keypress={(e) => {
+          e.key == "Enter" && clear()
+        }}
+        class="autocomplete-clear-button">{@html clearText}</span
+      >
     {/if}
   </div>
   <div
@@ -1217,7 +1222,9 @@
             class:selected={i === highlightIndex}
             class:confirmed={isConfirmed(listItem.item)}
             on:click={() => onListItemClick(listItem)}
-            on:keypress={(e) => {e.key == "Enter" && onListItemClick(listItem)}}
+            on:keypress={(e) => {
+              e.key == "Enter" && onListItemClick(listItem)
+            }}
             on:pointerenter={() => {
               highlightIndex = i
             }}
@@ -1255,7 +1262,9 @@
       <div
         class="autocomplete-list-item-create"
         on:click={selectItem}
-        on:keypress={(e) => {e.key == "Enter" && selectItem()}}
+        on:keypress={(e) => {
+          e.key == "Enter" && selectItem()
+        }}
       >
         <slot name="create" {createText}>{createText}</slot>
       </div>
@@ -1267,7 +1276,7 @@
   </div>
 </div>
 
-<svelte:window on:click={onDocumentClick} on:scroll={() => setPositionOnNextUpdate = true} />
+<svelte:window on:click={onDocumentClick} on:scroll={() => (setPositionOnNextUpdate = true)} />
 
 <style>
   .autocomplete {
