@@ -1385,6 +1385,7 @@
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
     z-index: 4;
+    height: 100%;
   }
 
   .autocomplete:not(.show-clear) .autocomplete-clear-button {
