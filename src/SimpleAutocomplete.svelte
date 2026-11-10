@@ -580,6 +580,10 @@
   }
 
   function selectListItem(listItem) {
+    if (disabled) {
+      return false
+    }
+
     if (debug) {
       console.log("selectListItem", listItem)
     }

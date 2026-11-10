@@ -81,3 +81,21 @@ test("widget initialization with text", async () => {
   expect(component.selectedItem).toBeUndefined()
   expect(component.text).toStrictEqual("White")
 })
+
+test("an open autocomplete cannot select an item after it is disabled", async () => {
+  const onChange = jest.fn()
+  const { component, container } = render(SimpleAutocomplete, { items: colors, onChange })
+  const input = container.querySelector("input[type='text']")
+
+  await fireEvent.focus(input)
+  const option = screen.getByText("Red")
+  expect(option).toBeVisible()
+  onChange.mockClear()
+
+  await component.$set({ disabled: true })
+  expect(input).toBeDisabled()
+  await fireEvent.click(option)
+
+  expect(component.selectedItem).toBeUndefined()
+  expect(onChange).not.toHaveBeenCalled()
+})
